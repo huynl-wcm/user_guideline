@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Guide — Đọc hệ báo cáo Back Margin (cho Category Manager)</title>
+<style>
+  :root{
+    /* synced với full-palette-v2 */
+    --accent:#2563EB;        /* CTA / link / active / Volume */
+    --accent-dark:#1D4ED8;
+    --accent-press:#1E40AF;
+    --accent-soft:#EEF2FF;
+    --accent-soft2:#DBEAFE;
+    --good:#0D9373;          /* positive / Mix */
+    --good-soft:#ECFDF5;
+    --amber:#D97706;         /* warning / Rate */
+    --amber-soft:#FFFBEB;
+    --amber-soft2:#FEF3C7;
+    --bad:#E03B3B;           /* negative */
+    --bad-soft:#FDF2F2;
+    --ink:#0F172A;           /* text primary */
+    --muted:#64748B;         /* text secondary */
+    --faint:#94A3B8;         /* text tertiary */
+    --line:#E2E8F0;          /* border default */
+    --line-strong:#CBD5E1;   /* border strong */
+    --bg:#F8FAFC;            /* surface bg */
+    --card:#FFFFFF;
+    --shadow:0 18px 48px -28px rgba(15,23,42,.30);
+    --shadow-sm:0 8px 24px -18px rgba(15,23,42,.34);
+    --ease:cubic-bezier(.32,.72,0,1);
+    --display:"Bahnschrift","Segoe UI Semibold","Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:Calibri,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.58;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px;}
+  b,strong{color:var(--ink);}
+  a{color:var(--accent);}
+  code{
+    font-family:"Cascadia Code",Consolas,monospace;font-size:.85em;
+    background:#F1F5F9;padding:1px 6px;border-radius:5px;border:1px solid var(--line);
+    color:#475569;white-space:nowrap;
+  }
+
+  /* ============ EYEBROW ============ */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--display);
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;
+    color:var(--accent);background:var(--accent-soft);
+    padding:6px 14px;border-radius:999px;margin:0 0 18px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+
+  /* ============ HERO ============ */
+  header.hero{padding:64px 0 16px;}
+  .hero h1{
+    font-family:var(--display);
+    text-transform:uppercase;
+    font-size:clamp(32px,5.2vw,54px);line-height:1.02;margin:0 0 4px;font-weight:700;
+    color:var(--ink);letter-spacing:.01em;max-width:18ch;
+  }
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .chip-meta{
+    display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
+    color:var(--muted);background:var(--card);border:1px solid var(--line);
+    padding:8px 14px;border-radius:999px;
+  }
+  .chip-meta .sw{width:11px;height:11px;border-radius:3px;}
+
+  /* ============ STICKY NAV ============ */
+  nav.toc{position:sticky;top:0;z-index:40;margin-top:30px;}
+  .toc-inner{
+    display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:10px 14px;
+    background:rgba(255,255,255,.86);backdrop-filter:blur(16px);
+    border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow-sm);
+  }
+  .toc a{
+    text-decoration:none;color:var(--muted);font-size:13px;font-weight:700;
+    padding:7px 13px;border-radius:999px;transition:all .4s var(--ease);white-space:nowrap;
+  }
+  .toc a:hover{color:var(--accent);background:var(--accent-soft);}
+
+  /* ============ SECTIONS ============ */
+  section{padding:26px 0;}
+  .sec-inner{
+    background:var(--card);border:1px solid var(--line);border-radius:24px;
+    padding:30px 32px;box-shadow:var(--shadow);
+  }
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:8px;}
+  .sec-num{
+    font-family:var(--display);
+    font-size:clamp(28px,5vw,44px);font-weight:700;line-height:1;color:var(--accent-soft2);
+    letter-spacing:.01em;flex:0 0 auto;
+  }
+  h2{font-size:clamp(23px,3.3vw,31px);margin:0;font-weight:700;color:var(--ink);letter-spacing:-.015em;}
+  h3{font-size:21px;margin:0 0 6px;font-weight:700;color:var(--ink);}
+  h4{margin:22px 0 8px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:12.5px;color:var(--muted);}
+  p{margin:0 0 14px;font-size:16px;}
+  .muted{color:var(--muted);}
+  .lead{font-size:17px;}
+
+  /* ============ JOURNEY DIAGRAM ============ */
+  .journey{display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin:26px 0 8px;}
+  .jnode{
+    flex:1 1 240px;background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:20px 22px;box-shadow:var(--shadow-sm);border-top:4px solid var(--accent);
+  }
+  .jnode .stage{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);}
+  .jnode h3{font-size:18px;margin:6px 0 2px;}
+  .jnode .grain{font-size:13px;font-weight:700;color:var(--good);margin-bottom:10px;}
+  .jnode .qline{font-size:14.5px;color:var(--ink);}
+  .jnode .drill{margin-top:14px;font-size:12.5px;color:var(--accent-dark);font-weight:700;background:var(--accent-soft);border-radius:8px;padding:8px 12px;}
+  .jarrow{align-self:center;font-size:26px;color:var(--faint);flex:0 0 auto;}
+  @media(max-width:760px){.jarrow{transform:rotate(90deg);}}
+
+  /* ============ LABEL BOX (Title/Sub/Note) ============ */
+  .screen{background:#F8FAFC;border:1px solid var(--line);border-radius:14px;padding:4px 0;margin:14px 0 22px;overflow:hidden;}
+  .screen .row{display:flex;gap:14px;padding:13px 20px;border-bottom:1px solid var(--line);}
+  .screen .row:last-child{border-bottom:none;}
+  .screen .k{flex:0 0 84px;font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding-top:2px;}
+  .screen .v{font-size:14.5px;color:var(--ink);}
+  .screen .v.title{font-weight:700;color:var(--accent);font-size:16px;}
+  .screen .v.en{font-style:italic;}
+
+  /* ============ TABLES ============ */
+  .tbl-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);}
+  th,td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  thead th{
+    position:sticky;top:0;
+    background:#F1F5F9;color:#475569;font-weight:700;font-size:11px;
+    letter-spacing:.07em;text-transform:uppercase;border-bottom:2px solid var(--line-strong);
+  }
+  tbody tr:nth-child(even){background:#FAFBFC;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:var(--accent-soft);}
+  table.calc td:first-child{font-weight:700;color:var(--ink);white-space:normal;min-width:148px;}
+  table.calc td:first-child code{display:inline-block;margin-top:3px;font-size:11.5px;white-space:normal;}
+  table.calc td{white-space:normal;}
+  table.calc .ask{color:var(--muted);}
+  table.calc .read{color:var(--muted);font-size:13.5px;}
+  table.calc .read b{color:var(--ink);}
+  table.num th,table.num td{text-align:right;white-space:nowrap;}
+  table.num th:first-child,table.num td:first-child{text-align:left;}
+  table.num tr.total td{background:var(--accent-soft);font-weight:700;color:var(--accent-dark);}
+  table.num td.force{font-weight:700;text-align:left;}
+  table.num td.read{text-align:left;white-space:normal;color:var(--muted);font-size:13.5px;min-width:210px;}
+  table.num td.calc-cell{text-align:left;}
+  .pill{display:inline-block;padding:2px 9px;border-radius:6px;font-weight:700;font-size:13.5px;white-space:nowrap;}
+  .pill.v{background:var(--accent-soft2);color:var(--accent-dark);}
+  .pill.m{background:var(--good-soft);color:var(--good);}
+  .pill.r{background:var(--amber-soft);color:var(--amber);}
+  .pill.sum{background:var(--accent);color:#fff;}
+  .check{color:var(--good);font-weight:700;}
+  .glossary td:first-child{font-weight:700;color:var(--accent-dark);white-space:nowrap;}
+  .glossary td{white-space:normal;}
+
+  /* ============ TRAP / CALLOUT BOXES ============ */
+  .traps{margin:18px 0;}
+  .traps h4{margin-top:0;}
+  .trap{display:flex;gap:14px;background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px;font-size:15px;}
+  .trap .ico{flex:0 0 auto;font-size:18px;line-height:1.5;}
+  .trap b{color:#b32f2f;}
+  .tip{display:flex;gap:14px;background:var(--good-soft);border-left:4px solid var(--good);border-radius:0 12px 12px 0;padding:16px 20px;margin:22px 0;font-size:15.5px;}
+  .tip .ico{flex:0 0 auto;font-size:20px;}
+  .tip b{color:var(--good);}
+  .note-amber{display:flex;gap:14px;background:var(--amber-soft);border-left:4px solid var(--amber);border-radius:0 12px 12px 0;padding:16px 20px;margin:18px 0;font-size:15px;}
+  .note-amber .ico{flex:0 0 auto;font-size:18px;}
+  .note-amber b{color:#b45309;}
+  blockquote.lede-q{
+    margin:0 0 8px;padding:20px 26px;font-size:18px;line-height:1.5;
+    background:var(--accent-soft);border-radius:16px;color:var(--ink);border-left:4px solid var(--accent);
+  }
+  blockquote.lede-q b{color:var(--accent-dark);}
+
+  /* ============ DEEP-DIVE EXPLAINER ============ */
+  .deepdive{
+    background:linear-gradient(180deg,#FBFCFF, #F6F9FF);
+    border:1px solid var(--accent-soft2);border-left:4px solid var(--accent);
+    border-radius:0 16px 16px 0;padding:22px 26px;margin:18px 0;
+  }
+  .deepdive .dd-eyebrow{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  .deepdive h4{margin:0 0 10px;text-transform:none;letter-spacing:0;font-size:18px;color:var(--ink);}
+  .deepdive p{font-size:15px;}
+  .deepdive ul{margin:6px 0 12px;padding-left:20px;}
+  .deepdive li{margin-bottom:8px;font-size:15px;}
+  .dd-formula{
+    font-family:"Cascadia Code",Consolas,monospace;font-size:13px;
+    background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;margin:8px 0 14px;color:var(--ink);line-height:1.6;overflow-x:auto;
+  }
+  .dd-sub{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:12px 0;font-size:14.5px;}
+  .dd-sub.warn{border-left:4px solid var(--amber);}
+  .dd-sub.scope{border-left:4px solid var(--good);}
+  .dd-sub b.h{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
+
+  /* ============ FORCE CARDS ============ */
+  .cards{display:grid;grid-template-columns:1fr;gap:18px;margin:22px 0 8px;}
+  @media(min-width:760px){.cards{grid-template-columns:repeat(3,1fr);}}
+  .fcard{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;border-top:4px solid var(--line);box-shadow:var(--shadow-sm);}
+  .fcard.v{border-top-color:var(--accent);}
+  .fcard.m{border-top-color:var(--good);}
+  .fcard.r{border-top-color:var(--amber);}
+  .fcard .fhead{padding:18px 20px 6px;}
+  .fcard .ico{font-size:26px;}
+  .fcard h3{margin:8px 0 2px;font-size:20px;}
+  .fcard.v h3{color:var(--accent-dark);}
+  .fcard.m h3{color:var(--good);}
+  .fcard.r h3{color:var(--amber);}
+  .fcard .sub{font-size:13.5px;color:var(--muted);font-weight:600;}
+  .fcard .fbody{padding:8px 20px 20px;display:flex;flex-direction:column;gap:12px;flex:1;}
+  .fcard .label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:3px;}
+  .fcard .mean{font-size:14.5px;}
+  .formula{font-family:"Cascadia Code",Consolas,monospace;font-size:12.5px;background:#F8FAFC;border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--ink);line-height:1.5;}
+  .decision{font-size:14px;padding:12px 14px;border-radius:8px;}
+  .fcard.v .decision{background:var(--accent-soft);}
+  .fcard.m .decision{background:var(--good-soft);}
+  .fcard.r .decision{background:var(--amber-soft);}
+
+  .model-axes{display:flex;gap:16px;flex-wrap:wrap;margin:18px 0 4px;}
+  .model-axes div{flex:1 1 200px;background:#F8FAFC;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14.5px;}
+  .model-axes b{color:var(--accent-dark);}
+
+  .figure{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin:22px 0;text-align:center;box-shadow:var(--shadow-sm);}
+  .figure svg{max-width:100%;height:auto;}
+  .figure figcaption{margin-top:14px;font-size:14px;color:var(--muted);text-align:left;border-left:3px solid var(--good);padding-left:14px;}
+
+  .bridge-eq{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin:24px 0 6px;font-size:18px;font-weight:700;}
+  .bridge-eq .chip{padding:8px 16px;border-radius:10px;color:#fff;}
+  .bridge-eq .chip.d{background:var(--accent);}
+  .bridge-eq .chip.v{background:var(--accent);}
+  .bridge-eq .chip.m{background:var(--good);}
+  .bridge-eq .chip.r{background:var(--amber);}
+  .bridge-eq .op{color:var(--faint);font-size:22px;}
+
+  /* ============ DATA-QUALITY NUMBERED ============ */
+  .dqlist{counter-reset:dq;display:grid;gap:16px;margin:20px 0;}
+  .dqitem{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px 20px 64px;position:relative;box-shadow:var(--shadow-sm);}
+  .dqitem::before{
+    counter-increment:dq;content:counter(dq);
+    position:absolute;left:18px;top:20px;width:32px;height:32px;border-radius:50%;
+    background:var(--accent);color:#fff;font-family:var(--display);font-weight:700;font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .dqitem h4{margin:0 0 6px;font-size:16px;color:var(--ink);text-transform:none;letter-spacing:0;}
+  .dqitem ul{margin:8px 0 0;padding-left:18px;}
+  .dqitem li{margin-bottom:6px;font-size:14.5px;}
+
+  /* ============ CASE STUDY ============ */
+  .step{margin:26px 0;}
+  .step-head{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+  .step-num{width:34px;height:34px;border-radius:10px;background:var(--accent);color:#fff;font-family:var(--display);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .step-head h3{margin:0;font-size:19px;}
+  .shots{display:flex;flex-direction:column;gap:20px;margin:18px 0;}
+  .shot{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--shadow-sm);}
+  .shot img{width:100%;height:auto;display:block;border-radius:10px;border:1px solid var(--line);}
+  .shot figcaption{font-size:14px;color:var(--muted);padding:12px 8px 4px;font-weight:600;}
+  .shot figcaption .badge{display:inline-block;font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:6px;margin-right:8px;}
+  .calllist{background:var(--accent);color:#fff;border-radius:18px;padding:24px 28px;margin:24px 0;box-shadow:var(--shadow);}
+  .calllist h3{color:#fff;margin:0 0 12px;font-size:19px;}
+  .calllist ol{margin:0;padding-left:22px;}
+  .calllist li{margin-bottom:8px;font-size:15.5px;}
+  .calllist li b{color:#fff;}
+  .calllist .extra{font-size:14px;opacity:.9;margin-top:12px;}
+
+  /* ============ FOOTER ============ */
+  footer{padding:40px 0 10px;}
+  .foot-meta{font-size:13px;color:var(--muted);text-align:center;}
+  .foot-meta .sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin:0 2px 0 8px;}
+
+  @media(max-width:680px){
+    .wrap{padding:0 18px;}
+    .sec-inner{padding:22px 18px;border-radius:18px;}
+    .sec-head{gap:12px;}
+    .screen .row{flex-direction:column;gap:4px;}
+    .screen .k{flex:none;}
+  }
+
+  @media print{
+    @page{ size:A4; margin:14mm; }
+    html,body{background:#fff;padding:0;}
+    nav.toc{display:none!important;}
+    section{padding:10px 0;}
+    .sec-inner{box-shadow:none;border-radius:14px;padding:18px 20px;}
+    /* giữ màu nền các khối khi in */
+    .calllist,thead th,.pill,.bridge-eq .chip,.step-num,.dqitem::before,
+    .eyebrow,.shot figcaption .badge,.jnode,.fcard,.tip,.trap,.note-amber,
+    .deepdive,.dd-sub,blockquote.lede-q,.screen .v.title,tbody tr:nth-child(even){
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;
+    }
+    /* bỏ bóng cho nhẹ */
+    .figure,.fcard,.jnode,.dqitem,.shot,.calllist,.deepdive,.tbl-wrap,.sec-inner{box-shadow:none;}
+    /* === CHỐNG CẮT GIỮA CHỪNG === */
+    /* không xé ngang các khối nội dung */
+    p,li,tr,.trap,.tip,.note-amber,.jnode,.fcard,.shot,.deepdive,.dd-sub,
+    .dd-formula,.formula,blockquote.lede-q,figure,.bridge-eq,.screen,.screen .row,
+    .step-head,.model-axes>div,.chip-meta{
+      break-inside:avoid; page-break-inside:avoid;
+    }
+    /* tiêu đề không bị bỏ lại lẻ loi cuối trang */
+    h1,h2,h3,h4,.sec-head,.step-head{ break-after:avoid; page-break-after:avoid; }
+    /* bảng: lặp lại header mỗi trang, không cắt giữa hàng */
+    thead{ display:table-header-group; }
+    tr{ break-inside:avoid; page-break-inside:avoid; }
+    /* ảnh case study không tràn/cắt qua trang */
+    .shot img{ max-height:170mm; width:auto; max-width:100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span>SOP / User Guide · Category Manager</span>
+    <h1>Hướng dẫn đọc hệ báo cáo Back Margin</h1>
+    <div class="hero-meta">
+      <span class="chip-meta">3 pages · Commercial Performance → Diagnostic → Detail</span>
+      <span class="chip-meta"><span class="sw" style="background:var(--good)"></span>Good</span>
+      <span class="chip-meta"><span class="sw" style="background:var(--amber)"></span>Warning</span>
+      <span class="chip-meta"><span class="sw" style="background:var(--bad)"></span>Negative</span>
+    </div>
+
+    <nav class="toc">
+      <div class="toc-inner wrap" style="padding-left:0;padding-right:0;">
+        <a href="#s1">1 · Đọc thế nào</a>
+        <a href="#s2">2 · Từng page</a>
+        <a href="#s3">3 · Volume·Mix·Rate</a>
+        <a href="#s4">4 · Bẫy &amp; data-quality</a>
+        <a href="#s5">5 · Case study</a>
+        <a href="#s6">6 · Glossary</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <div class="wrap"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">01</span><h2>Đọc báo cáo này thế nào</h2></div>
+
+    <h3>Hệ báo cáo này để làm gì</h3>
+    <p>Đòn bẩy của ngành hàng là <strong>Back Margin</strong> — tiền rebate/trade NSX trả lại; khác <strong>Front Margin</strong> (giá bán − giá vốn). Cả 3 trang trả lời một chuỗi câu hỏi:</p>
+    <blockquote class="lede-q">"Ngành nào biên đang có vấn đề → có phải do rebate không → nếu có thì ngồi với NSX nào, ép dòng rebate nào?"</blockquote>
+
+    <h3 style="margin-top:28px;">Sơ đồ hành trình 3 page</h3>
+    <div class="journey">
+      <div class="jnode">
+        <div class="stage">Page 1</div>
+        <h3>Commercial Performance</h3>
+        <div class="grain">cấp NGÀNH / MCH</div>
+        <div class="qline">"Ngành nào kéo/đẩy biên, thật hay ảo?"</div>
+        <div class="drill">→ chọn ngành đáng ngờ</div>
+      </div>
+      <div class="jarrow">→</div>
+      <div class="jnode">
+        <div class="stage">Page 2</div>
+        <h3>Back Margin Diagnostic</h3>
+        <div class="grain">cấp MCH5</div>
+        <div class="qline">"Back Margin đổi VÌ ĐÂU — Volume / Mix / Rate?"</div>
+        <div class="drill">→ lột mặt nạ rate (trade-lump vs structural)</div>
+      </div>
+      <div class="jarrow">→</div>
+      <div class="jnode">
+        <div class="stage">Page 3</div>
+        <h3>Back Margin Detail</h3>
+        <div class="grain">cấp SKU / NSX</div>
+        <div class="qline">"AI thu thiếu rebate vs mặt bằng → đàm phán"</div>
+        <div class="drill">→ ra call-list NSX + dòng rebate cần ép</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="calc">
+        <thead><tr><th>Page</th><th>Cấp (grain)</th><th>Trả lời câu hỏi</th><th>Đi tiếp</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Commercial Performance</strong></td><td>Ngành (MCH2–5)</td><td>Ngành nào kéo/đẩy biên tổng, biên đó <b>thật hay ảo</b></td><td>drill 1 ngành sang Diagnostic</td></tr>
+          <tr><td><strong>Back Margin Diagnostic</strong></td><td>MCH5</td><td>Back Margin đổi <b>vì đâu</b>: Volume / Mix / Rate, dòng rebate nào, ngành con nào</td><td>drill 1 MCH4/5 sang Detail</td></tr>
+          <tr><td><strong>Back Margin Detail</strong></td><td>SKU / Brand / NSX</td><td><b>Ai</b> thu thiếu rebate so mặt bằng peer, ép <b>dòng nào</b></td><td>điểm cuối → brief đàm phán</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top:28px;">Bắt đầu từ đâu</h3>
+    <p>Cụm còn 2 trang <strong>P&amp;L / BM Overview</strong> thiên về <strong>monitoring</strong> (sức khỏe, xu hướng tổng). Để làm việc ngành hàng, bắt đầu thẳng từ <strong>Commercial Performance</strong>.</p>
+    <div class="tip"><span class="ico">🗺️</span><div><b>Mẹo:</b> luôn đi theo chiều mũi tên. Đừng nhảy thẳng vào Detail mà chưa qua Diagnostic — sẽ không biết phần "biên đẹp" là <b>rebate thật</b> hay chỉ <b>cú dồn cục kế toán</b> (xem mục 4).</div></div>
+  </div></div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <div class="wrap"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">02</span><h2>Từng page</h2></div>
+    <p class="lead">Mỗi page đọc theo cùng một khung: <strong>(a)</strong> Title/Sub-title/Note đúng như trên màn hình → <strong>(b)</strong> page trả lời gì → <strong>(c)</strong> bảng các con số &amp; cách tính → <strong>(d)</strong> bẫy khi đọc.</p>
+
+    <!-- 2.1 -->
+    <h3 style="margin-top:30px;font-size:23px;">2.1 — Commercial Performance</h3>
+    <h4>a. Nhãn trên màn hình</h4>
+    <div class="screen">
+      <div class="row"><div class="k">Title</div><div class="v title">Commercial Performance</div></div>
+      <div class="row"><div class="k">Sub-title</div><div class="v en">TCM margin by category — see which categories moved margin, and whether it's real (Rate) or just a mix shift.</div></div>
+      <div class="row"><div class="k">Note</div><div class="v en">The latest month can be inflated by lumped trade rebate — cross-check the YTD columns. "Back Δ" shows how much of the move is rebate (your lever) vs price/COGS.</div></div>
+    </div>
+
+    <h4>b. Page này trả lời gì</h4>
+    <p>Màn quét tổng: ngành nào đang kéo/đẩy <strong>biên tổng (TCM)</strong>, và phần dịch đó là <strong>biên thật (Rate)</strong> hay chỉ <strong>dịch cơ cấu bán (Mix)</strong>. Mục tiêu: <strong>chọn 1 ngành đáng ngờ</strong> để drill sâu — đừng vội kết luận.</p>
+
+    <h4>c. Các con số trên page &amp; cách tính</h4>
+    <p class="muted">Ma trận chính là <strong>TCM Performance by Category</strong>. Các cột chính:</p>
+    <div class="tbl-wrap">
+      <table class="calc">
+        <thead><tr><th>Nhãn on-screen</th><th>Trả lời câu hỏi gì</th><th>Cách tính (nói)</th><th>Đọc thế nào / bẫy</th></tr></thead>
+        <tbody>
+          <tr><td>Net</td><td class="ask">Ngành bán được bao nhiêu doanh thu thuần</td><td>Cộng toàn bộ <code>sale_net</code> của ngành (rồi chia đơn vị bn/mn theo <code>value_scale</code>).</td><td class="read">Quy mô rổ. Ngành quá nhỏ thì biên đẹp/xấu cũng ít đáng đàm.</td></tr>
+          <tr><td>TCM %Rev</td><td class="ask">Biên nội tại của ngành</td><td>Cộng toàn bộ <b>TCM</b> của ngành rồi <b>chia cho doanh thu thuần (<code>sale_net</code>) của chính ngành đó</b>.</td><td class="read">Đây là biên RIÊNG ngành. Ô được <b>tô màu cảnh báo bền</b> (🔴/🟠) — xem bẫy bên dưới.</td></tr>
+          <tr><td>TCM %Rev Δ</td><td class="ask">Biên ngành dịch bao nhiêu so kỳ trước</td><td><code>TCM %Rev</code> kỳ này − <code>TCM %Rev</code> kỳ so sánh (ra <b>điểm phần trăm, pp</b>).</td><td class="read">Cột tín hiệu thô. Xanh đừng vội mừng — hỏi tiếp <i>thành phần nào</i> tạo ra nó (Back Δ).</td></tr>
+          <tr><td>Back Δ <code>CP BM %Rev Δ</code></td><td class="ask">Trong mức dịch đó, <b>bao nhiêu là do rebate</b> (đòn bẩy của tôi)</td><td>Lấy <b>back margin của ngành chia doanh thu thuần ngành</b> ra BM%Rev, rồi <b>kỳ này trừ kỳ so sánh</b>.</td><td class="read"><b>Cột quan trọng nhất với CM.</b> Mẹo: <code>Front+CB Δ = (TCM %Rev Δ) − (Back Δ)</code>. Nếu Back Δ lớn hơn cả mức tăng tổng → Front đang xói, bị Back che.</td></tr>
+          <tr><td>Contribution % <code>CP TCM Contribution %</code></td><td class="ask">Ngành này đóng góp bao nhiêu vào <b>biên TỔNG</b> công ty</td><td>TCM của ngành chia cho <b>doanh thu thuần TOÀN công ty</b> (không phải riêng ngành) → nên <b>cộng các ngành lại = biên tổng</b>.</td><td class="read">Dùng để biết ngành nào kéo biên TỔNG. Khác <code>TCM %Rev</code> (biên riêng). VD biên riêng 37% nhưng đóng góp tổng chỉ 0.5%.</td></tr>
+          <tr><td>Contribution % Δ</td><td class="ask">Ngành kéo/đẩy biên tổng bao nhiêu</td><td>= <b>Rate split + Mix split</b> (xem 2 dòng dưới). Cộng tất cả ngành = đúng Δ biên tổng.</td><td class="read">Cột để <b>sort</b> — ngành kéo biên tổng xấu nhất lên đầu.</td></tr>
+          <tr><td>↳ Rate <code>CP Contrib Δ Rate</code></td><td class="ask">Phần do <b>biên thật</b> ngành đổi</td><td><b>Tỷ trọng doanh số ngành kỳ này</b> × <b>mức biên ngành dịch chuyển</b> (<code>TCM %Rev Δ</code>).</td><td class="read">Rate âm = biên <b>thật</b> xấu đi (giá/rebate). Đây là cái đáng lo.</td></tr>
+          <tr><td>↳ Mix <code>CP Contrib Δ Mix</code></td><td class="ask">Phần chỉ do <b>dịch cơ cấu bán</b></td><td><b>Biên ngành kỳ trước</b> × <b>phần tỷ trọng doanh số dịch chuyển</b>.</td><td class="read">Mix âm = chỉ bán nhiều hàng biên thấp hơn, biên nội tại <b>không</b> xấu. Không sửa bằng đàm phán rebate.</td></tr>
+          <tr><td>TCM %Rev YTD</td><td class="ask">Biên ngành tính <b>lũy kế</b> cả năm</td><td><code>TCM %Rev</code> nhưng cộng dồn từ <b>đầu năm → tháng đang chọn</b>.</td><td class="read">Mức <b>bền</b> hơn 1 tháng. Khi nghi lump, đối chiếu cột này.</td></tr>
+          <tr><td>TCM %Rev YTD Δ</td><td class="ask">Biên lũy kế so cùng kỳ năm trước</td><td>YTD năm nay − YTD năm trước (BLANK khi chưa có dữ liệu năm trước).</td><td class="read">Dữ liệu hiện chỉ 5 tháng 2026 → chưa có năm trước → cột này hay trống, đừng hốt hoảng.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-amber"><span class="ico">💡</span><div>Hover 1 dòng để xem <b>tooltip</b> tách <code>Front</code> / <code>Back</code> / <code>Claimback</code> riêng nếu cần. Hai thẻ insight phía trên (Impact + Trend) tự diễn giải ngành xấu/tốt nhất; click 1 ngành → thẻ chuyển sang đọc riêng ngành đó.</div></div>
+
+    <h4>d. Bẫy khi đọc — Commercial Performance</h4>
+    <div class="traps">
+      <div class="trap"><span class="ico">⚠️</span><div><b><code>TCM %Rev Δ</code> xanh chưa chắc mừng.</b> Nhìn sang <b>Back Δ</b>: nếu gần hết mức tăng là Back và đang ở tháng mới nhất → khả năng cao là <b>trade-lump</b> (mục 4), không phải thắng lợi.</div></div>
+      <div class="trap"><span class="ico">⚠️</span><div><b>Rate vs Mix.</b> Biên đẹp có thể chỉ do Mix (bán lệch sang hàng biên cao). Ngược lại Contribution <b>phẳng</b> vẫn có thể che biên thật đang xói (Rate âm, Mix dương bù).</div></div>
+      <div class="trap"><span class="ico">⚠️</span><div><b>Màu ô <code>TCM %Rev</code></b> chỉ bắt ngành <b>xấu đi</b>, <b>không</b> bắt spike-up giả — cú đó để <b>Note</b> + cột YTD cảnh báo.</div></div>
+    </div>
+
+    <!-- 2.2 -->
+    <h3 style="margin-top:38px;font-size:23px;">2.2 — Back Margin Diagnostic</h3>
+    <h4>a. Nhãn trên màn hình</h4>
+    <div class="screen">
+      <div class="row"><div class="k">Title</div><div class="v title">Back Margin Diagnostic</div></div>
+      <div class="row"><div class="k">Sub-title</div><div class="v en">Why Back Margin changed — split into Volume / Mix / Rate, then by rebate &amp; trade line and by category.</div></div>
+      <div class="row"><div class="k">Note</div><div class="v en">A Rate gain driven by trade lines (grand opening / listing / shelves) lumps into the latest month — verify structural rebate (Normal / Log / Annual) before treating it as durable. Verdict reads YTD.</div></div>
+    </div>
+
+    <h4>b. Page này trả lời gì</h4>
+    <p>Trả lời <strong>VÌ ĐÂU</strong> Back Margin của ngành vừa drill đổi: bán nhiều hơn (<strong>Volume</strong>), dịch cơ cấu (<strong>Mix</strong>), hay NSX đổi % rebate (<strong>Rate</strong>) — và nếu là Rate thì <strong>dòng nào, ngành con nào</strong>. Đây là chỗ <strong>lột mặt nạ</strong>: rate tăng <strong>bền</strong> (structural) hay chỉ <strong>dồn cục nhất thời</strong> (trade-lump)?</p>
+
+    <h4>c. Các con số trên page &amp; cách tính</h4>
+    <div class="tbl-wrap">
+      <table class="calc">
+        <thead><tr><th>Nhãn on-screen</th><th>Trả lời câu hỏi gì</th><th>Cách tính (nói)</th><th>Đọc thế nào / bẫy</th></tr></thead>
+        <tbody>
+          <tr><td>BM Δ <span class="muted">(headline)</span></td><td class="ask">Back Margin đổi bao nhiêu tiền vs kỳ so sánh</td><td>Back Margin (tổng các dòng rebate/trade) kỳ này − kỳ so sánh.</td><td class="read">Headline đọc thêm "mainly Volume/Mix/Rate" = đòn bẩy trội (theo độ lớn).</td></tr>
+          <tr><td>BM %</td><td class="ask">Tỷ lệ rebate trên doanh thu</td><td>Back margin ÷ doanh thu thuần (<code>Net</code>) của ngành.</td><td class="read">Đây là "chiều cao" của hình chữ nhật BM (xem mục 3).</td></tr>
+          <tr><td>📦 Volume <span class="muted">(waterfall)</span></td><td class="ask">Bao nhiêu là do <b>bán nhiều/ít hơn</b></td><td>(Net kỳ này − Net kỳ trước) × <b>BM% blended kỳ trước</b>. Tức doanh thu tăng kéo theo rebate, <b>giữ nguyên % và cơ cấu</b>.</td><td class="read">Tăng trưởng "nền" — tốt, nhưng không phải mình đàm phán giỏi hơn.</td></tr>
+          <tr><td>🔀 Mix <span class="muted">(waterfall)</span></td><td class="ask">Bao nhiêu là do <b>cơ cấu dịch</b> sang ngành rebate cao/thấp</td><td>Với từng <b>MCH5</b>: phần doanh thu dịch khỏi tỷ trọng cũ × BM% cũ của MCH5 đó, rồi <b>cộng lại</b>.</td><td class="read">Đây là <b>assortment</b> — sửa bằng đẩy/cắt ngành nào, không sửa bằng đàm phán rebate.</td></tr>
+          <tr><td>🏷️ Rate <span class="muted">(waterfall)</span></td><td class="ask">Bao nhiêu là do <b>NSX đổi % rebate</b></td><td>Với từng <b>MCH5</b>: doanh thu kỳ này × (<b>BM% MCH5 kỳ này − BM% MCH5 kỳ trước</b>), rồi <b>cộng lại</b>.</td><td class="read"><b>Đòn bẩy đàm phán.</b> Nhưng phải hỏi: rate này <b>trade</b> (lumpy) hay <b>structural</b> (bền)? → đọc bảng By Income Line.</td></tr>
+          <tr><td><i>(cộng khít)</i></td><td class="ask"></td><td><b>Volume + Mix + Rate = BM Δ</b> ở mọi lựa chọn ngành.</td><td class="read">Nếu 3 lực không cộng ra BM Δ là lỗi — báo BI.</td></tr>
+          <tr><td>By Income Line <code>BM Driver Δ</code> <span class="muted">(8 dòng)</span></td><td class="ask">Mỗi <b>dòng rebate/trade</b> đẩy biên bao nhiêu</td><td>Với mỗi dòng: (giá trị dòng đó kỳ này ÷ Net kỳ này) − (giá trị dòng đó kỳ trước ÷ Net kỳ trước) → ra <b>pp</b>. 8 dòng cộng lại = <code>BM % Δ pp</code>.</td><td class="read"><b>Đây là chỗ lột mặt nạ.</b> 3 dòng <b>structural</b> = Normal / Log / Annual (bền). 5 dòng <b>trade</b> = Grand Opening / Marketing / Shelves / Listing / Early Payment (lumpy).</td></tr>
+          <tr><td>Where it happened — BM Mix Effect <span class="muted">(per ngành con)</span></td><td class="ask">Ngành con này đóng góp Mix bao nhiêu</td><td>Mix Effect tính riêng cho từng node MCH (cố định ngành cha).</td><td class="read">Grand total cột = đúng bar Mix; subtotal trung gian = mix <i>trong</i> node.</td></tr>
+          <tr><td>Where it happened — BM Rate Effect <span class="muted">(per ngành con)</span></td><td class="ask">Ngành con này đóng góp Rate bao nhiêu</td><td>Doanh thu kỳ này × (BM% node kỳ này − kỳ trước).</td><td class="read"><b>Đi xuống ngành con có Rate Effect ÂM</b> (đang xấu đi), không phải ngành đang được lump tô hồng.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-amber"><span class="ico">💡</span><div>Thẻ <b>Category Read</b> bên cạnh tự tóm 3 lực + gợi ý drill ngành con tệ nhất. Khi Rate tăng nhưng phần lớn là dòng trade, thẻ tự đổi sang <b>cảnh báo trade-lump</b> thay vì khuyên "khóa/nhân rộng".</div></div>
+
+    <h4>d. Bẫy khi đọc — Diagnostic</h4>
+    <div class="traps">
+      <div class="trap"><span class="ico">⚠️</span><div><b>Rate dương ≠ thắng lợi.</b> Nếu phần lớn Rate là <b>dòng trade</b> (Grand Opening, Shelves, Listing) → one-off dồn cục, không lặp lại. <b>Đừng "nhân rộng" khoản grand-opening.</b> Chỉ rate <b>structural</b> (Normal/Log/Annual) tăng mới đáng khóa.</div></div>
+      <div class="trap"><span class="ico">⚠️</span><div><b>Drill xuống ngành con có Rate Effect âm</b> (đang xấu đi), không phải ngành đang ăn lump (xanh mướt nhưng không phải điểm yếu thật).</div></div>
+      <div class="trap"><span class="ico">⚠️</span><div>Verdict ở thẻ đọc theo <b>YTD</b> — đừng so với con số 1 tháng trên waterfall.</div></div>
+    </div>
+
+    <!-- 2.3 -->
+    <h3 style="margin-top:38px;font-size:23px;">2.3 — Back Margin Detail</h3>
+    <h4>a. Nhãn trên màn hình</h4>
+    <div class="screen">
+      <div class="row"><div class="k">Title</div><div class="v title">Back Margin Detail</div></div>
+      <div class="row"><div class="k">Sub-title</div><div class="v en">Which brands / suppliers collect rebate below their micro-category peers — your negotiation worklist.</div></div>
+      <div class="row"><div class="k">Note</div><div class="v en">Read the verdict colour, not raw gap value (big ≠ short). Gap is YTD vs model-aware peers, so direct-import suppliers aren't flagged unfairly. Switch to "by Manufacturer" to size the real negotiation.</div></div>
+    </div>
+
+    <h4>b. Page này trả lời gì</h4>
+    <p><strong>Danh sách đàm phán.</strong> Page chấm mỗi <strong>entity</strong> (Brand / SKU / NSX / Model…) so <strong>mặt bằng peer cùng micro-ngành</strong> → verdict 🟢 đủ / 🟠 theo dõi / 🔴 đàm phán, kèm <strong>dòng rebate nào hụt</strong>. Đổi trục <strong>by Manufacturer</strong> để biết gọi NSX nào.</p>
+
+    <h4>c. Các con số trên page &amp; cách tính</h4>
+    <div class="tbl-wrap">
+      <table class="calc">
+        <thead><tr><th>Nhãn on-screen</th><th>Trả lời câu hỏi gì</th><th>Cách tính (nói)</th><th>Đọc thế nào / bẫy</th></tr></thead>
+        <tbody>
+          <tr><td>BM % <code>BM Rate Item</code></td><td class="ask">Entity này thu rebate ở tỷ lệ nào</td><td>Cộng toàn bộ các dòng back margin của entity rồi chia doanh thu thuần (<code>Net</code>) của entity.</td><td class="read">Tỷ lệ rebate thực thu của entity.</td></tr>
+          <tr><td>Gap vs Peers (%) <code>BM1 Δpp</code></td><td class="ask">Entity thu <b>trên hay dưới mặt bằng</b> bao nhiêu</td><td>BM% của entity <b>trừ "fair-line"</b> (<code>BM Peer Rate MCH5</code>) = bình quân BM% của peer cùng <b>MCH5 × Model</b>, <b>trọng số theo doanh số của chính entity</b>; tính <b>lũy kế YTD</b>. <i>Xem hộp đào sâu bên dưới.</i></td><td class="read"><b>Cột verdict màu chính.</b> Âm = thu <b>dưới</b> mặt bằng peer → cơ hội đòi thêm. So theo Model nên <b>NSX không cãi được</b> "brand tôi premium".</td></tr>
+          <tr><td>Gap vs Category (%) <code>BM2 Δpp</code></td><td class="ask">Entity đứng đâu <b>trong cả rổ ngành</b> đang xem</td><td>BM% entity − BM% trung bình <b>toàn scope</b> ngành đang drill. Dòng <b>Total = 0</b>.</td><td class="read">Chỉ là <b>bối cảnh vị trí</b>, không phải chuẩn hành động. Đừng nhầm với Gap vs Peers.</td></tr>
+          <tr><td>BM Gap Value <span class="muted">(Tiền thiếu/dư)</span></td><td class="ask">Kéo entity về fair-line thì <b>được/mất bao nhiêu tiền</b></td><td><b>Gap vs Peers × Net</b> (lũy kế YTD, theo <code>value_scale</code>).</td><td class="read">Sort tăng dần → thiếu nhiều tiền nhất lên đầu. <b>Nhưng đừng chạy theo cột này thô</b> — đọc verdict màu trước.</td></tr>
+          <tr><td>Net Share % <code>BM Net Share</code></td><td class="ask">Entity chiếm bao nhiêu doanh thu của ngành</td><td>Net của entity ÷ Net toàn scope ngành. Dòng Total = 100%.</td><td class="read"><b>Đòn bẩy đàm phán.</b> Share lớn + hụt = ưu tiên xử trước (có sức ép).</td></tr>
+          <tr><td>Verdict 🟢🟠🔴 <code>BM Detail Verdict</code></td><td class="ask">Có đáng đàm phán không</td><td>Chấm theo <b>Gap vs Peers</b> so 2 ngưỡng: 🟠 khi hụt ≥ <b>Watch gap</b> (mặc định 3%) · 🔴 khi hụt ≥ <b>Action gap</b> (mặc định 10%) · còn lại 🟢. Tính trên <b>YTD</b>.</td><td class="read"><b>Đọc MÀU, không đọc tiền-hụt-thô.</b> Brand to (hụt nhiều tiền) có thể vẫn 🟢 vì nó <i>to chứ không thiếu</i>. 2 ngưỡng chỉnh được ở ⚙ Settings.</td></tr>
+          <tr><td>Income-Line Gap bar</td><td class="ask">Dòng rebate nào hụt</td><td>Chưa click entity: mỗi dòng = movement vs kỳ trước của cả ngành. Click 1 entity: đổi sang <b>gap dòng đó của entity vs peer</b>.</td><td class="read">2 trạng thái = 2 thước đo khác nhau — đừng so chéo. Title luôn ghi đang ở chế độ nào.</td></tr>
+          <tr><td>Trend <span class="muted">(BM% vs Peer fair-line)</span></td><td class="ask">Hụt <b>dai dẳng</b> hay chỉ 1–2 tháng</td><td>2 đường: BM% entity và fair-line MCH5, vẽ theo <b>từng tháng</b>.</td><td class="read">Dưới fair-line nhiều tháng liền → terms cấu trúc, đàm phán mạnh. Mới tụt 1–2 tháng → hỏi lý do nhất thời trước.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DEEP DIVE: BM1 / fair-line -->
+    <div class="deepdive">
+      <div class="dd-eyebrow">Đào sâu · cột phức tạp nhất</div>
+      <h4>Gap vs Peers (<code>BM1 Δpp</code>) &amp; fair-line <code>BM Peer Rate MCH5</code> tính ra sao</h4>
+      <p>fair-line <b>không</b> phải "rate trung bình của 1 MCH5". Nó dựng <code>_pairs</code> = <b>mọi cặp (MCH5 × Model) mà entity thực sự có mặt</b> (<code>SUMMARIZE(fact, MCH5_ID, Model_ID, …)</code>), rồi blend theo doanh số của chính entity:</p>
+      <div class="dd-formula">fair-line = Σ ( net_entity tại cặp × peer_rate cặp ) / Σ ( net_entity tại cặp )
+
+BM1 = Σ w_cell × ( rate_entity,cell − peer_rate_cell )    với w_cell = net entity tại cell</div>
+      <p><b>Mấu chốt:</b> tử số (rate thật của brand) và fair-line dùng <b>CÙNG footprint + CÙNG trọng số net</b> → đây là so <b>like-for-like</b> từng cell rồi blend bằng đúng tỷ trọng của brand.</p>
+      <ul>
+        <li>Brand bán 70% ở MCH5-A (rebate cấu trúc thấp) + 30% ở B → fair-line của nó cũng <b>nghiêng 70% về peer của A</b>. Brand <b>không bị chấm oan</b> chỉ vì cơ cấu nằm ở ngành rebate thấp — Mix đã được trung hoà.</li>
+        <li>Cùng cơ chế xử lý <b>multi-Model</b>: cố tình <b>không</b> <code>SELECTEDVALUE(Model)</code> (brand trải nhiều model); iterator <code>_pairs</code> bắt hết.</li>
+      </ul>
+      <div class="dd-sub warn">
+        <b class="h">⚠️ 1 caveat phải biết (vai consultant)</b>
+        BM1 ra <b>1 con số blend</b> cho cả brand → nó <b>che được trường hợp bù trừ</b>: brand tốt ở A (+5pp) nhưng tệ ở B (−5pp) → net ≈ 0 → hiện 🟢 trung tính, trong khi B vẫn là chỗ thu thiếu thật. Matrix BM Detail là <b>1 row/entity (không nest)</b> nên không thấy chỗ vỡ.
+        <br><br>→ Khi 1 brand <b>đa-MCH5</b> ra verdict sát ngưỡng/trung tính, <b>đừng vội bỏ qua</b>: drill brand đó theo MCH5 (hoặc đổi trục) để xem gap từng ngành. Đòn bẩy đàm phán thường là <b>per-NSX-per-ngành</b> → <b>cell mới là đơn vị action thật</b>, không phải con số blend.
+      </div>
+      <div class="dd-sub scope">
+        <b class="h">Lưu ý phạm vi</b>
+        Footprint <code>_pairs</code> tính trong <b>filter context hiện tại</b>. Nếu drill-through vào MCH4 (vd <i>Hạt sấy khô</i>), BM1 của 1 brand chỉ blend các MCH5 thuộc nhánh đó; cell của brand đó ở MCH4 khác (chocolate…) bị <b>loại khỏi context</b>. → Đó là <b>"brand này thu thế nào TRONG ngành này"</b>, không phải bức tranh toàn brand. Đúng cho đàm phán theo category, nhưng cần biết để không kết luận nhầm toàn cục.
+      </div>
+      <p style="margin-bottom:0;"><b>Tóm:</b> BM1 toán học vững cho brand đa-MCH5 (<b>mix-neutral, model-aware</b>). Chỉ nhớ con số là <b>blend</b> — borderline thì soi <b>per-MCH5</b>.</p>
+    </div>
+
+    <div class="note-amber"><span class="ico">⚠️</span><div>Nhãn cửa sổ thời gian: cột <b>Gap/verdict/Tiền thiếu = lũy kế YTD</b>; nếu có cột <b>BM Δ</b> thì đó là <b>so tháng trước (MoM)</b>. Đừng hiểu Gap −5.3% là gap của riêng 1 tháng.</div></div>
+
+    <h4>d. Bẫy khi đọc — Detail</h4>
+    <div class="traps">
+      <div class="trap"><span class="ico">⚠️</span><div><b>Đọc verdict MÀU, không đọc tiền-hụt-thô.</b> "Tiền thiếu" lớn có thể chỉ vì entity <i>to</i> — verdict 🟢 = vẫn thu đủ mặt bằng → bỏ qua.</div></div>
+      <div class="trap"><span class="ico">⚠️</span><div><b>Fair-line model-aware.</b> Brand nhập trực tiếp (rebate ≈ 0) <b>không bị chấm oan</b> 🔴. Entity 🔴 mà <b>BM% = 0</b> → nghi nhập trực tiếp → <b>kiểm by Model trước</b>, đừng tốn vốn đàm phán.</div></div>
+      <div class="trap"><span class="ico">⚠️</span><div><b>Đổi trục by Manufacturer</b> để gộp tiền đúng đối tác: một NSX ôm nhiều brand cùng thu thiếu → gộp lên thường gần <b>gấp đôi</b> view-brand.</div></div>
+      <div class="trap"><span class="ico">⚠️</span><div>Lọc <b>"Negotiable only"</b> (mặc định) ẩn hàng nhập-trực-tiếp/model rác. Muốn xem hết → chuyển <b>"All entities"</b>.</div></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <div class="wrap"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Chuyên đề — Back Margin đổi vì đâu: Volume · Mix · Rate</h2></div>
+    <p class="lead">Khi Back Margin đổi, luôn tách phần thay đổi thành <strong>3 lực — 📦 Volume · 🔀 Mix · 🏷️ Rate</strong> (cộng khít = BM Δ), rồi hỏi tiếp: phần Rate là rebate <strong>cấu trúc</strong> (bền, đáng khóa) hay chỉ <strong>trade-lump</strong> (nhất thời)? Mục này là cách đọc 3 lực đó.</p>
+
+    <h3 style="margin-top:24px;">Mô hình trong đầu: BM là một hình chữ nhật</h3>
+    <p><code>Back Margin = Doanh thu (Net) × BM%</code>. Coi như diện tích một hình chữ nhật:</p>
+    <div class="model-axes">
+      <div><b>Chiều ngang = Doanh thu (Net)</b><br>giống "Sản lượng" nhưng tính bằng tiền.</div>
+      <div><b>Chiều cao = BM%</b><br>tỷ lệ rebate NSX trả trên doanh thu.</div>
+      <div><b>Diện tích = Back Margin</b><br>tổng tiền rebate thu về.</div>
+    </div>
+
+    <figure class="figure">
+      <svg viewBox="0 0 560 380" xmlns="http://www.w3.org/2000/svg" font-family="Calibri, sans-serif">
+        <line x1="70" y1="40" x2="70" y2="320" stroke="#475569" stroke-width="1.5"/>
+        <line x1="70" y1="320" x2="500" y2="320" stroke="#475569" stroke-width="1.5"/>
+        <text x="20" y="180" fill="#475569" font-size="13" transform="rotate(-90 30,180)">BM% (tỷ lệ rebate)</text>
+        <text x="230" y="360" fill="#475569" font-size="13">Doanh thu (Net)</text>
+        <rect x="70" y="200" width="230" height="120" fill="#EEF2FF" stroke="#CBD5E1"/>
+        <text x="150" y="266" fill="#2563EB" font-size="14" font-weight="bold">BM kỳ trước</text>
+        <text x="150" y="284" fill="#64748B" font-size="11">Net cũ × BM% cũ</text>
+        <rect x="300" y="200" width="140" height="120" fill="#2563EB" fill-opacity="0.92" stroke="#1D4ED8"/>
+        <text x="312" y="258" fill="#fff" font-size="13" font-weight="bold">📦 VOLUME</text>
+        <text x="312" y="276" fill="#DBEAFE" font-size="10.5">bán nhiều hơn,</text>
+        <text x="312" y="290" fill="#DBEAFE" font-size="10.5">rate giữ nguyên</text>
+        <rect x="70" y="110" width="230" height="90" fill="#D97706" fill-opacity="0.95" stroke="#92400E"/>
+        <text x="110" y="150" fill="#fff" font-size="13" font-weight="bold">🏷️ RATE</text>
+        <text x="110" y="168" fill="#FEF3C7" font-size="10.5">NSX đổi % rebate (cùng doanh thu)</text>
+        <rect x="300" y="110" width="140" height="90" fill="#0D9373" fill-opacity="0.92" stroke="#0a6b54"/>
+        <text x="312" y="150" fill="#fff" font-size="13" font-weight="bold">🔀 MIX</text>
+        <text x="312" y="168" fill="#D1FAE5" font-size="10.5">cơ cấu dịch</text>
+        <text x="312" y="182" fill="#D1FAE5" font-size="10.5">sang ngành BM% khác</text>
+        <line x1="70" y1="335" x2="300" y2="335" stroke="#CBD5E1" stroke-width="1"/>
+        <text x="150" y="349" fill="#64748B" font-size="10">Net kỳ trước</text>
+        <line x1="300" y1="335" x2="440" y2="335" stroke="#2563EB" stroke-width="1"/>
+        <text x="330" y="349" fill="#2563EB" font-size="10">+ Net tăng</text>
+      </svg>
+      <figcaption>Trong 1 ngành đơn lẻ, góc trên-phải là "tương tác Volume×Rate". Khi có <b>nhiều ngành với BM% khác nhau</b>, phần đó tổng quát thành <b>Mix</b> — sức nặng khi bán lệch sang ngành rebate cao/thấp. Đó là lý do report tính Mix theo từng MCH5 rồi cộng lại.</figcaption>
+    </figure>
+
+    <h3 style="margin-top:30px;">Ba lực, ba quyết định khác nhau</h3>
+    <div class="cards">
+      <article class="fcard v">
+        <div class="fhead"><div class="ico">📦</div><h3>Volume</h3><div class="sub">"bán được nhiều hơn"</div></div>
+        <div class="fbody">
+          <div><div class="label">Nghĩa</div><div class="mean">Tổng doanh thu tăng → kéo theo nhiều tiền rebate hơn, <b>dù % rebate và cơ cấu ngành giữ y nguyên</b>.</div></div>
+          <div><div class="label">Công thức</div><div class="formula">(Net kỳ này − Net kỳ trước)<br>× BM% blended kỳ trước</div></div>
+          <div class="decision"><b>Quyết định nó lái:</b> tăng trưởng "nền" — tốt, nhưng không phản ánh mình đàm phán giỏi hơn.</div>
+        </div>
+      </article>
+      <article class="fcard m">
+        <div class="fhead"><div class="ico">🔀</div><h3>Mix</h3><div class="sub">"bán lệch sang ngành rebate cao/thấp"</div></div>
+        <div class="fbody">
+          <div><div class="label">Nghĩa</div><div class="mean">Cùng tổng doanh thu, cùng % rebate từng ngành, nhưng <b>tỷ trọng dịch</b> — bán nhiều ngành BM% cao (Sữa) thay vì BM% thấp (Nước ngọt) → BM tổng lên.</div></div>
+          <div><div class="label">Công thức (mỗi MCH5, cộng lại)</div><div class="formula">Σ ( Net_s nay − Net tổng nay<br>× tỷ trọng_s trước ) × BM%_s trước</div></div>
+          <div class="decision"><b>Quyết định nó lái:</b> assortment / cơ cấu bán — không sửa bằng đàm phán rebate; sửa bằng đẩy/cắt ngành nào.</div>
+        </div>
+      </article>
+      <article class="fcard r">
+        <div class="fhead"><div class="ico">🏷️</div><h3>Rate</h3><div class="sub">"NSX đổi % rebate"</div></div>
+        <div class="fbody">
+          <div><div class="label">Nghĩa</div><div class="mean">Cùng doanh thu, cùng cơ cấu, nhưng <b>% rebate từng ngành thay đổi</b> (terms đàm phán đổi).</div></div>
+          <div><div class="label">Công thức (mỗi MCH5, cộng lại)</div><div class="formula">Σ Net_s nay<br>× ( BM%_s nay − BM%_s trước )</div></div>
+          <div class="decision"><b>Quyết định nó lái:</b> đòn bẩy đàm phán — Rate âm → renegotiate; Rate dương → khóa/nhân rộng terms <i>(trừ khi là trade-lump — xem mục 4)</i>.</div>
+        </div>
+      </article>
+    </div>
+
+    <h3 style="margin-top:30px;">Ví dụ số (cộng khít) — Sữa &amp; Nước ngọt</h3>
+    <div class="tbl-wrap">
+      <table class="num">
+        <thead><tr><th>Ngành</th><th>Net trước</th><th>BM% trước</th><th>BM trước</th><th>Net nay</th><th>BM% nay</th><th>BM nay</th></tr></thead>
+        <tbody>
+          <tr><td>Sữa</td><td>100</td><td>20%</td><td>20</td><td>180</td><td>22%</td><td>39.6</td></tr>
+          <tr><td>Nước ngọt</td><td>100</td><td>5%</td><td>5</td><td>60</td><td>4%</td><td>2.4</td></tr>
+          <tr class="total"><td>Tổng</td><td>200</td><td>12.5%</td><td>25</td><td>240</td><td>17.5%</td><td>42.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bridge-eq">
+      <span class="chip d">ΔBM +17.0</span>
+      <span class="op">=</span>
+      <span class="chip v">📦 +5</span>
+      <span class="op">+</span>
+      <span class="chip m">🔀 +9</span>
+      <span class="op">+</span>
+      <span class="chip r">🏷️ +3</span>
+    </div>
+    <p class="muted" style="text-align:center;margin-top:0;">ΔBM = 42.0 − 25 = <b>+17.0</b> — tách khít thành 3 lực:</p>
+
+    <div class="tbl-wrap">
+      <table class="num">
+        <thead><tr><th>Lực</th><th>Tính</th><th>Kết quả</th><th>Đọc</th></tr></thead>
+        <tbody>
+          <tr><td class="force">📦 Volume</td><td class="calc-cell"><code>(240 − 200) × 12.5%</code></td><td><span class="pill v">+5.0</span></td><td class="read">Doanh thu tăng 20% → +5 rebate ở rate cũ.</td></tr>
+          <tr><td class="force">🔀 Mix</td><td class="calc-cell"><code>60×20% + (−60)×5%</code></td><td><span class="pill m">+9.0</span></td><td class="read">Dịch mạnh sang Sữa (share 50%→75%), bỏ Nước ngọt → +9.</td></tr>
+          <tr><td class="force">🏷️ Rate</td><td class="calc-cell"><code>180×(+2pp) + 60×(−1pp)</code></td><td><span class="pill r">+3.0</span></td><td class="read">Sữa đàm phán tốt hơn (+2pp), Nước ngọt tệ đi (−1pp) → net +3.</td></tr>
+          <tr class="total"><td>Tổng</td><td></td><td><span class="pill sum">+17.0 <span class="check">✓</span></span></td><td class="read" style="color:var(--accent-dark);font-weight:700;">= đúng ΔBM</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top:30px;">🔀 Mix +9 — nhìn bằng diện tích</h3>
+    <figure class="figure">
+      <svg viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg" font-family="Calibri, sans-serif">
+        <text x="40" y="24" fill="#475569" font-size="13" font-weight="bold">Diện tích = Back Margin (rộng = Net, cao = BM%)</text>
+        <text x="40" y="52" fill="#64748B" font-size="12">Kỳ trước — 50% / 50%</text>
+        <rect x="40" y="130" width="110" height="120" fill="#0D9373" fill-opacity="0.85" stroke="#0a6b54"/>
+        <text x="60" y="195" fill="#fff" font-size="11">Sữa 20%</text>
+        <rect x="150" y="220" width="110" height="30" fill="#E03B3B" fill-opacity="0.85" stroke="#b32f2f"/>
+        <text x="165" y="240" fill="#fff" font-size="10">N.ngọt 5%</text>
+        <text x="285" y="195" fill="#475569" font-size="22">→</text>
+        <text x="320" y="52" fill="#64748B" font-size="12">Kỳ này — 75% / 25%</text>
+        <rect x="320" y="130" width="165" height="120" fill="#0D9373" fill-opacity="0.85" stroke="#0a6b54"/>
+        <text x="360" y="195" fill="#fff" font-size="11">Sữa 20%</text>
+        <rect x="485" y="220" width="55" height="30" fill="#E03B3B" fill-opacity="0.85" stroke="#b32f2f"/>
+        <text x="488" y="240" fill="#fff" font-size="9">N.ngọt</text>
+        <line x1="40" y1="258" x2="260" y2="258" stroke="#CBD5E1"/>
+        <line x1="320" y1="258" x2="540" y2="258" stroke="#CBD5E1"/>
+        <text x="120" y="272" fill="#64748B" font-size="10">cùng tổng Net</text>
+        <text x="400" y="272" fill="#64748B" font-size="10">cùng tổng Net</text>
+      </svg>
+      <figcaption>Hai kỳ <b>cùng tổng doanh thu, cùng % rebate mỗi ngành</b> — nhưng kỳ này khối Sữa (cao = BM% lớn) chiếm phần rộng hơn → tổng diện tích (BM) lớn hơn. Đó là <b>Mix +9</b>.</figcaption>
+    </figure>
+
+    <div class="note-amber"><span class="ico">🆚</span><div><b>Khác gì PVM của Sales?</b> Bridge này decompose <b>Back Margin</b> (base = doanh thu, rate = BM%), <b>không</b> dùng giá/đơn vị/số lượng. Muốn PVM thật (tăng giá / bán nhiều đơn vị / mix sản phẩm) cần <code>sale_qty</code> ở grain SKU — đó là analysis riêng, chưa làm.</div></div>
+  </div></div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <div class="wrap"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">04</span><h2>Các bẫy chung &amp; data-quality <span style="font-size:.6em;color:var(--bad);">(RẤT QUAN TRỌNG)</span></h2></div>
+    <p class="lead muted">Đọc kỹ mục này trước khi tin bất kỳ con số "biên đẹp" nào.</p>
+
+    <div class="dqlist">
+      <div class="dqitem">
+        <h4>Trade rebate dồn cục tháng mới nhất (T5)</h4>
+        <p style="margin:0;">Các dòng <strong>trade</strong> (Grand Opening / Shelves / Listing / Marketing / Early Payment) bị NSX/kế toán <strong>dồn cục vào tháng mới nhất</strong> thay vì rải đều. Hệ quả: <strong>biên single-month của tháng cuối bị thổi phồng</strong> (có ngành nhảy từ ~1% lên 5.3%). IT đang rà soát (project_pnl_data_quality F13).</p>
+        <ul>
+          <li><b>Cách chống:</b> đọc <b>YTD</b>, không đọc 1 tháng. Verdict ở Diagnostic &amp; Detail <b>đã tính YTD</b> sẵn để pha loãng cú lump.</li>
+          <li><b>Rate-gain TRADE</b> = timing, <b>không bền</b> (grand opening, listing… là one-off). Đừng "nhân rộng".</li>
+          <li><b>Rate-gain STRUCTURAL</b> = Normal / Log / Annual rebate = điều khoản lặp lại, <b>bền</b>. Đây mới đáng khóa/đàm.</li>
+        </ul>
+      </div>
+      <div class="dqitem">
+        <h4>Đọc VERDICT MÀU, không đọc tiền-hụt-thô</h4>
+        <p style="margin:0;">Brand <strong>to</strong> (hụt nhiều tiền tuyệt đối) <strong>≠</strong> brand <strong>thiếu</strong> (thu dưới mặt bằng). Cột "Tiền thiếu" lớn nhưng verdict 🟢 = nó to chứ không thiếu → bỏ qua.</p>
+      </div>
+      <div class="dqitem">
+        <h4>Fair-line model-aware</h4>
+        <p style="margin:0;">Benchmark so theo <strong>MCH5 × Model</strong>, nên brand <strong>nhập trực tiếp</strong> (rebate ≈ 0 theo bản chất) <strong>không bị chấm oan</strong>. Entity 🔴 mà <strong>BM% = 0</strong> → nghi nhập trực tiếp → kiểm <strong>by Model</strong> trước khi đàm.</p>
+      </div>
+      <div class="dqitem">
+        <h4>Dữ liệu chỉ có 5 tháng (202601–202605)</h4>
+        <p style="margin:0;">Khi báo cáo nói "cả năm" / "YTD" thì hiện tại = <strong>5 tháng</strong>. Compare mặc định chạy <strong>vs Previous Month</strong> (vì chưa có năm trước để so YTD). Cột nào so năm trước sẽ <strong>BLANK</strong> — bình thường, không phải lỗi.</p>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <div class="wrap"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">05</span><h2>Case study</h2></div>
+    <p class="muted">Hành trình May-2026 — tóm tắt từ <code>case-study-cm-back-margin-may2026.md</code>. <strong>Bối cảnh:</strong> May-2026 vs Apr-2026. Đã biết trước trade rebate dồn cục T5.</p>
+
+    <div class="step">
+      <div class="step-head"><span class="step-num">1</span><h3>Commercial Performance</h3></div>
+      <p>Tổng biên May +2.87pp, trong đó <strong>+2.72pp là Back</strong> (~95%) → nghi artifact kế toán. Chọn drill <strong>Bánh kẹo</strong>: biên 37.6% nhìn đẹp, <code>TCM %Rev Δ</code> +3.37 xanh, <strong>nhưng <code>Back Δ</code> +4.21 LỚN HƠN cả mức tăng tổng</strong> → suy ra Front đang xói (−0.84pp), bị Back che. Câu hỏi mang sang: <em>"+4.21 Back là rebate thật hay lump T5?"</em></p>
+      <div class="shots">
+        <figure class="shot"><img src="../case-study-assets/cp-01-overview-start.png" alt="Commercial Performance — overview" loading="lazy"><figcaption><span class="badge">Commercial · State 1</span>Overview ban đầu — quét TCM toàn bộ ngành</figcaption></figure>
+        <figure class="shot"><img src="../case-study-assets/cp-02-card-on-click.png" alt="Commercial Performance — click 1 ngành" loading="lazy"><figcaption><span class="badge">Commercial · State 2</span>Click 1 ngành → insight card đọc riêng Bánh kẹo</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-num">2</span><h3>Back Margin Diagnostic</h3></div>
+      <p>BM +18 tỷ, <strong>mainly Rate</strong>. Bóc By Income Line: <strong>~90% là trade</strong> (Grand Opening +1.54 · Shelves +1.67 · Listing +0.66…), chỉ +0.41pp là structural → <strong>cú +4.21 là lump, không phải thắng lợi bền</strong>. Điểm yếu thật nằm ở <strong>Hạt sấy khô</strong> — BM% chỉ 11.1%, <strong>Rate Effect âm −111tr</strong> (ngược chiều cả ngành đang ăn lump). Drill Hạt sấy khô sang Detail.</p>
+      <div class="shots">
+        <figure class="shot"><img src="../case-study-assets/diag-01-banhkeo.png" alt="Diagnostic — Bánh kẹo" loading="lazy"><figcaption><span class="badge">Diagnostic · State 1</span>Bánh kẹo — waterfall Volume/Mix/Rate + By Income Line</figcaption></figure>
+        <figure class="shot"><img src="../case-study-assets/diag-02-hatsaykho-expand.png" alt="Diagnostic — Hạt sấy khô" loading="lazy"><figcaption><span class="badge">Diagnostic · State 2</span>Expand Hạt sấy khô — Rate Effect âm, điểm yếu thật</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-num">3</span><h3>Back Margin Detail</h3></div>
+      <p>Đổi trục sang <strong>by Manufacturer</strong> (vì CM đàm với NSX). Brand "Nguyễn Huy" hụt −426tr; <strong>gộp lên NSX Nguyễn Huy = −777tr, share 9.2%</strong> → một cuộc đàm phán ~777 triệu YTD. PepsiCo (Poca) gap % tệ nhất (−6.6%). Bỏ Tân Tân/Minh Việt (🟢). Langfarm 🔴 nhưng <strong>BM% = 0</strong> → tách kiểm Model, đừng tốn vốn. Drill Nguyễn Huy → tiền thiếu <strong>toàn ở rebate cấu trúc</strong> (Log/Normal/Annual) → <strong>bền, đàm phán được</strong>.</p>
+      <div class="shots">
+        <figure class="shot"><img src="../case-study-assets/detail-01-by-brand.png" alt="Detail — by Brand" loading="lazy"><figcaption><span class="badge">Detail · State 1</span>Trục by Brand — verdict 🟢🟠🔴 từng brand</figcaption></figure>
+        <figure class="shot"><img src="../case-study-assets/detail-02-by-manu.png" alt="Detail — by Manufacturer" loading="lazy"><figcaption><span class="badge">Detail · State 2</span>Đổi trục by Manufacturer — gộp tiền đúng NSX</figcaption></figure>
+        <figure class="shot"><img src="../case-study-assets/detail-03-nguyenhuy.png" alt="Detail — drill Nguyễn Huy" loading="lazy"><figcaption><span class="badge">Detail · State 3</span>Drill NSX Nguyễn Huy — tiền thiếu ở rebate cấu trúc</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="calllist">
+      <h3>📞 Call-list ra được</h3>
+      <ol>
+        <li><b>Nguyễn Huy</b> (~777tr, ép Log Rebate)</li>
+        <li><b>PepsiCo</b> (~270tr, ép Normal Rebate)</li>
+      </ol>
+      <div class="extra"><b>Watch:</b> Phúc Thịnh · <b>Tách kiểm:</b> Langfarm · <b>Bỏ:</b> Tân Tân, Minh Việt.</div>
+    </div>
+
+    <div class="tip"><span class="ico">🎯</span><div><b>Bài học xuyên suốt:</b> overview suýt khen Bánh kẹo "tháng vàng"; đi đủ 3 page bóc ra ~90% là trade-lump, điểm yếu thật ở chỗ khác, và kết thúc bằng <b>con người + con số + dòng rebate</b> — không phải một biểu đồ đẹp.</div></div>
+  </div></div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <div class="wrap"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">06</span><h2>Glossary ngắn</h2></div>
+    <div class="tbl-wrap">
+      <table class="glossary">
+        <thead><tr><th>Thuật ngữ</th><th>Nghĩa</th></tr></thead>
+        <tbody>
+          <tr><td>TCM</td><td>Total Commercial Margin = tổng biên thương mại = Front Margin + Claimback + Back Margin.</td></tr>
+          <tr><td>Front Margin</td><td>Giá bán − giá vốn (COGS). Thuộc pricing/sourcing, <b>không</b> phải đòn bẩy CM.</td></tr>
+          <tr><td>Back Margin (BM)</td><td>Tiền rebate/trade NSX trả lại. <b>Đòn bẩy chính của CM</b> — đàm phán được.</td></tr>
+          <tr><td>Claimback</td><td>Khoản thu hồi từ NSX theo điều khoản claim.</td></tr>
+          <tr><td>Dòng rebate structural</td><td>Normal / Log / Annual — điều khoản lặp lại, <b>bền</b>.</td></tr>
+          <tr><td>Dòng rebate trade</td><td>Grand Opening / Marketing / Shelves / Listing / Early Payment — <b>lumpy</b>, dồn cục, không bền.</td></tr>
+          <tr><td>fair-line (peer)</td><td>Mặt bằng BM% của mọi SP cùng <b>MCH5 × Model</b>, trọng số theo doanh số entity. Chuẩn để chấm verdict.</td></tr>
+          <tr><td>Gap vs Peers</td><td>BM% entity − fair-line. <b>Chuẩn hành động</b> (verdict màu).</td></tr>
+          <tr><td>Gap vs Category</td><td>BM% entity − BM% cả rổ ngành đang xem. Chỉ là <b>bối cảnh vị trí</b> (Total = 0).</td></tr>
+          <tr><td>YTD</td><td>Year-to-Date = lũy kế từ đầu năm tới tháng đang chọn (hiện tại = 5 tháng).</td></tr>
+          <tr><td>lump (trade-lump)</td><td>Khoản rebate trade bị dồn cục vào 1 tháng (tháng mới nhất), thổi phồng biên single-month.</td></tr>
+          <tr><td>MCH2–5</td><td>Các cấp ngành hàng (MCH5 = micro-ngành, sâu nhất).</td></tr>
+          <tr><td>NSX / Manufacturer</td><td>Nhà cung cấp — đối tác đàm phán của CM.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div></div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="foot-meta">WCM · report_pnl_by_skus · CM User Guide — Back Margin · palette v2 · Accent <span class="sw" style="background:var(--accent)"></span> · Positive <span class="sw" style="background:var(--good)"></span> · Warning <span class="sw" style="background:var(--amber)"></span> · Negative <span class="sw" style="background:var(--bad)"></span></p>
+  </div>
+</footer>
+
+</body>
+</html>
