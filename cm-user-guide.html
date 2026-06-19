@@ -513,16 +513,14 @@
     <!-- DEEP DIVE: BM1 / fair-line -->
     <div class="deepdive">
       <div class="dd-eyebrow">Đào sâu · cột phức tạp nhất</div>
-      <h4>Gap vs Peers (<code>BM1 Δpp</code>) &amp; fair-line <code>BM Peer Rate MCH5</code> tính ra sao</h4>
-      <p>fair-line <b>không</b> phải "rate trung bình của 1 MCH5". Nó dựng <code>_pairs</code> = <b>mọi cặp (MCH5 × Model) mà entity thực sự có mặt</b> (<code>SUMMARIZE(fact, MCH5_ID, Model_ID, …)</code>), rồi blend theo doanh số của chính entity:</p>
-      <div class="dd-formula">fair-line = Σ ( net_entity tại cặp × peer_rate cặp ) / Σ ( net_entity tại cặp )
-
-BM1 = Σ w_cell × ( rate_entity,cell − peer_rate_cell )    với w_cell = net entity tại cell</div>
-      <p><b>Mấu chốt:</b> tử số (rate thật của brand) và fair-line dùng <b>CÙNG footprint + CÙNG trọng số net</b> → đây là so <b>like-for-like</b> từng cell rồi blend bằng đúng tỷ trọng của brand.</p>
-      <ul>
-        <li>Brand bán 70% ở MCH5-A (rebate cấu trúc thấp) + 30% ở B → fair-line của nó cũng <b>nghiêng 70% về peer của A</b>. Brand <b>không bị chấm oan</b> chỉ vì cơ cấu nằm ở ngành rebate thấp — Mix đã được trung hoà.</li>
-        <li>Cùng cơ chế xử lý <b>multi-Model</b>: cố tình <b>không</b> <code>SELECTEDVALUE(Model)</code> (brand trải nhiều model); iterator <code>_pairs</code> bắt hết.</li>
-      </ul>
+      <h4>Gap vs Peers &amp; "fair-line" — máy chấm điểm công bằng cỡ nào</h4>
+      <p>"fair-line" <b>không</b> phải mức rebate trung bình chung của cả một ngành hàng. Nó là <b>thước đo riêng dựng cho từng brand</b>. Máy nhìn xem brand đó <b>thực sự bán ở đâu</b> — từng ngách hàng nhỏ, từng dòng sản phẩm — rồi với mỗi chỗ, lấy <b>mức rebate mà mọi nhà cung cấp khác cùng bán ở đúng ngách đó đang thu</b>. Cuối cùng ghép lại theo đúng <b>tỷ trọng doanh số của chính brand</b> ở từng chỗ.</p>
+      <p>Nói gọn, fair-line trả lời: <i>"Nếu brand này thu rebate <b>đúng bằng mặt bằng</b> ở từng ngách nó đang bán, thì cả rổ hàng của nó nên ra bao nhiêu %?"</i> — <b>Gap vs Peers</b> chính là khoảng cách giữa mức brand <b>đang</b> thu và fair-line đó.</p>
+      <div class="dd-sub">
+        <b class="h">Vì sao cách so này công bằng</b>
+        Brand bán <b>70% ở ngách vốn rebate thấp</b> + 30% ở ngách rebate cao → fair-line của nó cũng <b>nghiêng 70%</b> về ngách thấp. Brand <b>không bị chấm oan</b> chỉ vì cơ cấu hàng rơi vào ngành rebate thấp: chuyện "bán hàng gì, bán ở đâu" đã được trung hoà, chỉ còn lại đúng câu hỏi <b>thu rebate giỏi hay dở hơn người cùng bán ngách đó</b>.
+        <br><br>Cùng cách đó, một brand trải <b>nhiều dòng sản phẩm</b> vẫn được so đúng từng dòng — máy gom hết các ngách brand có mặt, không bỏ sót.
+      </div>
       <div class="dd-sub warn">
         <b class="h">⚠️ 1 caveat phải biết (vai consultant)</b>
         BM1 ra <b>1 con số blend</b> cho cả brand → nó <b>che được trường hợp bù trừ</b>: brand tốt ở A (+5pp) nhưng tệ ở B (−5pp) → net ≈ 0 → hiện 🟢 trung tính, trong khi B vẫn là chỗ thu thiếu thật. Matrix BM Detail là <b>1 row/entity (không nest)</b> nên không thấy chỗ vỡ.
