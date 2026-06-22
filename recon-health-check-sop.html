@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP — Health-Check Reconciliation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    background: #F8FAFC;
+    color: #0F172A;
+    line-height: 1.6;
+    padding: 48px 24px;
+    display: flex;
+    justify-content: center;
+  }
+  .wrapper { width: 100%; max-width: 820px; display: flex; flex-direction: column; gap: 28px; }
+
+  header { border-bottom: 2px solid #E2E8F0; padding-bottom: 20px; }
+  .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #2563EB; margin-bottom: 8px;
+  }
+  h1 { font-size: 28px; font-weight: 700; color: #0F172A; letter-spacing: -0.02em; }
+  .sub { font-size: 14px; color: #64748B; margin-top: 8px; }
+  .channel {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
+    background: #EEF2FF; color: #2563EB; font-size: 12px; font-weight: 600;
+    padding: 5px 12px; border-radius: 20px;
+  }
+  .channel .dot { width: 6px; height: 6px; border-radius: 50%; background: #2563EB; }
+
+  section { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px 26px; }
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #94A3B8; margin-bottom: 6px;
+  }
+  h2 { font-size: 19px; font-weight: 700; color: #0F172A; margin-bottom: 14px; letter-spacing: -0.01em; }
+  h3 { font-size: 14px; font-weight: 700; color: #0F172A; margin: 18px 0 8px; }
+  p { font-size: 14px; color: #334155; margin-bottom: 10px; }
+  ul, ol { margin: 0 0 10px 20px; }
+  li { font-size: 14px; color: #334155; margin-bottom: 6px; }
+  strong { color: #0F172A; font-weight: 600; }
+
+  pre {
+    font-family: 'SF Mono','Fira Code',ui-monospace,monospace; font-size: 12px;
+    background: #0F172A; color: #E2E8F0; padding: 16px 18px; border-radius: 10px;
+    overflow-x: auto; line-height: 1.5; margin: 10px 0;
+  }
+  code {
+    font-family: 'SF Mono','Fira Code',ui-monospace,monospace; font-size: 12.5px;
+    background: #F1F5F9; padding: 1px 6px; border-radius: 4px; color: #475569;
+  }
+  pre code { background: none; padding: 0; color: inherit; font-size: 12px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  th {
+    text-align: left; padding: 10px 12px; background: #F8FAFC; color: #64748B;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  td { padding: 10px 12px; border-bottom: 1px solid #F1F5F9; color: #334155; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+    padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700;
+  }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .badge.new      { background: #EEF2FF; color: #2563EB; }
+  .badge.new .dot      { background: #2563EB; }
+  .badge.remind   { background: #FFFBEB; color: #D97706; }
+  .badge.remind .dot   { background: #D97706; }
+  .badge.notready { background: #FFFBEB; color: #D97706; }
+  .badge.notready .dot { background: #D97706; }
+  .badge.mismatch { background: #FDF2F2; color: #E03B3B; }
+  .badge.mismatch .dot { background: #E03B3B; }
+  .badge.ok       { background: #ECFDF5; color: #0D9373; }
+  .badge.ok .dot       { background: #0D9373; }
+
+  .callout {
+    border-left: 3px solid #D97706; background: #FFFBEB; border-radius: 0 8px 8px 0;
+    padding: 12px 16px; margin: 12px 0; font-size: 13px; color: #92400E;
+  }
+  .callout.it { border-left-color: #E03B3B; background: #FDF2F2; color: #991B1B; }
+  .callout strong { color: inherit; }
+
+  .owner-base   { color: #E03B3B; font-weight: 700; }
+  .owner-self   { color: #0D9373; font-weight: 700; }
+
+  footer { font-size: 12px; color: #94A3B8; text-align: center; padding-top: 4px; }
+  footer code { font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="eyebrow">Standard Operating Procedure</div>
+    <h1>Health-Check Reconciliation</h1>
+    <p class="sub">Hệ thống tự đối soát <strong>Databricks (nguồn thật)</strong> vs <strong>bảng Fabric</strong> mỗi ngày, cảnh báo khi lệch. Tài liệu: cách đọc alert, cách xử lý, khi nào tự fix vs báo IT.</p>
+    <span class="channel"><span class="dot"></span>Kênh cảnh báo: chỉ Telegram (email đã bỏ)</span>
+  </header>
+
+  <!-- 1. Kiến trúc -->
+  <section>
+    <div class="section-label">01 — Kiến trúc</div>
+    <h2>Hai tầng đối soát</h2>
+<pre><code>                 ┌──────────────── 2 TẦNG RECON ────────────────┐
+ Databricks ───► │ INGESTION   DBX  vs  Fact_A_STORE_SKU_DAY     │
+ (source truth)  │ TRANSFORM   EXPECTED vs Fact_A_MCH5_DAY_BY_TYPE│ ──► recon_result
+                 │             EXPECTED vs fact_mch5_day_by_type  │     (append-only)
+                 └───────────────────────────────────────────────┘            │
+                                                                               ▼
+  Chuỗi build (cascade):  Base ──► Bronze ──► Gold       NB_RECON_ALERT ──► 📲 Telegram
+  Fact_A_STORE_SKU_DAY  Fact_A_MCH5_DAY_BY_TYPE  fact_mch5_day_by_type
+  (TEAM build)          (TA build)               (TA build)</code></pre>
+    <ul>
+      <li>Gold build <strong>FROM</strong> Bronze, Bronze build <strong>FROM</strong> Base → sửa 1 tầng phải rebuild <strong>mọi tầng downstream</strong> cùng window.</li>
+      <li>Recon đọc qua shortcut, <strong>không copy</strong> bảng. <code>recon_result</code> append-only → query luôn lọc <code>run_ts</code> mới nhất per (partition_date, source_side) + whitelist source_side.</li>
+      <li>Lịch: <strong>daily</strong> [D-90, D-1] + <strong>weekly</strong> full sweep Y-1 (01/01 năm trước → D-1).</li>
+    </ul>
+  </section>
+
+  <!-- 2. Vòng đời -->
+  <section>
+    <div class="section-label">02 — Vòng đời 1 sự cố</div>
+    <h2>detect → alert → remediate → verify</h2>
+    <p>Ví dụ thật (store 1544 / 4181 / 2CBX, 06-03..07):</p>
+    <ol>
+      <li><strong>detect</strong> — recon thấy base &lt; DBX</li>
+      <li><strong>alert</strong> — Telegram đẩy <span class="badge new"><span class="dot"></span>NEW</span></li>
+      <li><strong>remediate</strong> — cascade re-run đúng window</li>
+      <li><strong>verify</strong> — re-run recon → flip <span class="badge ok"><span class="dot"></span>OK</span> → alert tự ngừng push</li>
+    </ol>
+  </section>
+
+  <!-- 3. Đọc alert -->
+  <section>
+    <div class="section-label">03 — Đọc alert</div>
+    <h2>Mỗi dấu hiệu nghĩa là gì</h2>
+    <table>
+      <thead><tr><th>Dấu hiệu</th><th>Nghĩa</th><th>Hành động</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge new"><span class="dot"></span>NEW</span></td><td>Lần đầu thấy ca này</td><td>Xử lý theo mục 04</td></tr>
+        <tr><td><span class="badge remind"><span class="dot"></span>REMIND</span></td><td>Ca cũ chưa xử lý (nhắc mỗi 3 ngày)</td><td>Đừng bỏ qua — đang tồn đọng</td></tr>
+        <tr><td><span class="badge notready"><span class="dot"></span>NOT_READY</span></td><td>Build chưa chạy tới ngày đó (KHÔNG phải lỗi data)</td><td>Re-run build bình thường, không cần backfill</td></tr>
+        <tr><td><span class="badge mismatch"><span class="dot"></span>MISMATCH</span> ít store</td><td>Stale do restate back-dated (≲30 store hoặc % nhỏ)</td><td><strong>auto-safe</strong> → cascade re-run (mục 04)</td></tr>
+        <tr><td><span class="badge mismatch"><span class="dot"></span>MISMATCH</span> nhiều store</td><td>Systematic, nghi lỗi pipeline/logic</td><td><strong>ĐIỀU TRA</strong>, đừng re-run mù</td></tr>
+        <tr><td><span class="badge mismatch"><span class="dot"></span>MISMATCH</span> còn sau cascade</td><td>Nguồn DBX / mapping có vấn đề</td><td><strong>ĐIỀU TRA</strong></td></tr>
+      </tbody>
+    </table>
+    <p><code>source_side</code> cho biết tầng nào lệch: <code>DBX_vs_Fact_A_STORE_SKU_DAY</code> = base; <code>EXPECTED_vs_Fact_A_MCH5_DAY_BY_TYPE</code> = bronze; <code>EXPECTED_vs_fact_mch5_day_by_type</code> = gold.</p>
+  </section>
+
+  <!-- 4. Runbook -->
+  <section>
+    <div class="section-label">04 — Runbook xử lý</div>
+    <h2>MISMATCH auto-safe</h2>
+    <ol>
+      <li><strong>Copy nguyên alert</strong> → chạy <code>/recon-remediate</code> (paste vào) → ra plan cascade + window <code>DATE_FROM/DATE_TO</code> (= min/max ngày bị flag).</li>
+      <li><strong>Duyệt plan</strong> + xác định chủ sở hữu từng tầng (mục 05).</li>
+      <li><strong>DRY_RUN</strong> mỗi notebook trước cell <code>.write</code>: so count window sắp ghi vs hiện tại — hợp lý mới ghi (xem <code>BACKFILL.md</code>).</li>
+      <li><strong>Re-run đúng thứ tự cascade</strong> (tầng lệch + mọi tầng downstream, cùng window).</li>
+      <li><strong>Re-run recon</strong> tầng tương ứng → ngày flip sang <span class="badge ok"><span class="dot"></span>OK</span> → alert tự ngừng push.</li>
+    </ol>
+    <div class="callout"><strong>Guardrails:</strong> <code>replaceWhere</code> ghi đè <strong>cả ngày</strong> (mọi store) — store trong alert chỉ tham khảo, KHÔNG lọc store khi ghi. DRY_RUN trước. Đúng thứ tự cascade. Re-run recon để xác nhận.</div>
+  </section>
+
+  <!-- 5. Ownership -->
+  <section>
+    <div class="section-label">05 — Tự fix vs Báo IT</div>
+    <h2>Theo chủ sở hữu từng tầng</h2>
+    <table>
+      <thead><tr><th>Tầng lệch</th><th>Chủ</th><th>Cách xử lý</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Base</strong> <code>Fact_A_STORE_SKU_DAY</code></td><td class="owner-base">Team (ta read-only)</td><td><strong>BÁO IT</strong> re-run ingestion + fix gốc. Ta KHÔNG ghi đè được.</td></tr>
+        <tr><td><strong>Bronze</strong> <code>Fact_A_MCH5_DAY_BY_TYPE</code></td><td class="owner-self">Ta</td><td>Tự re-run với date range (overwrite)</td></tr>
+        <tr><td><strong>Gold</strong> <code>fact_mch5_day_by_type</code></td><td class="owner-self">Ta</td><td>Tự re-run với date range (overwrite)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">Vì base là của team: nếu ca lệch ở base, <strong>IT phải re-land base trước</strong>, rồi ta mới re-run bronze→gold cùng window. Ta không tự đóng vòng RESOLVED cho ca base một mình được.</div>
+
+    <h3>Root-cause base stale (báo IT)</h3>
+    <p>Ingestion ghi incremental <code>replaceWhere DAY ∈ [D-3, D-1]</code> → khi IT restate 1 ngày cũ back-dated trên Databricks, Fabric base ngày đó <strong>không bao giờ re-land</strong> → stale vĩnh viễn. Fix gốc = mở rộng window re-land hoặc re-pull khi có restate.</p>
+
+    <h3>Mẫu tin báo IT</h3>
+<pre><code>[Health-Check Recon] Fact_A_STORE_SKU_DAY stale — nhờ re-run ingestion
+Bảng: Fact_A_STORE_SKU_DAY (Fabric base)
+Window: FDM='2026-06-01', DAY 2026-06-03..2026-06-07
+Triệu chứng: Fabric base &lt; Databricks (revenue+qty) — store 1544/4181/2CBX
+Nguyên nhân: restate back-dated ngoài replaceWhere D-3..D-1 → ngày cũ không re-land
+Đề nghị: (1) re-pull window trên cho các ngày này;
+         (2) fix gốc replaceWhere để re-land khi có restate back-dated.</code></pre>
+  </section>
+
+  <!-- 6. Config -->
+  <section>
+    <div class="section-label">06 — Liên hệ / Config</div>
+    <h2>Kết nối &amp; lịch</h2>
+    <ul>
+      <li><strong>Connection Databricks:</strong> <code>from env.wcm_pbi_udp_connect_func import databricks</code> (workspace-level).</li>
+      <li><strong>Telegram token:</strong> <code>Files/telegram.json</code> (plaintext interim, chat_id=-5501439897). <em>TODO: migrate Key Vault khi có role 'Key Vault Secrets User'.</em></li>
+      <li><strong>Notebook:</strong> <code>NB_RECON_DBX</code> (base tier), <code>NB_RECON_RESULT</code> (transform tier), <code>NB_RECON_ALERT</code> (push), <code>NB_RECON_PUBLISH_LATEST</code> (lớp dashboard). Module thuần + test ở <code>code-samples/</code>.</li>
+      <li><strong>Lịch:</strong> daily [D-90, D-1] + weekly full sweep Y-1.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Health-Check Reconciliation SOP · cập nhật 2026-06-22 · WCM Data Analytics
+  </footer>
+
+</div>
+</body>
+</html>
