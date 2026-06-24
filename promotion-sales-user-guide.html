@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hướng dẫn đọc báo cáo Promotion Sales (cho Category Manager)</title>
+<style>
+  :root{
+    /* synced với full-palette-v2 */
+    --accent:#2563EB; --accent-dark:#1D4ED8; --accent-press:#1E40AF;
+    --accent-soft:#EEF2FF; --accent-soft2:#DBEAFE;
+    --good:#0D9373; --good-soft:#ECFDF5;
+    --amber:#D97706; --amber-soft:#FFFBEB; --amber-soft2:#FEF3C7;
+    --bad:#E03B3B; --bad-soft:#FDF2F2;
+    --ink:#0F172A; --muted:#64748B; --faint:#94A3B8;
+    --line:#E2E8F0; --line-strong:#CBD5E1; --bg:#F8FAFC; --card:#FFFFFF;
+    --shadow:0 18px 48px -28px rgba(15,23,42,.30);
+    --shadow-sm:0 8px 24px -18px rgba(15,23,42,.34);
+    --ease:cubic-bezier(.32,.72,0,1);
+    --display:"Bahnschrift","Segoe UI Semibold","Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:Calibri,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.58;-webkit-font-smoothing:antialiased;padding-bottom:60px;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px;}
+  b,strong{color:var(--ink);}
+  a{color:var(--accent);}
+
+  /* EYEBROW */
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:6px 14px;border-radius:999px;margin:0 0 18px;}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+
+  /* HERO */
+  header.hero{padding:64px 0 16px;}
+  .hero h1{font-family:var(--display);text-transform:uppercase;font-size:clamp(32px,5.2vw,54px);line-height:1.02;margin:0 0 10px;font-weight:700;color:var(--ink);letter-spacing:.01em;max-width:20ch;}
+  .hero .lead{font-size:18px;color:var(--muted);max-width:64ch;}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .chip-meta{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--line);padding:8px 14px;border-radius:999px;}
+  .chip-meta .sw{width:11px;height:11px;border-radius:3px;}
+
+  /* STICKY NAV */
+  nav.toc{position:sticky;top:0;z-index:40;margin-top:30px;}
+  .toc-inner{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:10px 14px;background:rgba(255,255,255,.86);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow-sm);}
+  .toc a{text-decoration:none;color:var(--muted);font-size:13px;font-weight:700;padding:7px 13px;border-radius:999px;transition:all .4s var(--ease);white-space:nowrap;}
+  .toc a:hover{color:var(--accent);background:var(--accent-soft);}
+
+  /* SECTIONS */
+  section{padding:26px 0;}
+  .sec-inner{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:30px 32px;box-shadow:var(--shadow);}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:4px;}
+  .sec-num{font-family:var(--display);font-size:clamp(28px,5vw,44px);font-weight:700;line-height:1;color:var(--accent-soft2);letter-spacing:.01em;flex:0 0 auto;}
+  h2{font-size:clamp(23px,3.3vw,31px);margin:0;font-weight:700;color:var(--ink);letter-spacing:-.015em;}
+  .sec-purpose{font-size:13px;font-weight:700;color:var(--good);text-transform:uppercase;letter-spacing:.06em;margin:2px 0 0 0;}
+  h3{font-size:20px;margin:20px 0 6px;font-weight:700;color:var(--ink);}
+  h4{margin:22px 0 8px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:12.5px;color:var(--muted);}
+  p{margin:0 0 14px;font-size:16px;}
+  .muted{color:var(--muted);}
+  .lead{font-size:17px;}
+
+  /* JOURNEY */
+  .journey{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;margin:26px 0 8px;}
+  .jnode{flex:1 1 165px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow-sm);border-top:4px solid var(--accent);}
+  .jnode .stage{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);}
+  .jnode h3{font-size:16px;margin:6px 0 2px;}
+  .jnode .grain{font-size:12px;font-weight:700;color:var(--good);margin-bottom:8px;}
+  .jnode .qline{font-size:13.5px;color:var(--ink);}
+  .jarrow{align-self:center;font-size:22px;color:var(--faint);flex:0 0 auto;}
+  @media(max-width:820px){.jarrow{transform:rotate(90deg);}}
+
+  /* LABEL BOX */
+  .screen{background:#F8FAFC;border:1px solid var(--line);border-radius:14px;padding:4px 0;margin:14px 0 22px;overflow:hidden;}
+  .screen .row{display:flex;gap:14px;padding:13px 20px;border-bottom:1px solid var(--line);}
+  .screen .row:last-child{border-bottom:none;}
+  .screen .k{flex:0 0 70px;font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding-top:2px;}
+  .screen .v{font-size:14.5px;color:var(--ink);}
+  .screen .v.title{font-weight:700;color:var(--accent);font-size:16px;}
+
+  /* SCREENSHOT */
+  .shots{display:grid;grid-template-columns:1fr;gap:18px;margin:20px 0;}
+  .shot{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0;box-shadow:var(--shadow-sm);overflow:hidden;}
+  .shot img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line);}
+  .shot figcaption{margin-top:12px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--accent);padding-left:13px;line-height:1.5;}
+  .badge{display:inline-block;font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:999px;margin-right:8px;}
+
+  /* STEPS */
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:14px 0 6px;}
+  ol.steps li{counter-increment:s;position:relative;padding:10px 0 10px 44px;font-size:15.5px;border-bottom:1px solid var(--line);}
+  ol.steps li:last-child{border-bottom:none;}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent-dark);font-family:var(--display);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;}
+
+  /* TABLES */
+  .tbl-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);}
+  th,td{padding:11px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  thead th{background:#F1F5F9;color:#475569;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;border-bottom:2px solid var(--line-strong);}
+  tbody tr:nth-child(even){background:#FAFBFC;}
+  tbody tr:last-child td{border-bottom:none;}
+  td:first-child{font-weight:700;color:var(--ink);white-space:nowrap;}
+  .glossary td:first-child{color:var(--accent-dark);}
+  .glossary td{white-space:normal;}
+
+  /* CALLOUTS */
+  .trap{display:flex;gap:14px;background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:0 12px 12px 0;padding:13px 18px;margin-bottom:11px;font-size:15px;}
+  .trap .ico{flex:0 0 auto;font-size:18px;line-height:1.5;}
+  .trap b{color:#b32f2f;}
+  .tip{display:flex;gap:14px;background:var(--good-soft);border-left:4px solid var(--good);border-radius:0 12px 12px 0;padding:16px 20px;margin:22px 0;font-size:15.5px;}
+  .tip .ico{flex:0 0 auto;font-size:20px;}
+  .tip b{color:var(--good);}
+  .note-amber{display:flex;gap:14px;background:var(--amber-soft);border-left:4px solid var(--amber);border-radius:0 12px 12px 0;padding:15px 20px;margin:18px 0;font-size:15px;}
+  .note-amber .ico{flex:0 0 auto;font-size:18px;}
+  .note-amber b{color:#b45309;}
+  blockquote.lede-q{margin:0 0 16px;padding:18px 24px;font-size:17px;line-height:1.5;background:var(--accent-soft);border-radius:16px;color:var(--ink);border-left:4px solid var(--accent);}
+  blockquote.lede-q b{color:var(--accent-dark);}
+  .case{background:linear-gradient(180deg,#FBFCFF,#F6F9FF);border:1px solid var(--accent-soft2);border-left:4px solid var(--accent-dark);border-radius:0 14px 14px 0;padding:16px 22px;margin:18px 0;font-size:15px;}
+  .case .tag{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-dark);display:block;margin-bottom:5px;}
+
+  footer{margin-top:40px;text-align:center;color:var(--faint);font-size:13px;}
+  hr.div{border:none;border-top:1px solid var(--line);margin:24px 0;}
+
+  @media print{.toc{display:none;}.sec-inner,.shot,.jnode{box-shadow:none;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow"><span class="dot"></span>Promotion Sales · User Guide</div>
+    <h1>Đọc báo cáo Promotion Sales</h1>
+    <p class="lead">Hướng dẫn cho Category Manager mới: 5 trang báo cáo là <b>một hành trình thu hẹp dần</b> — từ toàn bộ chương trình khuyến mãi (CTKM) xuống tới một SKU. Đi theo câu chuyện của An để biết bấm vào đâu, đọc số nào, và tránh bẫy gì.</p>
+    <div class="hero-meta">
+      <span class="chip-meta"><span class="sw" style="background:var(--accent);"></span>5 trang · 1 mạch drill</span>
+      <span class="chip-meta"><span class="sw" style="background:var(--good);"></span>Đối tượng: CM &amp; Finance</span>
+      <span class="chip-meta"><span class="sw" style="background:var(--amber);"></span>Đọc ~10 phút</span>
+    </div>
+  </header>
+
+  <nav class="toc"><div class="toc-inner">
+    <a href="#flow">Hành trình</a>
+    <a href="#p1">1 · Portfolio</a>
+    <a href="#p2">2 · Overview</a>
+    <a href="#p3">3 · Performance</a>
+    <a href="#p4">4 · Diagnostic</a>
+    <a href="#p5">5 · Product</a>
+    <a href="#glossary">Từ điển số</a>
+  </div></nav>
+
+  <!-- ============ FLOW ============ -->
+  <section id="flow"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">00</span><div><h2>Hành trình 5 trang</h2><div class="sec-purpose">Mỗi trang trả lời 1 câu — rồi drill xuống trang sau</div></div></div>
+    <blockquote class="lede-q">Đừng đọc từng trang rời rạc. Báo cáo được thiết kế để bạn <b>bắt đầu từ trang 1</b> (cái gì đang rỉ máu?), rồi <b>click drill liên tục</b> xuống tận SKU — như lột từng lớp một củ hành.</blockquote>
+
+    <div class="journey">
+      <div class="jnode"><div class="stage">Trang 1</div><h3>Portfolio</h3><div class="grain">Toàn bộ CTKM</div><div class="qline">CTKM nào đang chạy? Cái nào dưới chuẩn?</div></div>
+      <div class="jarrow">→</div>
+      <div class="jnode"><div class="stage">Trang 2</div><h3>Overview</h3><div class="grain">1 CTKM</div><div class="qline">Ngành nào kéo CTKM này lên / xuống?</div></div>
+      <div class="jarrow">→</div>
+      <div class="jnode"><div class="stage">Trang 3</div><h3>Performance</h3><div class="grain">Vùng × Ngành</div><div class="qline">Vùng nào đang rỉ máu cho ngành đó?</div></div>
+      <div class="jarrow">→</div>
+      <div class="jnode"><div class="stage">Trang 4</div><h3>Diagnostic</h3><div class="grain">Theo ngày + SKU</div><div class="qline">Ngày nào bất thường? SKU nào kéo?</div></div>
+      <div class="jarrow">→</div>
+      <div class="jnode"><div class="stage">Trang 5</div><h3>Product</h3><div class="grain">1 SKU · toàn quốc</div><div class="qline">SKU bị chồng CTKM / khuyến mãi triền miên?</div></div>
+    </div>
+
+    <div class="case"><span class="tag">Nhân vật của chúng ta</span><b>An</b> — Category Manager ngành <b>Dầu ăn</b>. Sáng thứ Hai, An mở báo cáo để rà các CTKM đang chạy. Cô sẽ lần theo một chương trình đáng ngờ — <b>"UBWL Super 02.26"</b> — đi xuyên cả 5 trang.</div>
+  </div></section>
+
+  <!-- ============ P1 ============ -->
+  <section id="p1"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">01</span><div><h2>Promotion Portfolio</h2><div class="sec-purpose">Điểm danh — tìm cái đang rỉ máu</div></div></div>
+    <p>Trang đầu là <b>bàn cờ tổng</b>: mọi CTKM đang chạy trong một cửa sổ thời gian. Đây là trang <b>điều hướng</b>, không phải để đọc sâu — mục tiêu là <b>chọn nơi để drill</b>.</p>
+
+    <div class="shots"><figure class="shot"><img src="case-study-assets/p1.png" alt="Trang Promotion Portfolio" loading="lazy"><figcaption><span class="badge">Trang 1</span>Bảng CTKM (trái) · thẻ insight + watchlist 3 CTKM tệ nhất (phải) · bảng doanh thu theo cơ chế bonus-buy (dưới-phải).</figcaption></figure></div>
+
+    <h3>Đọc trong 30 giây</h3>
+    <ol class="steps">
+      <li><b>Đặt cửa sổ thời gian</b> (slicer trên cùng, mặc định <i>2 tuần gần nhất</i>) — mọi visual phản ứng theo.</li>
+      <li><b>Thẻ insight</b>: có bao nhiêu CTKM đang chạy, bao nhiêu đang dưới baseline P2W / SPLY.</li>
+      <li><b>Watchlist</b>: 3 CTKM tệ nhất so với P2W — đây là danh sách nghi phạm đầu tiên.</li>
+      <li><b>Quét cột Δ% màu đỏ</b> trong bảng từ trên xuống; cần thì sort theo Δ% hoặc Sales.</li>
+      <li><b>Chọn 1 CTKM</b> → nút <b>"Promotion Overview"</b> sáng lên → click để drill.</li>
+    </ol>
+
+    <h4>Số quan trọng</h4>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Chỉ số</th><th>Nghĩa</th></tr></thead>
+      <tbody>
+        <tr><td>Sales / Day</td><td>Doanh thu trên <b>mỗi store, mỗi ngày</b> → so công bằng giữa CTKM 3 ngày và 60 ngày, store nhiều và ít.</td></tr>
+        <tr><td>Δ% P2W</td><td>So với <b>2 tuần trước</b> (cùng store &amp; SKU). Âm = cần điều tra.</td></tr>
+        <tr><td>Δ% SPLY</td><td>So với <b>cùng kỳ năm ngoái</b> (cùng store &amp; SKU). Ống kính mùa vụ.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="trap"><span class="ico">⚠️</span><div><b>Δ% dương rất to thường KHÔNG phải hero.</b> Hay gặp khi SKU năm ngoái chưa bán → không có gì để so. Đừng vội mừng.</div></div>
+    <div class="trap"><span class="ico">⚪</span><div><b>"No baseline" ≠ tốt.</b> Δ% để trống (không phải 0) khi không có doanh thu để so. "0 cái dưới baseline" có thể chỉ là nhiều cái <i>chưa có</i> baseline.</div></div>
+    <div class="note-amber"><span class="ico">🗓️</span><div>Cửa sổ thời gian chỉ <b>chọn CTKM nào hiện ra</b>, KHÔNG cắt số. Sales/Δ% vẫn là tổng cả kỳ CTKM.</div></div>
+
+    <div class="case"><span class="tag">An làm gì</span>Trong Watchlist, <b>"UBWL Super 02.26"</b> đỏ <b>−18% so với P2W</b>. An chọn nó → bấm <b>Promotion Overview</b>.</div>
+  </div></section>
+
+  <!-- ============ P2 ============ -->
+  <section id="p2"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">02</span><div><h2>Promotion Overview</h2><div class="sec-purpose">Soi 1 CTKM — ngành nào kéo lên / xuống</div></div></div>
+    <p>Giờ chỉ còn <b>một CTKM</b> dưới kính hiển vi. Câu hỏi: nó tốt hay xấu tổng thể, và <b>ngành hàng nào</b> tạo nên điều đó.</p>
+
+    <div class="shots"><figure class="shot"><img src="case-study-assets/p2.png" alt="Trang Promotion Overview" loading="lazy"><figcaption><span class="badge">Trang 2</span>Thẻ KPI + dòng verdict ngành (trên) · ma trận Category Performance sort theo Gap/Day (dưới-trái) · đường doanh thu daily vs baseline (phải).</figcaption></figure></div>
+
+    <h3>Đọc trong 20 giây</h3>
+    <ol class="steps">
+      <li><b>Dòng verdict ngành</b> (MCH Headline): tổng thể so P2W + <b>ngành tệ nhất theo đồng/ngày</b>. Đây là "bắt đầu từ đây".</li>
+      <li><b>Thẻ KPI</b> Sales/Day kèm Δ% P2W / SPLY → nhìn một phát biết tốt/xấu.</li>
+      <li><b>Ma trận Category</b> sort theo <b>Gap/Day</b> (đồng thật) — ống máu to nhất nằm trên đầu. Δ% đỏ là <i>ống kính</i>, Gap là <i>ưu tiên</i>.</li>
+      <li><b>Đường daily</b>: CTKM đang vượt baseline hay đang chùng giữa kỳ?</li>
+      <li><b>Click ngành tệ nhất</b> → drill sang Performance.</li>
+    </ol>
+
+    <div class="trap"><span class="ico">➗</span><div><b>Gap/Day quan trọng hơn Δ%.</b> −40% trên ngành bé &lt; −8% trên ngành to xét theo <i>tiền thật</i>. Luôn ưu tiên theo Gap/Day để đánh đúng chỗ chảy máu lớn nhất.</div></div>
+    <div class="trap"><span class="ico">🔁</span><div><b>Chọn nhiều CTKM = số bị cộng dồn.</b> Một SKU chạy 2 CTKM cùng lúc bị <b>đếm đôi</b> (trang 5 sẽ xác nhận overlap). Mix ≠ Share — hai câu hỏi khác nhau.</div></div>
+    <div class="trap"><span class="ico">📉</span><div><b>Δ% SPLY có thể nhiễu</b> (năm ngoái hết hàng) → đối chiếu thêm Δ% P2W.</div></div>
+
+    <div class="case"><span class="tag">An làm gì</span>Ma trận chỉ ra ngành <b>"Dầu nành"</b> có Gap/ngày âm nhiều nhất. An click dòng đó → <b>Promotion Performance</b>.</div>
+  </div></section>
+
+  <!-- ============ P3 ============ -->
+  <section id="p3"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">03</span><div><h2>Promotion Performance</h2><div class="sec-purpose">Ngành đó, bổ theo địa lý — vùng nào rỉ máu</div></div></div>
+    <p>Bạn đến đây từ một ngành ở trang 2. Tất cả bên dưới là <b>ngành đó, cho CTKM đã chọn</b>, nhưng bóc theo <b>vùng × ngành con</b> qua một heatmap.</p>
+
+    <div class="shots"><figure class="shot"><img src="case-study-assets/p3.png" alt="Trang Promotion Performance" loading="lazy"><figcaption><span class="badge">Trang 3</span>Action card "bắt đầu từ đây" (trái) · heatmap geo × MCH (giữa) với toggle vùng, cấp ngành, và 4 metric ở trên.</figcaption></figure></div>
+
+    <h3>Đọc heatmap</h3>
+    <ol class="steps">
+      <li><b>Action card (trái)</b>: liệt kê <b>top-3 ô tệ nhất</b> theo metric đang chọn = "bắt đầu từ đây".</li>
+      <li><b>Chọn metric</b> ở trên heatmap: Sales/Day · <b>Gap/Day P2W</b> · Δ% P2W · Δ% SPLY. Gap/Day = trục ưu tiên (đồng thật); Δ% = màu.</li>
+      <li><b>Chọn độ phân giải</b>: vùng (Chain → Concept → Region → City → Store) × cấp ngành (MCH2 → … → SKU). Đỏ = dưới baseline, xanh = trên.</li>
+      <li><b>Hover một ô</b> → xem chi tiết: Opr Day, #Store, #SKUs.</li>
+      <li><b>Click một ô</b> → drill sang Diagnostic (mang theo cả <b>vùng + ngành</b>).</li>
+    </ol>
+
+    <div class="trap"><span class="ico">🏪</span><div><b>Opr Day là cái bẫy Sales/Day.</b> Store chỉ mở vài ngày sẽ có Sales/Day <i>cao ảo</i> dù doanh thu thấp. Luôn hover ô để kiểm tra Opr Day trước khi kết luận một vùng "khỏe".</div></div>
+
+    <div class="case"><span class="tag">An làm gì</span>Heatmap đỏ đậm ở ô <b>"Nam Trung Bộ × Dầu nành" (−49%)</b>. Action card cũng xếp nó đầu danh sách. An click ô đó → <b>Diagnostic</b>.</div>
+  </div></section>
+
+  <!-- ============ P4 ============ -->
+  <section id="p4"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">04</span><div><h2>Promotion Diagnostic</h2><div class="sec-purpose">Theo ngày — ngày nào bất thường, SKU nào kéo</div></div></div>
+    <p>Trang chẩn đoán theo thời gian: đường doanh thu hằng ngày (trên) + bảng từng SKU (dưới).</p>
+
+    <div class="shots"><figure class="shot"><img src="case-study-assets/p4.png" alt="Trang Promotion Diagnostic" loading="lazy"><figcaption><span class="badge">Trang 4</span>Đường Promo / Total / Baseline theo ngày, có toggle Cumulative &amp; Pre/Post (trên) · bảng Product Performance sort theo Gap/Day + thẻ Effectiveness (dưới).</figcaption></figure></div>
+
+    <h3>Đọc trong 30 giây</h3>
+    <ol class="steps">
+      <li><b>Đường daily, Cumulative OFF</b>: quét spike/drop từng ngày — Promo so với Baseline; Total cho thấy "bướu promo" trên nền bán thường.</li>
+      <li><b>Bật Cumulative ON (chỉ SPLY)</b>: khoảng cách dọc giữa Promo và Baseline = <b>tiền tăng thêm cộng dồn</b>. Đang nới rộng hay thu hẹp?</li>
+      <li><b>Pre/Post Window ±7/14/30</b>: nới để thấy đà trước CTKM và đuôi sau.</li>
+      <li><b>Bảng Product Performance</b> sort <b>Gap/Day</b>: SKU rỉ máu đồng-thật nhiều nhất lên đầu.</li>
+      <li><b>Thẻ Effectiveness</b>: SKU "đẹp so baseline nhưng promo chỉ chiếm thiểu số doanh thu" = đáng nghi.</li>
+      <li><b>Click một SKU</b> → Product Analysis.</li>
+    </ol>
+
+    <div class="trap"><span class="ico">📈</span><div><b>Cumulative thì mọi đường đều đi lên</b> — tín hiệu nằm ở <i>khoảng cách</i> Promo↔Baseline, không phải mức tuyệt đối. Cumulative bị <b>khóa với P2W</b> (chỉ có 14 ngày → khoảng cách sẽ phình giả).</div></div>
+    <div class="trap"><span class="ico">💧</span><div><b>Penetration thấp một mình KHÔNG xấu</b> (hàng staple nền cao). Chỉ đáng nghi khi đi kèm uplift cao — nghĩa là số đẹp có thể do bán nền hoặc <i>một CTKM khác chạy cùng</i>.</div></div>
+
+    <div class="case"><span class="tag">An làm gì</span>Một SKU dầu nành có Gap/ngày âm nhưng <b>uplift lại dương</b>, trong khi promo chỉ chiếm &lt;50% doanh thu SKU. Thẻ Effectiveness gắn cờ nghi. An click SKU đó → <b>Product Analysis</b> để xem có CTKM nào chạy chồng không.</div>
+  </div></section>
+
+  <!-- ============ P5 ============ -->
+  <section id="p5"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">05</span><div><h2>Product Analysis</h2><div class="sec-purpose">Soi 1 SKU, toàn quốc — overlap &amp; "khuyến mãi triền miên"</div></div></div>
+    <p>Trang chốt: <b>một SKU</b>, luôn xem <b>toàn quốc</b>. Hai nhiệm vụ — <b>Finance</b> kiểm tra SKU có bị nhiều CTKM chạy đồng thời (double-funding) không; <b>Commercial</b> kiểm tra SKU có bị <b>khuyến mãi triền miên</b> không.</p>
+
+    <div class="shots"><figure class="shot"><img src="case-study-assets/p5.png" alt="Trang Product Analysis" loading="lazy"><figcaption><span class="badge">Trang 5</span>Thẻ Promo Health (trên) · Promo Timeline gantt — bar chồng = overlap (phải) · Daily Sales Trend với giai đoạn promo được tô (giữa) · bảng tổng hợp từng CTKM kèm cột Overlap (dưới).</figcaption></figure></div>
+
+    <h3>Đọc trong 20 giây</h3>
+    <ol class="steps">
+      <li><b>Thẻ Promo Health</b> (verdict): SKU chạy bao nhiêu CTKM · <b>on-promo bao nhiêu % vòng đời</b> · bao nhiêu CTKM chồng nhau · bao nhiêu dưới baseline. <i>Click 1 CTKM → thẻ đổi sang nói riêng về CTKM đó.</i></li>
+      <li><b>Promo Timeline (gantt)</b>: bar chồng lên nhau = overlap. Nhìn được ngay SKU có bị nhiều CTKM cùng lúc không.</li>
+      <li><b>Daily Sales Trend</b>: giai đoạn có promo được tô màu. Tô <b>phủ kín cả năm</b> = khuyến mãi triền miên.</li>
+      <li><b>Bảng tổng hợp</b>: cột <b>Overlapped</b> + <b>Overlap Promotion Names</b> → <b>copy</b> tên đem đi điều tra.</li>
+    </ol>
+
+    <div class="trap"><span class="ico">🔁</span><div><b>"On-promo" gần 100% = nguy hiểm.</b> SKU lúc nào cũng ở giá promo thì baseline tự bào mòn → mọi Δ% "vượt baseline" đều <b>không đáng tin</b> (vì baseline cũng là kỳ promo).</div></div>
+    <div class="note-amber"><span class="ico">🧭</span><div><b>Trang này luôn toàn quốc.</b> Drill vào đây <b>chỉ mang theo đúng SKU</b> — không mang filter vùng/ngành từ trang 3/4. Overlap được tính trên <b>toàn bộ lịch sử</b> và <b>không đổi</b> khi bạn gạt Year/Month (Year/Month chỉ để zoom Daily Trend).</div></div>
+    <div class="tip"><span class="ico">💡</span><div><b>Tip cho Finance:</b> khi thấy <b>Overlapped = Yes</b>, copy giá trị cột <b>Overlap Promotion Names</b> rồi dán vào filter <b>Promotion Name</b> ở trang 1 để điều tra các CTKM chạy cùng.</div></div>
+
+    <div class="case"><span class="tag">An kết luận</span>SKU dầu nành đó <b>on-promo 100% vòng đời</b>, chạy hàng trăm CTKM và nhiều cái chồng nhau. An hiểu ra: "uplift đẹp ở trang 4 là <b>giả</b> — vì SKU này lúc nào cũng đang khuyến mãi". Cô copy danh sách CTKM overlap gửi Finance để rà ngân sách trùng.</div>
+  </div></section>
+
+  <!-- ============ GLOSSARY ============ -->
+  <section id="glossary"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">06</span><div><h2>Từ điển số</h2><div class="sec-purpose">Đọc đúng nghĩa từng chỉ số</div></div></div>
+    <div class="tbl-wrap"><table class="glossary">
+      <thead><tr><th>Thuật ngữ</th><th>Nghĩa</th></tr></thead>
+      <tbody>
+        <tr><td>Sales / Day</td><td>Doanh thu trên mỗi store, mỗi ngày vận hành → so công bằng giữa các CTKM dài/ngắn, rộng/hẹp.</td></tr>
+        <tr><td>Δ% P2W</td><td>So với 2 tuần liền trước, cùng store &amp; SKU. Ống kính xu hướng gần.</td></tr>
+        <tr><td>Δ% SPLY</td><td>So với cùng kỳ năm ngoái, cùng store &amp; SKU. Ống kính mùa vụ (có thể nhiễu nếu năm ngoái hết hàng).</td></tr>
+        <tr><td>Gap / Day</td><td>Chênh lệch Sales/Day so baseline tính bằng <b>đồng thật</b>. Dùng để xếp ưu tiên (thay vì %).</td></tr>
+        <tr><td>Mix vs Share</td><td>Mix = phần ngành chiếm trong doanh thu portfolio · Share = ngành bán có <i>hiệu quả</i> không. Hai câu khác nhau.</td></tr>
+        <tr><td>Opr Day</td><td>Số ngày store thực sự vận hành trong kỳ. Opr Day thấp → Sales/Day cao ảo.</td></tr>
+        <tr><td>On-promo %</td><td>Tỷ lệ ngày SKU đang nằm trong bất kỳ CTKM nào. Cao ≈ "khuyến mãi triền miên".</td></tr>
+        <tr><td>Overlap</td><td>SKU chạy nhiều CTKM cùng lúc (cùng store-concept + trùng thời gian). Cờ double-funding cho Finance.</td></tr>
+        <tr><td>Baseline</td><td>Mốc so sánh (P2W hoặc SPLY) — Sales/Day "đáng lẽ" nếu không có CTKM.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="tip"><span class="ico">🧭</span><div><b>Nhớ một câu:</b> bắt đầu từ <b>Watchlist trang 1</b>, drill liên tục xuống tận SKU ở trang 5. Mỗi trang chỉ trả <b>một câu hỏi</b> — đừng nhảy cóc.</div></div>
+  </div></section>
+
+  <footer>Promotion Sales · Hướng dẫn cho Category Manager — đồng bộ màu với báo cáo (full-palette-v2).</footer>
+
+</div>
+</body>
+</html>
