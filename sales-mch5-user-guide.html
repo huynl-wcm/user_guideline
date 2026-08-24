@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hướng dẫn sử dụng báo cáo Daily Sales (Store × MCH5)</title>
+<style>
+  :root{
+    /* full-palette-v2 */
+    --accent:#2563EB; --accent-dark:#1D4ED8; --accent-press:#1E40AF;
+    --accent-soft:#EEF2FF; --accent-soft2:#DBEAFE;
+    --good:#0D9373; --good-soft:#ECFDF5;
+    --amber:#D97706; --amber-soft:#FFFBEB; --amber-soft2:#FEF3C7;
+    --bad:#E03B3B; --bad-soft:#FDF2F2;
+    --ink:#0F172A; --muted:#64748B; --faint:#94A3B8;
+    --line:#E2E8F0; --line-strong:#CBD5E1; --bg:#F8FAFC; --card:#FFFFFF;
+    --shadow:0 18px 48px -28px rgba(15,23,42,.30);
+    --shadow-sm:0 8px 24px -18px rgba(15,23,42,.34);
+    --ease:cubic-bezier(.32,.72,0,1);
+    --display:"Bahnschrift","Segoe UI Semibold","Segoe UI",system-ui,sans-serif;
+    --mono:"SF Mono","Fira Code","Cascadia Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:Calibri,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.58;-webkit-font-smoothing:antialiased;padding-bottom:60px;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 28px;}
+  b,strong{color:var(--ink);}
+  a{color:var(--accent);}
+  code{font-family:var(--mono);font-size:.88em;background:#F1F5F9;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--accent-press);}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:6px 14px;border-radius:999px;margin:0 0 18px;}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+
+  header.hero{padding:64px 0 16px;}
+  .hero h1{font-family:var(--display);text-transform:uppercase;font-size:clamp(30px,4.8vw,50px);line-height:1.04;margin:0 0 10px;font-weight:700;color:var(--ink);letter-spacing:.01em;max-width:22ch;}
+  .hero .lead{font-size:18px;color:var(--muted);max-width:66ch;}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .chip-meta{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--line);padding:8px 14px;border-radius:999px;}
+  .chip-meta .sw{width:11px;height:11px;border-radius:3px;}
+
+  nav.toc{position:sticky;top:0;z-index:40;margin-top:30px;}
+  .toc-inner{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:10px 14px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow-sm);}
+  .toc a{text-decoration:none;color:var(--muted);font-size:13px;font-weight:700;padding:7px 13px;border-radius:999px;transition:all .4s var(--ease);white-space:nowrap;}
+  .toc a:hover{color:var(--accent);background:var(--accent-soft);}
+
+  section{padding:26px 0;}
+  .sec-inner{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:30px 32px;box-shadow:var(--shadow);}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:6px;}
+  .sec-num{font-family:var(--display);font-size:clamp(28px,5vw,44px);font-weight:700;line-height:1;color:var(--accent-soft2);letter-spacing:.01em;flex:0 0 auto;}
+  h2{font-size:clamp(23px,3.3vw,31px);margin:0;font-weight:700;color:var(--ink);letter-spacing:-.015em;}
+  .sec-purpose{font-size:13px;font-weight:700;color:var(--good);text-transform:uppercase;letter-spacing:.06em;margin:2px 0 0 0;}
+  h3{font-size:20px;margin:24px 0 6px;font-weight:700;color:var(--ink);}
+  h4{margin:22px 0 8px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:12.5px;color:var(--muted);}
+  p{margin:0 0 14px;font-size:16px;}
+  ul{margin:0 0 14px;padding-left:22px;font-size:15.5px;}
+  ul li{margin-bottom:6px;}
+  .muted{color:var(--muted);}
+
+  /* JOURNEY */
+  .journey{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;margin:24px 0 8px;}
+  .jnode{flex:1 1 200px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow-sm);border-top:4px solid var(--accent);}
+  .jnode .stage{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);}
+  .jnode h3{font-size:16px;margin:6px 0 2px;}
+  .jnode .grain{font-size:12px;font-weight:700;color:var(--good);margin-bottom:8px;}
+  .jnode .qline{font-size:13.5px;color:var(--ink);}
+  .jarrow{align-self:center;font-size:22px;color:var(--faint);flex:0 0 auto;}
+  @media(max-width:820px){.jarrow{transform:rotate(90deg);}}
+
+  /* SCREENSHOT */
+  .shots{display:grid;grid-template-columns:1fr;gap:18px;margin:20px 0;}
+  .shots.two{grid-template-columns:1fr 1fr;}
+  @media(max-width:800px){.shots.two{grid-template-columns:1fr;}}
+  .shot{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0;box-shadow:var(--shadow-sm);overflow:hidden;}
+  .shot img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line);}
+  .shot figcaption{margin-top:12px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--accent);padding-left:13px;line-height:1.5;}
+  .badge{display:inline-block;font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:999px;margin-right:8px;}
+
+  /* STEPS */
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:14px 0 6px;}
+  ol.steps li{counter-increment:s;position:relative;padding:10px 0 10px 44px;font-size:15.5px;border-bottom:1px solid var(--line);}
+  ol.steps li:last-child{border-bottom:none;}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent-dark);font-family:var(--display);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;}
+
+  /* TABLES */
+  .tbl-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);}
+  th,td{padding:11px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  thead th{background:#F1F5F9;color:#475569;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;border-bottom:2px solid var(--line-strong);}
+  tbody tr:nth-child(even){background:#FAFBFC;}
+  tbody tr:last-child td{border-bottom:none;}
+  td:first-child{font-weight:700;color:var(--ink);}
+  .glossary td:first-child{color:var(--accent-dark);white-space:nowrap;}
+  .nowrap td:first-child{white-space:nowrap;}
+
+  /* CALLOUTS */
+  .trap{display:flex;gap:14px;background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:0 12px 12px 0;padding:13px 18px;margin-bottom:11px;font-size:15px;}
+  .trap .ico{flex:0 0 auto;font-size:18px;line-height:1.5;}
+  .trap b{color:#b32f2f;}
+  .tip{display:flex;gap:14px;background:var(--good-soft);border-left:4px solid var(--good);border-radius:0 12px 12px 0;padding:16px 20px;margin:20px 0;font-size:15.5px;}
+  .tip .ico{flex:0 0 auto;font-size:20px;}
+  .tip b{color:var(--good);}
+  .note-amber{display:flex;gap:14px;background:var(--amber-soft);border-left:4px solid var(--amber);border-radius:0 12px 12px 0;padding:15px 20px;margin:18px 0;font-size:15px;}
+  .note-amber .ico{flex:0 0 auto;font-size:18px;}
+  .note-amber b{color:#b45309;}
+  blockquote.lede-q{margin:0 0 16px;padding:18px 24px;font-size:17px;line-height:1.5;background:var(--accent-soft);border-radius:16px;color:var(--ink);border-left:4px solid var(--accent);}
+  blockquote.lede-q b{color:var(--accent-dark);}
+  .case{background:linear-gradient(180deg,#FBFCFF,#F6F9FF);border:1px solid var(--accent-soft2);border-left:4px solid var(--accent-dark);border-radius:0 14px 14px 0;padding:16px 22px;margin:18px 0;font-size:15px;}
+  .case .tag{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-dark);display:block;margin-bottom:5px;}
+
+  /* HIERARCHY TREE */
+  .trees{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:18px 0;}
+  .tree{background:#F8FAFC;border:1px solid var(--line);border-radius:14px;padding:16px 18px;}
+  .tree .tname{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);margin-bottom:10px;}
+  .tree ol{list-style:none;margin:0;padding:0;font-size:14.5px;}
+  .tree ol li{padding:3px 0;color:var(--ink);}
+  .tree ol li span.lv{font-family:var(--mono);font-size:11px;color:var(--faint);margin-right:8px;}
+  .tree ol li.leaf{color:var(--good);font-weight:700;}
+
+  /* KEYCAP / ICON CHIP */
+  .kc{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 7px;border-radius:6px;background:#F1F5F9;border:1px solid var(--line-strong);border-bottom-width:2px;font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--ink);vertical-align:middle;}
+
+  /* SWATCHES */
+  .sw-row{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0;}
+  .sw-card{flex:1 1 200px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card);}
+  .sw-card .bar{height:8px;border-radius:99px;margin-bottom:9px;}
+  .sw-card .lbl{font-size:13.5px;color:var(--muted);}
+  .sw-card .lbl b{display:block;color:var(--ink);font-size:15px;margin-bottom:2px;}
+
+  footer{margin-top:40px;text-align:center;color:var(--faint);font-size:13px;}
+  footer a{font-weight:700;}
+  hr.div{border:none;border-top:1px solid var(--line);margin:26px 0;}
+
+  @media print{.toc{display:none;}.sec-inner,.shot,.jnode{box-shadow:none;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow"><span class="dot"></span>Daily Sales · Store × MCH5 · User Guide</div>
+    <h1>Hướng dẫn đọc báo cáo Daily Sales (Store × MCH5)</h1>
+    <p class="lead">Báo cáo có <b>2 trang chính</b> và <b>1 bảng lọc dùng chung</b>. Luồng xem chuẩn: vào <b>Overview</b> để nắm xu hướng &amp; sức khỏe chuỗi trong vài giây, rồi sang <b>Detail View</b> để bóc tách xuống từng cấp quản lý, từng cửa hàng, từng ngành hàng. Tài liệu này chỉ cho anh/chị bấm vào đâu, đọc số nào và tránh bẫy gì.</p>
+    <div class="hero-meta">
+      <span class="chip-meta"><span class="sw" style="background:var(--accent);"></span>2 trang · 1 filter panel</span>
+      <span class="chip-meta"><span class="sw" style="background:var(--good);"></span>Cập nhật hằng ngày (D-1)</span>
+      <span class="chip-meta"><span class="sw" style="background:var(--amber);"></span>Đọc ~12 phút</span>
+      <span class="chip-meta"><span class="sw" style="background:var(--faint);"></span>Cập nhật: 08/2026</span>
+    </div>
+  </header>
+
+  <nav class="toc"><div class="toc-inner">
+    <a href="#flow">Luồng xem</a>
+    <a href="#login">1 · Đăng nhập</a>
+    <a href="#scope">2 · Phạm vi &amp; quyền</a>
+    <a href="#screen">3 · Bản đồ màn hình</a>
+    <a href="#overview">4 · Overview</a>
+    <a href="#detail">5 · Detail View</a>
+    <a href="#drill">6 · Drill &amp; đổi chiều</a>
+    <a href="#filter">7 · Bộ lọc</a>
+    <a href="#glossary">8 · Từ điển chỉ số</a>
+    <a href="#faq">9 · FAQ</a>
+  </div></nav>
+
+  <!-- ============ FLOW ============ -->
+  <section id="flow"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">00</span><div><h2>Luồng xem báo cáo</h2><div class="sec-purpose">Từ tổng quan → chi tiết, không nhảy cóc</div></div></div>
+    <blockquote class="lede-q">Báo cáo được thiết kế theo một mạch: <b>Overview trả lời “chuỗi đang tăng hay giảm?”</b>, còn <b>Detail View trả lời “ai/ngành nào làm nó tăng–giảm?”</b>. Vào thẳng Detail View mà chưa lọc gì sẽ vừa chậm vừa khó đọc.</blockquote>
+
+    <div class="journey">
+      <div class="jnode"><div class="stage">Bước 1 — Trang chủ</div><h3>Overview</h3><div class="grain">Toàn chuỗi · theo ngày</div><div class="qline">Doanh thu kỳ này bao nhiêu? Xu hướng theo ngày ra sao? Bill/ngày, Bill size đang tốt hay xấu?</div></div>
+      <div class="jarrow">→</div>
+      <div class="jnode"><div class="stage">Bước 2 — Thu hẹp</div><h3>Filter Panel</h3><div class="grain">Ngày · Store · Ngành hàng</div><div class="qline">Chốt kỳ Baseline &amp; kỳ Compare, lọc chuỗi/vùng/cấp quản lý/ngành hàng cần soi.</div></div>
+      <div class="jarrow">→</div>
+      <div class="jnode"><div class="stage">Bước 3 — Bóc tách</div><h3>Detail View</h3><div class="grain">5 chiều · nhiều cấp</div><div class="qline">Xem theo Concept / Region / RSM / Category, expand xuống tới cửa hàng hoặc tới MCH5.</div></div>
+    </div>
+
+    <div class="tip"><span class="ico">💡</span><div><b>Nguyên tắc vàng:</b> lọc trước — bóc sau. Càng lọc hẹp (chuỗi, vùng, ngành hàng) trước khi expand matrix, báo cáo càng chạy nhanh và số càng dễ đọc.</div></div>
+  </div></section>
+
+  <!-- ============ 01 LOGIN ============ -->
+  <section id="login"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">01</span><div><h2>Đăng nhập &amp; truy cập</h2><div class="sec-purpose">Vào được báo cáo trong 1 phút</div></div></div>
+
+    <h3>1. Tài khoản</h3>
+    <ul>
+      <li>Đăng nhập bằng <b>email công ty</b>: <code>name@winmart.masangroup.com</code>.</li>
+      <li>Nếu chưa có tài khoản Power BI, đăng ký miễn phí tại <a href="https://powerbi.microsoft.com/en-gb/">powerbi.microsoft.com</a>.</li>
+    </ul>
+
+    <h3>2. Mở báo cáo</h3>
+    <ol class="steps">
+      <li>Vào <b>Power BI Service</b> — <a href="https://app.powerbi.com">app.powerbi.com</a>.</li>
+      <li>Chọn mục <b>Apps</b> (Ứng dụng) ở menu bên trái.</li>
+      <li>Mở app <b>WinCommerce Business Insights</b>.</li>
+      <li>Trong nhóm <b>A. Sales</b>, chọn báo cáo <b>Daily Sales (Store × MCH)</b>.</li>
+    </ol>
+
+    <div class="note-amber"><span class="ico">🔑</span><div>Góc trên bên trái báo cáo luôn hiển thị <b>email đang đăng nhập</b>. Nếu email đó không phải email công ty đã được cấp quyền, báo cáo sẽ trống — xem mục <a href="#faq">FAQ</a>.</div></div>
+  </div></section>
+
+  <!-- ============ 02 SCOPE ============ -->
+  <section id="scope"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">02</span><div><h2>Phạm vi dữ liệu &amp; phân quyền</h2><div class="sec-purpose">Anh/chị đang nhìn thấy gì — và vì sao</div></div></div>
+
+    <h3>Phạm vi báo cáo</h3>
+    <div class="tbl-wrap"><table class="nowrap">
+      <thead><tr><th>Nội dung</th><th>Chi tiết</th></tr></thead>
+      <tbody>
+        <tr><td>Dữ liệu</td><td>Doanh thu bán hàng của <b>WMP &amp; WMT</b>, chi tiết tới <b>MCH5</b> và tới từng <b>cửa hàng</b>.</td></tr>
+        <tr><td>Chỉ số</td><td>Doanh thu, Sales per Day, Bill per Day, Bill Size, %Penetration, %Sales Mix, số cửa hàng hoạt động.</td></tr>
+        <tr><td>Tần suất</td><td><b>Hằng ngày (D-1)</b> — dữ liệu có đến hết ngày hôm qua. Ví dụ hôm nay 24/08 → báo cáo có số đến 23/08.</td></tr>
+        <tr><td>Kỳ so sánh</td><td>Mọi Δ% đều là <b>Baseline so với Compare</b> — hai kỳ do anh/chị tự chọn trong Filter Panel (mặc định là cùng kỳ năm trước).</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Phân quyền dữ liệu</h3>
+    <p>Nguyên tắc: <b>mỗi user chỉ nhìn thấy các cửa hàng nằm trong phạm vi phụ trách của mình</b>. Quyền được gán theo email và cập nhật theo dữ liệu nhân sự.</p>
+    <div class="tbl-wrap"><table class="nowrap">
+      <thead><tr><th>Cấp</th><th>Phạm vi nhìn thấy</th></tr></thead>
+      <tbody>
+        <tr><td>GĐM (Giám đốc Miền)</td><td>Toàn bộ cửa hàng thuộc chuỗi / miền phụ trách.</td></tr>
+        <tr><td>GĐV / GĐST</td><td>Các cửa hàng thuộc vùng / siêu thị phụ trách.</td></tr>
+        <tr><td>QLKV</td><td>Các cửa hàng thuộc khu vực phụ trách.</td></tr>
+        <tr><td>Category / Finance / SSC</td><td>Theo phạm vi được cấp riêng (thường là toàn quốc, giới hạn theo ngành hàng nếu có).</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="trap"><span class="ico">⚠️</span><div><b>Số tổng của anh/chị có thể khác đồng nghiệp.</b> Đó không phải lỗi — mỗi người có một tập cửa hàng khác nhau. Khi đối chiếu số với nhau, phải chắc chắn hai bên cùng phạm vi quyền và cùng bộ lọc.</div></div>
+  </div></section>
+
+  <!-- ============ 03 SCREEN MAP ============ -->
+  <section id="screen"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">03</span><div><h2>Bản đồ màn hình</h2><div class="sec-purpose">3 khu vực — nhớ 3 chỗ này là dùng được cả báo cáo</div></div></div>
+
+    <p>Cả hai trang dùng chung một khung: <b>thanh điều hướng bên trái</b>, <b>vùng nội dung bên phải</b>, và <b>bảng lọc bật ra khi cần</b>.</p>
+
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Khu vực</th><th>Có gì</th><th>Dùng để</th></tr></thead>
+      <tbody>
+        <tr><td>Thanh trái — trên</td><td>Email đang đăng nhập · nút <b>Filters</b> · <b>Overview</b> · <b>Detail View</b></td><td>Xác nhận đúng tài khoản; mở bảng lọc; chuyển giữa 2 trang.</td></tr>
+        <tr><td>Thanh trái — dưới</td><td>Khối <b>Filters Active</b>: <code>Store</code> · <code>Category</code> · <code>Others</code></td><td>Xem nhanh <b>đang lọc những gì</b>. Bấm dấu <b>✖</b> đỏ cạnh mỗi dòng để <b>xoá riêng nhóm lọc đó</b>.</td></tr>
+        <tr><td>Vùng nội dung — đầu trang</td><td>Tiêu đề · mô tả · dòng <b>Note*</b> in nghiêng</td><td>Note* luôn ghi lưu ý quan trọng nhất của trang — đọc 1 lần trước khi dùng.</td></tr>
+        <tr><td>Vùng nội dung — thanh chuyển</td><td>Dải nút ngang ngay dưới tiêu đề</td><td>Trên Overview là <b>chọn kỳ</b>; trên Detail View là <b>chọn chiều xem</b>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="tip"><span class="ico">🧭</span><div><b>Khối “Filters Active” là bạn thân của anh/chị.</b> Trước khi thắc mắc “sao số lạ vậy?”, liếc khối này: nếu ghi <i>Store: 1 filter active</i> nghĩa là báo cáo đang bị thu hẹp, không phải toàn chuỗi.</div></div>
+  </div></section>
+
+  <!-- ============ 04 OVERVIEW ============ -->
+  <section id="overview"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">04</span><div><h2>Trang Overview — trang chủ</h2><div class="sec-purpose">Nắm sức khỏe chuỗi trong 30 giây</div></div></div>
+
+    <p>Đây là trang mặc định khi mở báo cáo. Nó trả lời: <b>doanh thu kỳ này bao nhiêu, tăng/giảm thế nào, và ngày nào bất thường</b>. Dữ liệu tổng hợp ở cấp <b>MCH3 × Store</b> nên trang này luôn tải nhanh.</p>
+
+    <div class="shots"><figure class="shot"><img src="case-study-assets/mch5-overview.png" alt="Trang KPI Overview" loading="lazy"><figcaption><span class="badge">Trang 1</span>Dải chọn kỳ (trên) · biểu đồ <b>Daily Sales Trend</b> với số tổng và 2 dòng biến động (giữa) · 3 thẻ KPI <b>Bill Per Day / Bill Size / Sales Per Day</b> (dưới).</figcaption></figure></div>
+
+    <h3>A. Dải chọn kỳ nhanh</h3>
+    <p>Hàng nút đầu tiên đặt <b>kỳ Baseline</b> chỉ bằng 1 cú bấm — không cần vào Filter Panel:</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Nhóm</th><th>Lựa chọn</th><th>Ý nghĩa</th></tr></thead>
+      <tbody>
+        <tr><td>Kỳ đang diễn ra</td><td>This Week · This Month · This Quarter · This Year</td><td>Từ đầu tuần/tháng/quý/năm đến ngày dữ liệu mới nhất (D-1).</td></tr>
+        <tr><td>Kỳ đã đóng</td><td>Last Week · Last Month · Last Quarter</td><td>Trọn vẹn tuần/tháng/quý liền trước — dùng để chốt số.</td></tr>
+        <tr><td>Cửa sổ trượt</td><td>Last 7.D · Last 14.D · Last 30.D · Last 3.M · Last 6.M</td><td>N ngày/tháng gần nhất tính lùi từ D-1 — dùng để nhìn xu hướng, không bị méo bởi mốc đầu tháng.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>B. Chọn kiểu so sánh</h3>
+    <p>Hàng nút thứ hai quyết định <b>mọi con số Δ% trên trang này so với cái gì</b>:</p>
+    <div class="tbl-wrap"><table class="nowrap">
+      <thead><tr><th>Nút</th><th>So với</th><th>Dùng khi</th></tr></thead>
+      <tbody>
+        <tr><td>Same Period LY</td><td>Cùng kỳ năm ngoái</td><td>Đánh giá tăng trưởng thật, đã loại yếu tố mùa vụ (Tết, mùa nóng, mùa tựu trường…).</td></tr>
+        <tr><td>Previous Period</td><td>Kỳ liền trước cùng độ dài</td><td>Xem đà ngắn hạn: tháng này so tháng trước, tuần này so tuần trước.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="trap"><span class="ico">⚠️</span><div><b>Đừng đọc Δ% mà không nhìn nút này.</b> Cùng một ngày, “+26.6% so cùng kỳ năm ngoái” và “+4.4% so kỳ liền trước” là hai câu chuyện hoàn toàn khác nhau. Dòng chú thích màu xám bên phải biểu đồ luôn ghi rõ khoảng ngày đang so.</div></div>
+
+    <h3>C. Biểu đồ Daily Sales Trend</h3>
+    <ul>
+      <li><b>Số lớn màu xanh</b> bên trái: tổng doanh thu của kỳ Baseline, kèm đúng khoảng ngày ngay dưới.</li>
+      <li><b>Hai dòng biến động</b>: dòng trên so với <i>cùng kỳ năm ngoái</i>, dòng dưới so với <i>kỳ liền trước</i> — luôn hiện cả hai, kèm số tuyệt đối và %.</li>
+      <li><b>Đường đậm</b> là kỳ hiện tại; <b>đường nét đứt mờ</b> phía dưới là kỳ so sánh.</li>
+      <li><b>Nhãn trên mỗi điểm</b>: doanh thu ngày đó (bn = tỷ đồng) và % so với kỳ so sánh — <span style="color:var(--good);font-weight:700;">xanh</span> khi tăng, <span style="color:var(--bad);font-weight:700;">đỏ</span> khi giảm. Nhìn dải nhãn là thấy ngay ngày nào tụt.</li>
+      <li><b>Nút Daily / Compare</b> ở góc phải biểu đồ: bật/tắt đường kỳ hiện tại và đường kỳ so sánh khi biểu đồ quá rối.</li>
+    </ul>
+
+    <h4>Show Events / Hide Events</h4>
+    <p>Nút <b>Show Events</b> gắn nhãn <span style="color:var(--amber);font-weight:700;">màu cam</span> lên những ngày đặc biệt (ví dụ <i>Mùng 1</i>, ngày lễ, ngày có sự kiện thương mại). Bật lên khi thấy một ngày tăng/giảm bất thường — rất nhiều trường hợp là do lịch chứ không phải do vận hành.</p>
+
+    <h3>D. Ba thẻ KPI</h3>
+    <div class="tbl-wrap"><table class="nowrap">
+      <thead><tr><th>Thẻ</th><th>Trả lời câu hỏi</th></tr></thead>
+      <tbody>
+        <tr><td>Bill Per Day</td><td>Lưu lượng khách — <b>một cửa hàng bán được bao nhiêu bill mỗi ngày</b>? Giảm = mất khách.</td></tr>
+        <tr><td>Bill Size</td><td>Giỏ hàng — <b>mỗi bill trị giá bao nhiêu</b>? Giảm = khách mua ít hơn / rẻ hơn.</td></tr>
+        <tr><td>Sales Per Day</td><td>Năng suất — <b>một cửa hàng làm ra bao nhiêu doanh thu mỗi ngày</b>? = Bill Per Day × Bill Size.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Mỗi thẻ có 3 tầng: giá trị kỳ Baseline (kèm khoảng ngày), thanh bullet so với kỳ Compare, và dòng biến động ▲/▼ ở dưới cùng.</p>
+
+    <div class="tip"><span class="ico">🔍</span><div><b>Cách chẩn đoán nhanh khi doanh thu giảm:</b> nhìn 2 thẻ Bill Per Day và Bill Size. <b>Bill/ngày giảm</b> → vấn đề <i>lưu lượng khách</i> (vị trí, cạnh tranh, hàng thiếu). <b>Bill Size giảm</b> → vấn đề <i>giỏ hàng</i> (cơ cấu ngành hàng, giá, khuyến mãi). Rồi mới sang Detail View tìm ai gây ra.</div></div>
+
+    <div class="note-amber"><span class="ico">📌</span><div><b>Note* của trang:</b> Doanh thu/Ngày và Số bill/Ngày được tính trên <b>ngày hoạt động thực tế</b> của từng cửa hàng — cửa hàng đóng cửa không bị tính vào mẫu số, nên số không bị pha loãng. Định dạng <b>GH &amp; Outlet không nằm trong tính toán này</b>.</div></div>
+  </div></section>
+
+  <!-- ============ 05 DETAIL ============ -->
+  <section id="detail"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">05</span><div><h2>Trang Detail View</h2><div class="sec-purpose">Bóc tách — ai / ngành nào tạo ra con số đó</div></div></div>
+
+    <p>Một bảng ma trận duy nhất, nhưng <b>đổi được chiều xem</b> và <b>đào xuống nhiều cấp</b>. Đây là nơi trả lời “miền nào kéo tụt?”, “QLKV nào yếu?”, “ngành hàng nào mất doanh thu?”.</p>
+
+    <div class="shots"><figure class="shot"><img src="case-study-assets/mch5-detail.png" alt="Trang Detail View" loading="lazy"><figcaption><span class="badge">Trang 2</span>Dải <b>chiều xem</b> (by Concept / by Region / by RSM-Sub-RSM / by RSM Only / by Category) · dải <b>độ sâu dữ liệu</b> (Xem Tổng Quan / Xem chi tiết MCH4/5) · bảng ma trận với cột Δ% và tô màu theo hiệu suất.</figcaption></figure></div>
+
+    <h3>A. Hai dải điều khiển ở đầu trang</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Dải</th><th>Lựa chọn</th><th>Tác dụng</th></tr></thead>
+      <tbody>
+        <tr><td>Dải 1 — Chiều xem</td><td>by Concept · by Region · by RSM/Sub-RSM · by RSM Only · by Category</td><td><b>Đổi trục dòng</b> của bảng. Bảng vẫn là một, chỉ thay cách nhóm cửa hàng / sản phẩm.</td></tr>
+        <tr><td>Dải 2 — Độ sâu dữ liệu</td><td>Xem Tổng Quan · Xem chi tiết MCH4/5</td><td><b>Đổi độ chi tiết ngành hàng</b> mà báo cáo lấy số. Ảnh hưởng trực tiếp tới tốc độ.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Xem Tổng Quan vs. Xem chi tiết MCH4/5 — chọn sao cho đúng</h4>
+    <div class="tbl-wrap"><table class="nowrap">
+      <thead><tr><th>Chế độ</th><th>Số được tổng hợp đến</th><th>Khi nào dùng</th></tr></thead>
+      <tbody>
+        <tr><td>Xem Tổng Quan <span class="muted">(mặc định)</span></td><td>MCH3</td><td>Mặc định cho mọi phân tích theo cửa hàng / vùng / cấp quản lý. <b>Nhanh</b>.</td></tr>
+        <tr><td>Xem chi tiết MCH4/5</td><td>MCH4 &amp; MCH5</td><td>Chỉ khi thật sự cần đào xuống nhóm hàng / mặt hàng con. <b>Nặng hơn nhiều</b>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="trap"><span class="ico">⚡</span><div><b>Đúng theo Note* của trang:</b> muốn phân tích sâu đến MCH4/5 thì <b>lọc store và/hoặc ngành hàng trước</b>, rồi mới bấm <b>Xem chi tiết MCH4/5</b>. Bấm chế độ này khi chưa lọc gì = kéo toàn chuỗi ở cấp mặt hàng → báo cáo treo rất lâu.</div></div>
+    <div class="trap"><span class="ico">🚫</span><div><b>Bảng trống?</b> Ở chế độ <b>Xem chi tiết MCH4/5</b>, các chỉ số chỉ hiện khi đã có bộ lọc MCH4 hoặc MCH5. Nếu bảng trắng, quay lại Filter Panel → tab <b>Category</b> → chọn MCH4/MCH5, hoặc chuyển về <b>Xem Tổng Quan</b>.</div></div>
+
+    <h3>B. Đọc các cột của bảng</h3>
+    <p>Cột đầu là cấp đang xem; các cột sau đi theo cặp <b>giá trị + Δ%</b>. Δ% luôn là <b>Baseline so với Compare</b>, hai mốc ngày hiện ở góc phải trên bảng (<i>Baseline</i> và <i>In Comparison</i>).</p>
+    <div class="tbl-wrap"><table class="nowrap">
+      <thead><tr><th>Cột</th><th>Ý nghĩa</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td>Doanh thu kỳ Baseline (VNĐ).</td></tr>
+        <tr><td># Store</td><td>Số cửa hàng <b>thực sự có hoạt động</b> trong kỳ ở dòng đó.</td></tr>
+        <tr><td>Sales Per Day</td><td>Doanh thu / cửa hàng / ngày — cột <b>công bằng nhất</b> để so giữa các nhóm to nhỏ khác nhau.</td></tr>
+        <tr><td>Bill Per Day</td><td>Số bill / cửa hàng / ngày.</td></tr>
+        <tr><td>Bill Size</td><td>Giá trị trung bình mỗi bill.</td></tr>
+        <tr><td>Penetration %</td><td>Tỷ lệ bill có ngành hàng này trên tổng bill — <b>độ phủ trong giỏ khách</b>.</td></tr>
+        <tr><td>Revenue Mix <span class="muted">(chiều by Category)</span></td><td>Tỷ trọng doanh thu của ngành hàng đó trên tổng.</td></tr>
+        <tr><td>Δ / Δ%</td><td>Biến động so với kỳ Compare. Với Penetration là <b>chênh lệch điểm %</b> (Δ), không phải % tương đối.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Màu trong bảng</h4>
+    <div class="sw-row">
+      <div class="sw-card"><div class="bar" style="background:var(--good);"></div><div class="lbl"><b>Xanh lá</b>Δ% ≥ 0 · hoặc ô hiệu suất thuộc nhóm cao</div></div>
+      <div class="sw-card"><div class="bar" style="background:var(--bad);"></div><div class="lbl"><b>Đỏ</b>Δ% &lt; 0 · hoặc ô hiệu suất thuộc nhóm thấp</div></div>
+      <div class="sw-card"><div class="bar" style="background:var(--accent-press);"></div><div class="lbl"><b>Xanh đậm</b>Dòng <b>Total</b> — tổng theo phạm vi lọc hiện tại</div></div>
+    </div>
+    <p class="muted">Cột <b>Sales Per Day</b> được tô nền theo thang giá trị (đỏ → xanh) để quét mắt tìm nhóm yếu/mạnh mà không cần đọc số.</p>
+
+    <div class="tip"><span class="ico">↕️</span><div><b>Sắp xếp:</b> bấm vào tiêu đề cột bất kỳ để sort tăng/giảm. Mẹo hay dùng: sort <b>Δ% của Sales Per Day</b> tăng dần → nhóm tệ nhất nổi lên đầu bảng.</div></div>
+  </div></section>
+
+  <!-- ============ 06 DRILL ============ -->
+  <section id="drill"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">06</span><div><h2>Đào sâu &amp; đổi chiều xem</h2><div class="sec-purpose">Phần quan trọng nhất — làm chủ được là dùng được cả báo cáo</div></div></div>
+
+    <h3>A. Năm chiều xem và cây phân cấp của từng chiều</h3>
+    <p>Bấm một nút trên dải chiều xem là bảng đổi trục dòng ngay. Mỗi chiều có sẵn một <b>cây phân cấp</b> — anh/chị đào xuống theo cây đó:</p>
+
+    <div class="trees">
+      <div class="tree"><div class="tname">1 · by Concept</div><ol>
+        <li><span class="lv">L1</span>Group Concept</li>
+        <li><span class="lv">L2</span>Phân vùng</li>
+        <li><span class="lv">L3</span>Tỉnh / TP</li>
+        <li><span class="lv">L4</span>Quận / Huyện</li>
+        <li><span class="lv">L5</span>Phường / Xã</li>
+        <li class="leaf"><span class="lv">L6</span>Tên cửa hàng</li>
+      </ol></div>
+
+      <div class="tree"><div class="tname">2 · by Region</div><ol>
+        <li><span class="lv">L1</span>Miền</li>
+        <li><span class="lv">L2</span>Tỉnh / TP</li>
+        <li><span class="lv">L3</span>Quận / Huyện</li>
+        <li><span class="lv">L4</span>Phường / Xã</li>
+        <li class="leaf"><span class="lv">L5</span>Tên cửa hàng</li>
+      </ol></div>
+
+      <div class="tree"><div class="tname">3 · by RSM / Sub-RSM</div><ol>
+        <li><span class="lv">L1</span>GĐC</li>
+        <li><span class="lv">L2</span>GĐM</li>
+        <li><span class="lv">L3</span>GĐV / GĐST</li>
+        <li><span class="lv">L4</span>QLKV</li>
+        <li class="leaf"><span class="lv">L5</span>Tên cửa hàng</li>
+      </ol></div>
+
+      <div class="tree"><div class="tname">4 · by RSM Only</div><ol>
+        <li><span class="lv">L1</span>GĐM</li>
+        <li class="leaf"><span class="lv">L2</span>Tên cửa hàng</li>
+      </ol></div>
+
+      <div class="tree"><div class="tname">5 · by Category</div><ol>
+        <li><span class="lv">L1</span>MCH2</li>
+        <li class="leaf"><span class="lv">L2</span>MCH3</li>
+      </ol>
+      <p class="muted" style="font-size:13px;margin:8px 0 0;">Muốn xuống MCH4 / MCH5: chuyển sang <b>Xem chi tiết MCH4/5</b> và lọc ngành hàng ở Filter Panel.</p>
+      </div>
+    </div>
+
+    <div class="note-amber"><span class="ico">🔁</span><div>Đổi chiều xem <b>không làm mất bộ lọc</b> đang áp. Anh/chị lọc một miền rồi lần lượt bấm qua từng chiều để soi cùng một tập cửa hàng dưới nhiều góc nhìn.</div></div>
+
+    <h3>B. Ba nút điều khiển ở góc bảng</h3>
+    <p>Rê chuột vào <b>góc trên bên phải của bảng</b>, một cụm nút nhỏ sẽ hiện ra. Đây là cách đào xuống/lên toàn bảng:</p>
+
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Nút</th><th>Tên trong Power BI</th><th>Làm gì</th></tr></thead>
+      <tbody>
+        <tr><td><span class="kc">↓↓</span></td><td>Expand all down one level</td><td><b>Mở thêm một cấp cho toàn bộ bảng</b>, và <b>vẫn giữ dòng tổng của cấp cha</b>. Ví dụ <i>by Region</i>: từ Miền → hiện Miền + Tỉnh/TP bên dưới. Đây là nút hay dùng nhất.</td></tr>
+        <tr><td><span class="kc">↧</span></td><td>Go to the next level</td><td><b>Nhảy hẳn xuống cấp kế tiếp</b>, <b>bỏ dòng tổng của cấp cha</b>. Cho danh sách phẳng, gọn — ví dụ nhảy thẳng ra danh sách Tỉnh/TP, không còn dòng Miền.</td></tr>
+        <tr><td><span class="kc">↑</span></td><td>Drill up</td><td><b>Quay lên một cấp</b> — rút gọn bảng về mức tổng hợp trước đó.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="tip"><span class="ico">🎯</span><div><b>Khi nào dùng nút nào?</b><br>
+    • Cần <b>so cấp con trong bối cảnh cấp cha</b> (Tỉnh nào kéo Miền Bắc xuống?) → dùng <b>↓↓ Expand all down one level</b>.<br>
+    • Cần <b>xếp hạng phẳng toàn bộ</b> (top/bottom 20 Tỉnh trên cả nước) → dùng <b>↧ Go to the next level</b> rồi sort.</div></div>
+
+    <h3>C. Mở từng dòng thay vì cả bảng</h3>
+    <p>Không phải lúc nào cũng cần mở hết. Ở cột đầu tiên, mỗi dòng có <b>dấu ⊞ / ⊟</b> nhỏ bên trái:</p>
+    <ol class="steps">
+      <li>Bấm <b>⊞</b> ở đầu một dòng → chỉ dòng đó mở ra cấp con, các dòng khác giữ nguyên.</li>
+      <li>Bấm <b>⊟</b> để thu dòng đó lại.</li>
+      <li>Lặp lại để lần theo một nhánh duy nhất: <i>Miền Bắc → Hà Nội → Cầu Giấy → cửa hàng</i>.</li>
+    </ol>
+    <p class="muted">Cách này giữ bảng gọn và chạy nhanh hơn nhiều so với mở toàn bộ bảng xuống cấp cửa hàng.</p>
+
+    <h3>D. Đường đi điển hình khi truy vấn một vấn đề</h3>
+    <div class="case"><span class="tag">Ví dụ — “Tháng này Sales Per Day giảm 3%, do đâu?”</span>
+      <ol class="steps" style="margin-top:8px;">
+        <li>Ở <b>Overview</b>: chọn <b>This Month</b> + <b>Same Period LY</b>. Thấy Bill Per Day −4.4% còn Bill Size +3.2% → <b>vấn đề là lưu lượng khách</b>, không phải giỏ hàng.</li>
+        <li>Sang <b>Detail View</b>, chọn chiều <b>by Region</b>. Sort cột Δ% của <b>Bill Per Day</b> tăng dần → miền yếu nhất nổi lên đầu.</li>
+        <li>Bấm <b>⊞</b> ngay dòng miền đó → ra danh sách Tỉnh/TP; tiếp tục ⊞ tới Quận/Huyện rồi tới cửa hàng.</li>
+        <li>Chuyển sang chiều <b>by RSM/Sub-RSM</b> (bộ lọc vẫn giữ) để biết <b>ai đang phụ trách</b> cụm cửa hàng đó.</li>
+        <li>Muốn biết <b>ngành hàng nào</b> mất bill: mở Filter Panel lọc đúng cụm cửa hàng, chuyển chiều <b>by Category</b>, xem cột <b>Penetration %</b> — ngành nào Δ âm mạnh là ngành mất độ phủ giỏ.</li>
+      </ol>
+    </div>
+  </div></section>
+
+  <!-- ============ 07 FILTER ============ -->
+  <section id="filter"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">07</span><div><h2>Bảng lọc (Filter Panel)</h2><div class="sec-purpose">Dùng chung cho cả 2 trang — lọc ở đâu cũng áp cho cả báo cáo</div></div></div>
+
+    <p>Bấm nút <b>Filters</b> ở thanh trái để mở. Bảng có <b>4 tab</b>: <b>Date · Store · Category · Others</b>. Chọn xong, bấm nút <b>✖ (Close)</b> góc trên bên phải bảng để đóng và áp bộ lọc.</p>
+
+    <div class="note-amber"><span class="ico">🔗</span><div>Bộ lọc <b>áp cho cả Overview lẫn Detail View</b>. Lọc ở trang này, chuyển sang trang kia vẫn còn nguyên — rất tiện, nhưng cũng là nguyên nhân số một khiến “số trang kia trông lạ”.</div></div>
+
+    <h3>Tab 1 · Date — hai mốc thời gian</h3>
+    <div class="shots"><figure class="shot"><img src="case-study-assets/mch5-filter-date.png" alt="Filter Panel — tab Date" loading="lazy"><figcaption><span class="badge">Date</span><b>Baseline</b> = kỳ đang phân tích · <b>Compare</b> = kỳ dùng để so. Mọi Δ% trong báo cáo đều sinh ra từ cặp này.</figcaption></figure></div>
+    <ul>
+      <li><b>Baseline</b> — ô ngày bắt đầu và kết thúc của kỳ đang xem.</li>
+      <li><b>Compare</b> — ô ngày bắt đầu và kết thúc của kỳ so sánh. Muốn so cùng kỳ năm trước thì đặt đúng khoảng đó của năm trước.</li>
+    </ul>
+    <div class="trap"><span class="ico">📏</span><div><b>Hai kỳ nên có cùng số ngày.</b> So một tháng 31 ngày với một kỳ 28 ngày thì cột <b>Revenue</b> sẽ lệch một cách vô nghĩa. Nếu buộc phải so kỳ dài ngắn khác nhau, chỉ đọc các cột <b>trên đầu ngày</b>: Sales Per Day, Bill Per Day, Bill Size — chúng đã chia cho số ngày hoạt động nên vẫn so được.</div></div>
+    <p class="muted">Trên trang <b>Overview</b>, dải nút <i>This Week / This Month / Last 7.D…</i> đặt Baseline nhanh mà không cần vào tab này.</p>
+
+    <h3>Tab 2 · Store — lọc theo cửa hàng &amp; tổ chức</h3>
+    <div class="shots"><figure class="shot"><img src="case-study-assets/mch5-filter-store.png" alt="Filter Panel — tab Store" loading="lazy"><figcaption><span class="badge">Store</span>Chuỗi · Địa lý · Cấp quản lý · Format · Project · Panel · và ô dán hàng loạt Store ID.</figcaption></figure></div>
+    <div class="tbl-wrap"><table class="nowrap">
+      <thead><tr><th>Bộ lọc</th><th>Cấp</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td>Chain</td><td>WMP · WMT</td><td>Nút bấm nhanh. Không chọn = cả hai chuỗi.</td></tr>
+        <tr><td>Region</td><td>Miền → Tỉnh/TP → Quận/Huyện → Phường/Xã</td><td>Dropdown phân cấp — chọn cấp trên sẽ thu hẹp danh sách cấp dưới.</td></tr>
+        <tr><td>Rsm</td><td>GĐC → GĐM → GĐV → QLKV</td><td>Lọc theo cây quản lý vận hành.</td></tr>
+        <tr><td>Format</td><td>Concept → WiN</td><td>Định dạng cửa hàng.</td></tr>
+        <tr><td>Project</td><td>Group → Project → Detail</td><td>Lọc theo dự án cải tạo / mô hình thử nghiệm.</td></tr>
+        <tr><td>Store</td><td>Id &amp; SAP Name</td><td>Tìm và chọn từng cửa hàng cụ thể.</td></tr>
+        <tr><td>Panel</td><td>LFL · NSO · STU…</td><td><b>Rất quan trọng khi so cùng kỳ</b>: chọn <b>LFL</b> để loại ảnh hưởng của cửa hàng mới mở / mới đóng.</td></tr>
+        <tr><td>Store Id mass filter</td><td>Ô nhập tự do</td><td>Dán <b>một danh sách Store ID</b> từ Excel, cách nhau bởi dấu phẩy (<code>1001, 1002, 1003</code>). Dùng khi cần soi đúng một tập cửa hàng không theo cây tổ chức nào.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Tab 3 · Category — lọc theo ngành hàng</h3>
+    <div class="shots"><figure class="shot"><img src="case-study-assets/mch5-filter-category.png" alt="Filter Panel — tab Category" loading="lazy"><figcaption><span class="badge">Category</span><b>MCH2 → MCH3</b> · <b>MCH4 → MCH5</b> · <b>Chamber</b> (nhóm nhiệt độ / khu vực trưng bày).</figcaption></figure></div>
+    <ul>
+      <li><b>MCH2 → MCH3</b>: lọc ngành hàng cấp trên — dùng cho hầu hết phân tích, hoạt động ở cả chế độ <i>Xem Tổng Quan</i>.</li>
+      <li><b>MCH4 → MCH5</b>: lọc tới nhóm hàng / mặt hàng. <b>Đây là bộ lọc bắt buộc</b> nếu muốn dùng chế độ <i>Xem chi tiết MCH4/5</i> ở Detail View.</li>
+      <li><b>Chamber</b>: nhóm theo khu vực trưng bày / bảo quản.</li>
+    </ul>
+    <div class="tip"><span class="ico">⚡</span><div><b>Công thức chống treo báo cáo:</b> lọc <b>MCH4/MCH5</b> (và tốt nhất là cả một cụm store) → <i>rồi mới</i> bấm <b>Xem chi tiết MCH4/5</b>. Làm ngược lại là nguyên nhân phổ biến nhất khiến báo cáo quay vòng lâu.</div></div>
+
+    <h3>Tab 4 · Others</h3>
+    <div class="shots"><figure class="shot"><img src="case-study-assets/mch5-filter-others.png" alt="Filter Panel — tab Others" loading="lazy"><figcaption><span class="badge">Others</span><b>Revenue Type</b> · <b>Bill Type</b> · <b>Performance Tier</b> (xếp hạng cửa hàng theo doanh thu/ngày).</figcaption></figure></div>
+    <div class="tbl-wrap"><table class="nowrap">
+      <thead><tr><th>Bộ lọc</th><th>Ý nghĩa</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue Type</td><td>Lọc theo loại doanh thu (bán hàng thường, chương trình, v.v.).</td></tr>
+        <tr><td>Bill Type</td><td>Lọc theo loại bill (POS / B2B / SLL…).</td></tr>
+        <tr><td>Performance Tier</td><td>Xếp loại cửa hàng theo <b>doanh thu/ngày</b>: <b>A</b> ≥ 25tr · <b>B</b> 18–25tr · <b>C</b> 15–18tr · <b>D</b> 12–15tr · <b>E</b> 8–12tr · <b>F</b> &lt; 8tr. Giữ <span class="kc">Ctrl</span> + click để chọn nhiều tier.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Performance Tier rất hữu ích khi so sánh: các cửa hàng tier A và tier F có hành vi hoàn toàn khác nhau, gộp chung sẽ làm trung bình mất ý nghĩa.</p>
+
+    <h3>Xoá bộ lọc</h3>
+    <div class="tbl-wrap"><table class="nowrap">
+      <thead><tr><th>Cách</th><th>Kết quả</th></tr></thead>
+      <tbody>
+        <tr><td>Bấm <b>✖</b> đỏ ở khối <b>Filters Active</b></td><td>Xoá riêng nhóm đó (Store / Category / Others), giữ nguyên các nhóm khác.</td></tr>
+        <tr><td>Nút <b>Reset</b> trong Filter Panel</td><td>Đưa nhóm lọc tương ứng về mặc định.</td></tr>
+        <tr><td>Nút <b>Reset to default</b> của Power BI <span class="muted">(thanh trên cùng của trình duyệt)</span></td><td>Đưa <b>toàn bộ báo cáo</b> về trạng thái gốc — dùng khi báo cáo lỗi hoặc lọc rối quá.</td></tr>
+      </tbody>
+    </table></div>
+  </div></section>
+
+  <!-- ============ 08 GLOSSARY ============ -->
+  <section id="glossary"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">08</span><div><h2>Từ điển chỉ số</h2><div class="sec-purpose">Hiểu đúng công thức để không đọc sai kết luận</div></div></div>
+
+    <div class="tbl-wrap"><table class="glossary">
+      <thead><tr><th>Chỉ số</th><th>Công thức</th><th>Đọc như thế nào</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td>Tổng doanh thu trong kỳ</td><td>Số tuyệt đối — chịu ảnh hưởng của độ dài kỳ và số lượng cửa hàng.</td></tr>
+        <tr><td>Operating Day</td><td>Số ngày cửa hàng <b>thực sự hoạt động</b></td><td>Mẫu số của các chỉ số “per day”. Cửa hàng đóng cửa không bị tính.</td></tr>
+        <tr><td>Sales per Day</td><td>Revenue ÷ Operating Day</td><td>Doanh thu / cửa hàng / ngày. <b>Cột so sánh công bằng nhất</b> giữa các nhóm to nhỏ khác nhau.</td></tr>
+        <tr><td>Bill per Day</td><td>#Bill ÷ Operating Day</td><td>Số bill / cửa hàng / ngày — đại diện cho <b>lưu lượng khách</b>.</td></tr>
+        <tr><td>Bill Size</td><td>Revenue ÷ #Bill</td><td>Giá trị trung bình một bill — đại diện cho <b>giỏ hàng</b>.</td></tr>
+        <tr><td>% Sales Mix</td><td>Revenue ngành ÷ Tổng Revenue</td><td>Tỷ trọng đóng góp doanh thu của một ngành hàng.</td></tr>
+        <tr><td>% Penetration</td><td>Số bill có ngành hàng ÷ Tổng số bill</td><td><b>Độ phủ trong giỏ khách</b>: cứ 100 khách thì bao nhiêu người mua ngành này.</td></tr>
+        <tr><td># Stores</td><td>Đếm cửa hàng có hoạt động trong kỳ</td><td>Dùng để hiểu quy mô của dòng đang xem; cũng giải thích vì sao Revenue thay đổi.</td></tr>
+        <tr><td>Δ%</td><td>(Baseline − Compare) ÷ Compare</td><td>Biến động tương đối giữa hai kỳ đã chọn.</td></tr>
+        <tr><td>Δ <span class="muted">(Penetration)</span></td><td>Penetration Baseline − Penetration Compare</td><td><b>Chênh lệch điểm %</b>, không phải phần trăm tương đối. “+0.5%” nghĩa là tăng 0.5 điểm phần trăm.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="tip"><span class="ico">🧮</span><div><b>Quan hệ cần nhớ:</b> <code>Sales per Day = Bill per Day × Bill Size</code>. Doanh thu/ngày chỉ giảm vì một trong hai — <b>ít khách hơn</b> hoặc <b>mỗi khách mua ít hơn</b>. Xác định được vế nào là đã đi được nửa đường chẩn đoán.</div></div>
+
+    <h4>Quy ước màu trong toàn báo cáo</h4>
+    <div class="sw-row">
+      <div class="sw-card"><div class="bar" style="background:var(--good);"></div><div class="lbl"><b>Xanh lá</b>Giá trị tăng / tỷ lệ ≥ 0 / hiệu suất cao</div></div>
+      <div class="sw-card"><div class="bar" style="background:var(--bad);"></div><div class="lbl"><b>Đỏ</b>Giá trị giảm / tỷ lệ &lt; 0 / hiệu suất thấp</div></div>
+      <div class="sw-card"><div class="bar" style="background:var(--amber);"></div><div class="lbl"><b>Cam</b>Nhãn sự kiện đặc biệt trên biểu đồ xu hướng</div></div>
+      <div class="sw-card"><div class="bar" style="background:var(--accent);"></div><div class="lbl"><b>Xanh dương</b>Giá trị chính / mục đang được chọn</div></div>
+    </div>
+  </div></section>
+
+  <!-- ============ 09 FAQ ============ -->
+  <section id="faq"><div class="sec-inner">
+    <div class="sec-head"><span class="sec-num">09</span><div><h2>Câu hỏi thường gặp &amp; xử lý lỗi</h2><div class="sec-purpose">Tự xử lý 90% tình huống trước khi cần hỗ trợ</div></div></div>
+
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Tình huống</th><th>Nguyên nhân thường gặp</th><th>Cách xử lý</th></tr></thead>
+      <tbody>
+        <tr><td>Bảng Detail View trống trơn</td><td>Đang ở chế độ <b>Xem chi tiết MCH4/5</b> nhưng chưa lọc MCH4/MCH5.</td><td>Vào Filter Panel → tab <b>Category</b> chọn MCH4/MCH5, hoặc quay về <b>Xem Tổng Quan</b>.</td></tr>
+        <tr><td>Báo cáo quay vòng rất lâu</td><td>Bật <b>Xem chi tiết MCH4/5</b> trên toàn chuỗi, hoặc expand xuống cấp cửa hàng khi chưa lọc.</td><td>Về <b>Xem Tổng Quan</b>, lọc hẹp store/ngành hàng rồi mới đào sâu lại.</td></tr>
+        <tr><td>Số không khớp với đồng nghiệp</td><td>Khác phạm vi phân quyền, hoặc khác bộ lọc / khác kỳ Baseline–Compare.</td><td>Đối chiếu khối <b>Filters Active</b> và hai mốc <b>Baseline / In Comparison</b> ở góc phải bảng.</td></tr>
+        <tr><td>Δ% to bất thường</td><td>Kỳ Compare quá ngắn, hoặc nhóm cửa hàng mới mở nên kỳ trước gần như không có số.</td><td>Đặt hai kỳ cùng độ dài; lọc <b>Panel = LFL</b> để chỉ so cửa hàng đã hoạt động ổn định.</td></tr>
+        <tr><td>Một ngày trên biểu đồ tăng/giảm đột biến</td><td>Ngày lễ, Mùng 1, sự kiện thương mại.</td><td>Bấm <b>Show Events</b> trên trang Overview để kiểm tra trước khi kết luận là vấn đề vận hành.</td></tr>
+        <tr><td>Không mở được báo cáo / báo lỗi quyền</td><td>Chưa được cấp quyền, hoặc đang đăng nhập bằng email khác.</td><td>Kiểm tra email hiển thị ở góc trên bên trái. Nếu đúng email công ty mà vẫn lỗi, xem mục dưới.</td></tr>
+        <tr><td>Đã thử hết mà vẫn lỗi</td><td>—</td><td>Bấm <b>Reset to default</b> để đưa báo cáo về trạng thái gốc. Vẫn lỗi thì gửi email cho bộ phận phụ trách, kèm ảnh chụp màn hình lỗi.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Cấp quyền cho nhân sự mới</h3>
+    <p>Việc cấp quyền cần có <b>email phê duyệt của cấp quản lý trực tiếp</b>. Gửi email tới bộ phận phụ trách báo cáo kèm: họ tên, email công ty, chức danh, phạm vi cần xem, và email phê duyệt.</p>
+
+    <div class="case"><span class="tag">Liên hệ hỗ trợ</span>
+      <b>minhnn2@winmart.masangroup.com</b> &nbsp;·&nbsp; <b>huynl@winmart.masangroup.com</b><br>
+      <span class="muted">Khi báo lỗi, vui lòng đính kèm ảnh chụp màn hình + mô tả bộ lọc đang dùng để xử lý nhanh hơn.</span>
+    </div>
+  </div></section>
+
+  <footer>
+    Daily Sales (Store × MCH5) — User Manual · Cập nhật 08/2026 · DS Team – TCKT Dept.<br>
+    Cảm ơn anh/chị đã theo dõi. Mọi góp ý về báo cáo xin gửi về email bộ phận ở trên.
+  </footer>
+
+</div>
+</body>
+</html>
