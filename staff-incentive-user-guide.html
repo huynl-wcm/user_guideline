@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Guide - Staff Product Incentive (Finance UAT)</title>
+<style>
+  :root{
+    /* synced với full-palette-v2 */
+    --accent:#2563EB;        /* CTA / link / active / Volume */
+    --accent-dark:#1D4ED8;
+    --accent-press:#1E40AF;
+    --accent-soft:#EEF2FF;
+    --accent-soft2:#DBEAFE;
+    --good:#0D9373;          /* positive / Mix */
+    --good-soft:#ECFDF5;
+    --amber:#D97706;         /* warning / Rate */
+    --amber-soft:#FFFBEB;
+    --amber-soft2:#FEF3C7;
+    --bad:#E03B3B;           /* negative */
+    --bad-soft:#FDF2F2;
+    --ink:#0F172A;           /* text primary */
+    --muted:#64748B;         /* text secondary */
+    --faint:#94A3B8;         /* text tertiary */
+    --line:#E2E8F0;          /* border default */
+    --line-strong:#CBD5E1;   /* border strong */
+    --bg:#F8FAFC;            /* surface bg */
+    --card:#FFFFFF;
+    --shadow:0 18px 48px -28px rgba(15,23,42,.30);
+    --shadow-sm:0 8px 24px -18px rgba(15,23,42,.34);
+    --ease:cubic-bezier(.32,.72,0,1);
+    --display:"Bahnschrift","Segoe UI Semibold","Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:Calibri,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.58;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px;}
+  b,strong{color:var(--ink);}
+  a{color:var(--accent);}
+  code{
+    font-family:"Cascadia Code",Consolas,monospace;font-size:.85em;
+    background:#F1F5F9;padding:1px 6px;border-radius:5px;border:1px solid var(--line);
+    color:#475569;white-space:nowrap;
+  }
+
+  /* ============ EYEBROW ============ */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--display);
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;
+    color:var(--accent);background:var(--accent-soft);
+    padding:6px 14px;border-radius:999px;margin:0 0 18px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+
+  /* ============ HERO ============ */
+  header.hero{padding:64px 0 16px;}
+  .hero h1{
+    font-family:var(--display);
+    text-transform:uppercase;
+    font-size:clamp(32px,5.2vw,54px);line-height:1.02;margin:0 0 4px;font-weight:700;
+    color:var(--ink);letter-spacing:.01em;max-width:18ch;
+  }
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .chip-meta{
+    display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
+    color:var(--muted);background:var(--card);border:1px solid var(--line);
+    padding:8px 14px;border-radius:999px;
+  }
+  .chip-meta .sw{width:11px;height:11px;border-radius:3px;}
+
+  /* ============ STICKY NAV ============ */
+  nav.toc{position:sticky;top:0;z-index:40;margin-top:30px;}
+  .toc-inner{
+    display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:10px 14px;
+    background:rgba(255,255,255,.86);backdrop-filter:blur(16px);
+    border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow-sm);
+  }
+  .toc a{
+    text-decoration:none;color:var(--muted);font-size:13px;font-weight:700;
+    padding:7px 13px;border-radius:999px;transition:all .4s var(--ease);white-space:nowrap;
+  }
+  .toc a:hover{color:var(--accent);background:var(--accent-soft);}
+
+  /* ============ SECTIONS ============ */
+  section{padding:26px 0;}
+  .sec-inner{
+    background:var(--card);border:1px solid var(--line);border-radius:24px;
+    padding:30px 32px;box-shadow:var(--shadow);
+  }
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:8px;}
+  .sec-num{
+    font-family:var(--display);
+    font-size:clamp(28px,5vw,44px);font-weight:700;line-height:1;color:var(--accent-soft2);
+    letter-spacing:.01em;flex:0 0 auto;
+  }
+  h2{font-size:clamp(23px,3.3vw,31px);margin:0;font-weight:700;color:var(--ink);letter-spacing:-.015em;}
+  h3{font-size:21px;margin:0 0 6px;font-weight:700;color:var(--ink);}
+  h4{margin:22px 0 8px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:12.5px;color:var(--muted);}
+  p{margin:0 0 14px;font-size:16px;}
+  .muted{color:var(--muted);}
+  .lead{font-size:17px;}
+
+  /* ============ JOURNEY DIAGRAM ============ */
+  .journey{display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin:26px 0 8px;}
+  .jnode{
+    flex:1 1 240px;background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:20px 22px;box-shadow:var(--shadow-sm);border-top:4px solid var(--accent);
+  }
+  .jnode .stage{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);}
+  .jnode h3{font-size:18px;margin:6px 0 2px;}
+  .jnode .grain{font-size:13px;font-weight:700;color:var(--good);margin-bottom:10px;}
+  .jnode .qline{font-size:14.5px;color:var(--ink);}
+  .jnode .drill{margin-top:14px;font-size:12.5px;color:var(--accent-dark);font-weight:700;background:var(--accent-soft);border-radius:8px;padding:8px 12px;}
+  .jarrow{align-self:center;font-size:26px;color:var(--faint);flex:0 0 auto;}
+  @media(max-width:760px){.jarrow{transform:rotate(90deg);}}
+
+  /* ============ LABEL BOX (Title/Sub/Note) ============ */
+  .screen{background:#F8FAFC;border:1px solid var(--line);border-radius:14px;padding:4px 0;margin:14px 0 22px;overflow:hidden;}
+  .screen .row{display:flex;gap:14px;padding:13px 20px;border-bottom:1px solid var(--line);}
+  .screen .row:last-child{border-bottom:none;}
+  .screen .k{flex:0 0 84px;font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding-top:2px;}
+  .screen .v{font-size:14.5px;color:var(--ink);}
+  .screen .v.title{font-weight:700;color:var(--accent);font-size:16px;}
+  .screen .v.en{font-style:italic;}
+
+  /* ============ TABLES ============ */
+  .tbl-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);}
+  th,td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  thead th{
+    position:sticky;top:0;
+    background:#F1F5F9;color:#475569;font-weight:700;font-size:11px;
+    letter-spacing:.07em;text-transform:uppercase;border-bottom:2px solid var(--line-strong);
+  }
+  tbody tr:nth-child(even){background:#FAFBFC;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:var(--accent-soft);}
+  table.calc td:first-child{font-weight:700;color:var(--ink);white-space:normal;min-width:148px;}
+  table.calc td:first-child code{display:inline-block;margin-top:3px;font-size:11.5px;white-space:normal;}
+  table.calc td{white-space:normal;}
+  table.calc .ask{color:var(--muted);}
+  table.calc .read{color:var(--muted);font-size:13.5px;}
+  table.calc .read b{color:var(--ink);}
+  table.num th,table.num td{text-align:right;white-space:nowrap;}
+  table.num th:first-child,table.num td:first-child{text-align:left;}
+  table.num tr.total td{background:var(--accent-soft);font-weight:700;color:var(--accent-dark);}
+  table.num td.force{font-weight:700;text-align:left;}
+  table.num td.read{text-align:left;white-space:normal;color:var(--muted);font-size:13.5px;min-width:210px;}
+  table.num td.calc-cell{text-align:left;}
+  .pill{display:inline-block;padding:2px 9px;border-radius:6px;font-weight:700;font-size:13.5px;white-space:nowrap;}
+  .pill.v{background:var(--accent-soft2);color:var(--accent-dark);}
+  .pill.m{background:var(--good-soft);color:var(--good);}
+  .pill.r{background:var(--amber-soft);color:var(--amber);}
+  .pill.sum{background:var(--accent);color:#fff;}
+  .check{color:var(--good);font-weight:700;}
+  .glossary td:first-child{font-weight:700;color:var(--accent-dark);white-space:nowrap;}
+  .glossary td{white-space:normal;}
+
+  /* ============ TRAP / CALLOUT BOXES ============ */
+  .traps{margin:18px 0;}
+  .traps h4{margin-top:0;}
+  .trap{display:flex;gap:14px;background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px;font-size:15px;}
+  .trap .ico{flex:0 0 auto;font-size:18px;line-height:1.5;}
+  .trap b{color:#b32f2f;}
+  .tip{display:flex;gap:14px;background:var(--good-soft);border-left:4px solid var(--good);border-radius:0 12px 12px 0;padding:16px 20px;margin:22px 0;font-size:15.5px;}
+  .tip .ico{flex:0 0 auto;font-size:20px;}
+  .tip b{color:var(--good);}
+  .note-amber{display:flex;gap:14px;background:var(--amber-soft);border-left:4px solid var(--amber);border-radius:0 12px 12px 0;padding:16px 20px;margin:18px 0;font-size:15px;}
+  .note-amber .ico{flex:0 0 auto;font-size:18px;}
+  .note-amber b{color:#b45309;}
+  blockquote.lede-q{
+    margin:0 0 8px;padding:20px 26px;font-size:18px;line-height:1.5;
+    background:var(--accent-soft);border-radius:16px;color:var(--ink);border-left:4px solid var(--accent);
+  }
+  blockquote.lede-q b{color:var(--accent-dark);}
+
+  /* ============ DEEP-DIVE EXPLAINER ============ */
+  .deepdive{
+    background:linear-gradient(180deg,#FBFCFF, #F6F9FF);
+    border:1px solid var(--accent-soft2);border-left:4px solid var(--accent);
+    border-radius:0 16px 16px 0;padding:22px 26px;margin:18px 0;
+  }
+  .deepdive .dd-eyebrow{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  .deepdive h4{margin:0 0 10px;text-transform:none;letter-spacing:0;font-size:18px;color:var(--ink);}
+  .deepdive p{font-size:15px;}
+  .deepdive ul{margin:6px 0 12px;padding-left:20px;}
+  .deepdive li{margin-bottom:8px;font-size:15px;}
+  .dd-formula{
+    font-family:"Cascadia Code",Consolas,monospace;font-size:13px;
+    background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;margin:8px 0 14px;color:var(--ink);line-height:1.6;overflow-x:auto;
+  }
+  .dd-sub{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:12px 0;font-size:14.5px;}
+  .dd-sub.warn{border-left:4px solid var(--amber);}
+  .dd-sub.scope{border-left:4px solid var(--good);}
+  .dd-sub b.h{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
+
+  /* ============ FORCE CARDS ============ */
+  .cards{display:grid;grid-template-columns:1fr;gap:18px;margin:22px 0 8px;}
+  @media(min-width:760px){.cards{grid-template-columns:repeat(3,1fr);}}
+  .fcard{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;border-top:4px solid var(--line);box-shadow:var(--shadow-sm);}
+  .fcard.v{border-top-color:var(--accent);}
+  .fcard.m{border-top-color:var(--good);}
+  .fcard.r{border-top-color:var(--amber);}
+  .fcard .fhead{padding:18px 20px 6px;}
+  .fcard .ico{font-size:26px;}
+  .fcard h3{margin:8px 0 2px;font-size:20px;}
+  .fcard.v h3{color:var(--accent-dark);}
+  .fcard.m h3{color:var(--good);}
+  .fcard.r h3{color:var(--amber);}
+  .fcard .sub{font-size:13.5px;color:var(--muted);font-weight:600;}
+  .fcard .fbody{padding:8px 20px 20px;display:flex;flex-direction:column;gap:12px;flex:1;}
+  .fcard .label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:3px;}
+  .fcard .mean{font-size:14.5px;}
+  .formula{font-family:"Cascadia Code",Consolas,monospace;font-size:12.5px;background:#F8FAFC;border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--ink);line-height:1.5;}
+  .decision{font-size:14px;padding:12px 14px;border-radius:8px;}
+  .fcard.v .decision{background:var(--accent-soft);}
+  .fcard.m .decision{background:var(--good-soft);}
+  .fcard.r .decision{background:var(--amber-soft);}
+
+  .model-axes{display:flex;gap:16px;flex-wrap:wrap;margin:18px 0 4px;}
+  .model-axes div{flex:1 1 200px;background:#F8FAFC;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14.5px;}
+  .model-axes b{color:var(--accent-dark);}
+
+  .figure{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin:22px 0;text-align:center;box-shadow:var(--shadow-sm);}
+  .figure svg{max-width:100%;height:auto;}
+  .figure figcaption{margin-top:14px;font-size:14px;color:var(--muted);text-align:left;border-left:3px solid var(--good);padding-left:14px;}
+
+  .bridge-eq{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin:24px 0 6px;font-size:18px;font-weight:700;}
+  .bridge-eq .chip{padding:8px 16px;border-radius:10px;color:#fff;}
+  .bridge-eq .chip.d{background:var(--accent);}
+  .bridge-eq .chip.v{background:var(--accent);}
+  .bridge-eq .chip.m{background:var(--good);}
+  .bridge-eq .chip.r{background:var(--amber);}
+  .bridge-eq .op{color:var(--faint);font-size:22px;}
+
+  /* ============ DATA-QUALITY NUMBERED ============ */
+  .dqlist{counter-reset:dq;display:grid;gap:16px;margin:20px 0;}
+  .dqitem{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px 20px 64px;position:relative;box-shadow:var(--shadow-sm);}
+  .dqitem::before{
+    counter-increment:dq;content:counter(dq);
+    position:absolute;left:18px;top:20px;width:32px;height:32px;border-radius:50%;
+    background:var(--accent);color:#fff;font-family:var(--display);font-weight:700;font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .dqitem h4{margin:0 0 6px;font-size:16px;color:var(--ink);text-transform:none;letter-spacing:0;}
+  .dqitem ul{margin:8px 0 0;padding-left:18px;}
+  .dqitem li{margin-bottom:6px;font-size:14.5px;}
+
+  /* ============ CASE STUDY ============ */
+  .step{margin:26px 0;}
+  .step-head{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+  .step-num{width:34px;height:34px;border-radius:10px;background:var(--accent);color:#fff;font-family:var(--display);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .step-head h3{margin:0;font-size:19px;}
+  .shots{display:flex;flex-direction:column;gap:20px;margin:18px 0;}
+  .shot{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--shadow-sm);}
+  .shot img{width:100%;height:auto;display:block;border-radius:10px;border:1px solid var(--line);}
+  .shot figcaption{font-size:14px;color:var(--muted);padding:12px 8px 4px;font-weight:600;}
+  .shot figcaption .badge{display:inline-block;font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:6px;margin-right:8px;}
+  .calllist{background:var(--accent);color:#fff;border-radius:18px;padding:24px 28px;margin:24px 0;box-shadow:var(--shadow);}
+  .calllist h3{color:#fff;margin:0 0 12px;font-size:19px;}
+  .calllist ol{margin:0;padding-left:22px;}
+  .calllist li{margin-bottom:8px;font-size:15.5px;}
+  .calllist li b{color:#fff;}
+  .calllist .extra{font-size:14px;opacity:.9;margin-top:12px;}
+
+  /* ============ FOOTER ============ */
+  footer{padding:40px 0 10px;}
+  .foot-meta{font-size:13px;color:var(--muted);text-align:center;}
+  .foot-meta .sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin:0 2px 0 8px;}
+
+  @media(max-width:680px){
+    .wrap{padding:0 18px;}
+    .sec-inner{padding:22px 18px;border-radius:18px;}
+    .sec-head{gap:12px;}
+    .screen .row{flex-direction:column;gap:4px;}
+    .screen .k{flex:none;}
+  }
+
+  @media print{
+    @page{ size:A4; margin:14mm; }
+    html,body{background:#fff;padding:0;}
+    nav.toc{display:none!important;}
+    section{padding:10px 0;}
+    .sec-inner{box-shadow:none;border-radius:14px;padding:18px 20px;}
+    /* giữ màu nền các khối khi in */
+    .calllist,thead th,.pill,.bridge-eq .chip,.step-num,.dqitem::before,
+    .eyebrow,.shot figcaption .badge,.jnode,.fcard,.tip,.trap,.note-amber,
+    .deepdive,.dd-sub,blockquote.lede-q,.screen .v.title,tbody tr:nth-child(even){
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;
+    }
+    /* bỏ bóng cho nhẹ */
+    .figure,.fcard,.jnode,.dqitem,.shot,.calllist,.deepdive,.tbl-wrap,.sec-inner{box-shadow:none;}
+    /* === CHỐNG CẮT GIỮA CHỪNG === */
+    /* không xé ngang các khối nội dung */
+    p,li,tr,.trap,.tip,.note-amber,.jnode,.fcard,.shot,.deepdive,.dd-sub,
+    .dd-formula,.formula,blockquote.lede-q,figure,.bridge-eq,.screen,.screen .row,
+    .step-head,.model-axes>div,.chip-meta{
+      break-inside:avoid; page-break-inside:avoid;
+    }
+    /* tiêu đề không bị bỏ lại lẻ loi cuối trang */
+    h1,h2,h3,h4,.sec-head,.step-head{ break-after:avoid; page-break-after:avoid; }
+    /* bảng: lặp lại header mỗi trang, không cắt giữa hàng */
+    thead{ display:table-header-group; }
+    tr{ break-inside:avoid; page-break-inside:avoid; }
+    /* ảnh case study không tràn/cắt qua trang */
+    .shot img{ max-height:170mm; width:auto; max-width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow"><span class="dot"></span>User Guide · UAT round 1</div>
+  <h1>Staff Product Incentive</h1>
+  <p class="lead muted">Hướng dẫn đọc báo cáo thưởng thi đua bán hàng theo sản phẩm — dành cho Finance.
+  Đi theo đúng một luồng: <b>tổng danh mục → cửa hàng → chương trình → phân bố → chi tiết nhân viên</b>.</p>
+  <div class="hero-meta">
+    <span class="chip-meta"><span class="sw" style="background:#2563EB"></span>4 trang chính + 1 panel bộ lọc</span>
+    <span class="chip-meta"><span class="sw" style="background:#0D9373"></span>Dữ liệu chốt tới D-1</span>
+    <span class="chip-meta"><span class="sw" style="background:#D97706"></span>Không có budget / target</span>
+  </div>
+</header>
+
+<nav class="toc"><div class="toc-inner">
+  <a href="#flow">Luồng đọc</a>
+  <a href="#p1">1 · Overview</a>
+  <a href="#p2">2 · Store Matrix</a>
+  <a href="#p3">3 · Programs</a>
+  <a href="#p4">4 · Distribution</a>
+  <a href="#p5">5 · Staff Detail</a>
+  <a href="#filters">Bộ lọc</a>
+  <a href="#glossary">Thuật ngữ</a>
+  <a href="#traps">8 bẫy đọc số</a>
+  <a href="#uat">Cần bạn phản hồi</a>
+</div></nav>
+
+<!-- ================= FLOW ================= -->
+<section id="flow"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">00</div><h2>Báo cáo này trả lời câu gì</h2></div>
+  <blockquote class="lede-q">
+    <b>Chương trình thưởng thi đua đang tiêu bao nhiêu tiền, tiền đó có tới tay nhân viên không, và nó dồn vào đâu?</b>
+  </blockquote>
+  <p>Mỗi trang trả lời đúng một câu hỏi và <b>chuyển tiếp sang trang sau</b>. Đọc lệch thứ tự vẫn được,
+  nhưng luồng dưới đây là đường đi được thiết kế để không bỏ sót bước nào.</p>
+
+  <div class="journey">
+    <div class="jnode">
+      <div class="stage">Trang 1</div><h3>Overview</h3>
+      <div class="grain">Toàn danh mục</div>
+      <div class="qline">Tổng quỹ bao nhiêu, bao nhiêu tới tay nhân viên, tốn bao nhiêu trên mỗi đồng doanh số?</div>
+    </div>
+    <div class="jarrow">→</div>
+    <div class="jnode">
+      <div class="stage">Trang 2</div><h3>Store Matrix</h3>
+      <div class="grain">Theo tổ chức → cửa hàng</div>
+      <div class="qline">Tiền nằm ở vùng/miền/concept nào? Vùng nào lệch khỏi mặt bằng?</div>
+      <div class="drill">Expand down tới tận cửa hàng</div>
+    </div>
+    <div class="jarrow">→</div>
+    <div class="jnode">
+      <div class="stage">Trang 3</div><h3>Programs in Scope</h3>
+      <div class="grain">Theo chương trình</div>
+      <div class="qline">Chương trình nào đốt tiền nhanh nhất, chương trình nào đắt trên mỗi đồng doanh số?</div>
+    </div>
+    <div class="jarrow">→</div>
+    <div class="jnode">
+      <div class="stage">Trang 4</div><h3>Distribution</h3>
+      <div class="grain">Hình dạng phân bố</div>
+      <div class="qline">Tiền rải đều hay dồn cục? Cửa hàng nào nằm ở đuôi?</div>
+      <div class="drill">Bấm 1 cửa hàng → drill sang Staff Detail</div>
+    </div>
+  </div>
+
+  <div class="note-amber"><div class="ico">⚠️</div><div>
+    <b>Không có budget hay target trong nguồn.</b> Mọi con số ở đây là <b>số mô tả</b> (đang là bao nhiêu),
+    không phải <b>số so kế hoạch</b> (lệch bao nhiêu so với dự kiến). Đừng đọc bất kỳ ô nào thành "vượt/hụt chỉ tiêu".
+  </div></div>
+</div></section>
+
+<!-- ================= PAGE 1 ================= -->
+<section id="p1"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">01</div><h2>Overview — mạch đập của cả danh mục</h2></div>
+  <p>Sáu thẻ số + biểu đồ quỹ theo ngày. Đây là trang bạn mở đầu ca làm việc để biết "hôm nay có gì bất thường không".</p>
+
+  <div class="shots"><figure class="shot">
+    <img src="case-study-assets/si-01-overview.png" alt="Trang Overview">
+    <figcaption><span class="badge">Trang 1</span>Sáu thẻ soi gương đúng sáu cột của Store Matrix — đọc ở đây rồi bổ xuống trang 2 sẽ thấy cùng một bộ số.</figcaption>
+  </figure></div>
+
+  <h4>Đọc theo thứ tự này</h4>
+  <div class="dqlist">
+    <div class="dqitem"><h4>Quỹ và chi trả</h4>
+      <ul>
+        <li><code>Bonus Pool (VND)</code> — tổng quỹ thưởng tích luỹ trong khoảng ngày đang chọn.</li>
+        <li><code>Bonus Paid to Staff (VND)</code> — tổng thưởng cộng từ từng dòng nhân viên.</li>
+        <li><code>Payout Rate %</code> — tỉ lệ quỹ đã tới tay nhân viên.</li>
+      </ul>
+    </div>
+    <div class="dqitem"><h4>Hiệu quả chi phí</h4>
+      <ul>
+        <li><code>Program Revenue (VND)</code> — doanh thu của <b>đúng những SKU được thưởng</b>, tại cửa hàng/ngày có tham gia.</li>
+        <li><code>Bonus as % of Program Revenue</code> — mỗi đồng doanh số được thưởng thì tốn bao nhiêu tiền thưởng.</li>
+        <li><code>Avg Bonus Pool per Operating Store-Day</code> — trung bình mỗi ngày mở cửa của một cửa hàng tốn bao nhiêu VND thưởng.</li>
+      </ul>
+    </div>
+    <div class="dqitem"><h4>Hai mốc thời gian ở góc phải — không phải một</h4>
+      <ul>
+        <li><code>Data Through</code> = ngày cuối cùng <b>có trong dữ liệu</b>. Luôn là <b>D-1</b> (hôm qua) vì pipeline cố ý chặn ngày đang chạy dở.</li>
+        <li><code>Refreshed at</code> = giờ báo cáo được làm mới lần cuối.</li>
+        <li>Hai cái này <b>khác nhau</b>. Refresh lúc 9h sáng nay <b>không</b> có nghĩa là đã có số của hôm nay.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tip"><div class="ico">💡</div><div>
+    <b>Băng trạng thái ở đáy trang</b> (<code>Settled</code> / <code>Provisional</code> / <code>Mixed</code>) cho biết
+    số trên màn hình đã chốt hay còn tạm tính. Xem mục <a href="#glossary">thuật ngữ</a> để biết đọc thế nào —
+    <b><code>Mixed</code> là bình thường</b>, không phải lỗi.
+  </div></div>
+</div></section>
+
+<!-- ================= PAGE 2 ================= -->
+<section id="p2"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">02</div><h2>Store Matrix — tiền nằm ở đâu</h2></div>
+  <p>Bốn tab ở đầu trang đổi <b>cách nhóm cửa hàng</b>: <code>by Concept</code> · <code>by Region</code> ·
+  <code>by RSM/Sub-RSM</code> · <code>by RSM Only</code>. Bấm dấu <b>+</b> để bung xuống cấp sâu hơn, tới tận từng cửa hàng.</p>
+
+  <div class="shots"><figure class="shot">
+    <img src="case-study-assets/si-02-store-matrix.png" alt="Trang Store Matrix">
+    <figcaption><span class="badge">Trang 2</span>Màu chỉ tô 3 cột chẩn đoán. Các cột tiền để trắng có chủ đích — tô màu ở đó chỉ vẽ lại "cửa hàng to thì số to".</figcaption>
+  </figure></div>
+
+  <h4>Ba cột có màu — và cách đọc màu</h4>
+  <div class="tbl-wrap"><table class="calc">
+    <thead><tr><th>Cột</th><th>Màu nói gì</th><th>Đọc thế nào</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Index vs Baseline %</td>
+        <td><span class="pill r">amber = thấp</span> <span class="pill v">trắng = 100%</span> <span class="pill" style="background:#FDF2F2;color:#b32f2f">đỏ = cao</span></td>
+        <td class="read"><b>100% = bằng trung bình của chính các cửa hàng bạn đang xem.</b> <b>Cả hai đuôi đều đáng soi</b>:
+        đỏ = tiền dồn cục bất thường; amber = chương trình <b>không với tới</b> nhóm đó. ⛔ Đừng đọc amber thành "tiết kiệm tốt".</td>
+      </tr>
+      <tr>
+        <td>Payout Rate %</td>
+        <td><span class="pill m">xanh = cao</span> → <span class="pill" style="background:#FDF2F2;color:#b32f2f">đỏ = thấp</span></td>
+        <td class="read">Đây là cột <b>duy nhất</b> có trục tốt/xấu thật. Thấp = quỹ chưa tới tay nhân viên.
+        Thang được ghim <code>85% → 100%</code> nên các ô quanh <code>94-98%</code> gần như cùng màu — <b>đúng, vì chúng thật sự giống nhau</b>.</td>
+      </tr>
+      <tr>
+        <td>Bonus as % of Program Revenue</td>
+        <td><span class="pill m">gradient 0 → 4%</span></td>
+        <td class="read">Chi phí thưởng trên mỗi đồng doanh số được thưởng. Ô đậm = chương trình/khu vực đó đắt hơn mặt bằng.</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="trap"><div class="ico">⛔</div><div>
+    <b>Cột <code>Cumulative Bonus (Period-to-Date)</code> cố ý KHÔNG theo Date Range.</b>
+    Nó luôn là luỹ kế của <b>trọn kỳ thưởng</b>. Vì vậy nó chỉ có nghĩa khi khoảng ngày bạn chọn
+    <b>nằm gọn trong một kỳ</b>; chọn vắt hai kỳ thì cột này để trống — đó là <b>cố ý</b>, không phải mất dữ liệu.
+  </div></div>
+
+  <div class="trap"><div class="ico">⛔</div><div>
+    <b>Cửa hàng không phát sinh thưởng đã bị ẩn</b> khỏi bảng. Nên tổng số cửa hàng trên trang này
+    <b>không</b> phải tổng số cửa hàng của chuỗi. Cột <code>Stores Earning Bonus</code> cho biết còn lại bao nhiêu.
+  </div></div>
+</div></section>
+
+<!-- ================= PAGE 3 ================= -->
+<section id="p3"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">03</div><h2>Programs in Scope — chương trình nào đang tiêu</h2></div>
+
+  <div class="shots"><figure class="shot">
+    <img src="case-study-assets/si-03-programs.png" alt="Trang Programs in Scope">
+    <figcaption><span class="badge">Trang 3</span>Bảng trên xếp hạng theo tiền; bảng dưới là tham số thiết kế của chương trình, <b>không phải</b> bảng xếp hạng.</figcaption>
+  </figure></div>
+
+  <h4>Hai cách xếp hạng, đừng lẫn</h4>
+  <div class="cards">
+    <div class="fcard v">
+      <div class="fhead"><div class="ico">💰</div><h3>Bonus Pool</h3><div class="sub">Tổng tiền đã tiêu</div></div>
+      <div class="fbody">
+        <div><div class="label">Thiên vị</div><div class="mean">Ưu ái chương trình <b>chạy lâu</b> — cộng dồn càng nhiều ngày càng lớn.</div></div>
+        <div class="decision">Dùng khi hỏi: "tổng cộng đã chi bao nhiêu?"</div>
+      </div>
+    </div>
+    <div class="fcard m">
+      <div class="fhead"><div class="ico">🔥</div><h3>Pool per Active Day</h3><div class="sub">Tốc độ đốt tiền</div></div>
+      <div class="fbody">
+        <div><div class="label">Thiên vị</div><div class="mean">Không phụ thuộc độ dài. Chương trình vừa chạy vẫn lên top nếu đốt nhanh.</div></div>
+        <div class="decision">Dùng khi hỏi: "cái nào đang tăng tốc?"</div>
+      </div>
+    </div>
+    <div class="fcard r">
+      <div class="fhead"><div class="ico">⚖️</div><h3>Bonus as % of Program Revenue</h3><div class="sub">Đắt hay rẻ</div></div>
+      <div class="fbody">
+        <div><div class="label">Thiên vị</div><div class="mean">Không phụ thuộc quy mô. So được chương trình lớn với chương trình nhỏ.</div></div>
+        <div class="decision">Dùng khi hỏi: "cái nào tốn nhất trên mỗi đồng doanh số?"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-amber"><div class="ico">⚠️</div><div>
+    Thẻ <code>Fastest-Ramping Program</code> chỉ xét <b>các chương trình đang chạy</b>.
+    Nếu bạn bật tab <code>Show stopped/ended programs</code>, bảng bên dưới có thể có chương trình
+    <b>đốt nhanh hơn</b> chương trình trên thẻ — không mâu thuẫn, chỉ là hai phạm vi khác nhau.
+  </div></div>
+
+  <div class="dd-sub warn"><b class="h">Bảng Program Design Parameters</b>
+    <code>Threshold (units)</code> để <b>trống</b> nghĩa là chương trình đó <b>không có ngưỡng đơn vị</b> — mọi đơn vị đạt đều được thưởng,
+    và khi đó <code>Reward Conversion Rate %</code> thường là <code>100%</code>. Trống không phải thiếu dữ liệu.
+  </div>
+</div></section>
+
+<!-- ================= PAGE 4 ================= -->
+<section id="p4"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">04</div><h2>Distribution — tiền rải đều hay dồn cục</h2></div>
+  <p>Hai biểu đồ cột: một cho <b>cửa hàng</b>, một cho <b>nhân viên</b>. Trục ngang là <b>dải phần trăm so với trung bình</b>
+  của chính vùng chọn hiện tại — không phải số tiền.</p>
+
+  <div class="shots"><figure class="shot">
+    <img src="case-study-assets/si-04-distribution.png" alt="Trang Distribution">
+    <figcaption><span class="badge">Trang 4</span>Bấm vào một cột → danh sách bên phải thu hẹp về đúng dải đó. Bấm lại cột đó để bỏ chọn.</figcaption>
+  </figure></div>
+
+  <h4>Đọc hình dạng</h4>
+  <div class="tbl-wrap"><table class="calc">
+    <thead><tr><th>Hình dạng</th><th>Nghĩa</th></tr></thead>
+    <tbody>
+      <tr><td>Đuôi <code>&gt; 200%</code> dày</td><td class="read">Một nhóm nhỏ đang gánh phần lớn tiền thưởng. Bấm vào cột đó để xem đích danh cửa hàng nào.</td></tr>
+      <tr><td>Dồn về <code>0-25%</code></td><td class="read">Chương trình <b>không với tới</b> phần lớn cửa hàng đang tham gia.</td></tr>
+      <tr><td>Hai bướu (hai đỉnh)</td><td class="read">Dấu hiệu bạn đang <b>trộn nhiều chương trình có thang thưởng rất khác nhau</b>.
+      Trang này đọc chuẩn nhất khi <b>chọn đúng một chương trình</b> ở slicer <code>Program</code>.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="trap"><div class="ico">⛔</div><div>
+    <b>Cột đầu tiên <code>0-25%</code> có gộp cả cửa hàng thưởng bằng 0.</b>
+    Đó là cửa hàng <b>có mở cửa, có tham gia chương trình, nhưng không kiếm được đồng thưởng nào</b> —
+    chỉ số bằng <b>0</b>, không phải "nhỏ". Đừng đọc cả cột đó thành "nhóm làm kém": phần lớn là nhóm <b>không phát sinh</b>.
+  </div></div>
+
+  <div class="tip"><div class="ico">💡</div><div>
+    <b>Đường ra chi tiết nằm ở đây.</b> Bấm một dòng trong danh sách cửa hàng → nút
+    <code>Go to Staff Detail</code> ở góc trên phải sáng lên → bấm để xem từng nhân viên của cửa hàng đó.
+    Chưa chọn cửa hàng thì nút hiện chữ <i>"Select any Store to continue"</i>.
+  </div></div>
+</div></section>
+
+<!-- ================= PAGE 5 ================= -->
+<section id="p5"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">05</div><h2>Staff Detail — bảng phẳng để đối chiếu</h2></div>
+  <p>Trang này <b>không nằm trên thanh điều hướng</b>. Bạn chỉ tới được bằng cách drill từ trang <code>Distribution</code>.
+  Nút <code>Back to Previous page</code> ở cột trái đưa bạn quay lại.</p>
+
+  <div class="shots"><figure class="shot">
+    <img src="case-study-assets/si-08-staff-detail.png" alt="Trang Staff Detail">
+    <figcaption><span class="badge">Drill-through</span>Một dòng = một <b>nhân viên × chương trình × cửa hàng × kỳ</b>. Xuất Excel từ bảng này để đối chiếu.</figcaption>
+  </figure></div>
+
+  <div class="dd-sub scope"><b class="h">Vì sao nhiều nhân viên cùng cửa hàng nhận số tiền y hệt nhau</b>
+    Quỹ của cửa hàng được chia cho nhân viên theo <code>Bonus coefficient</code>. Khi mọi người cùng hệ số
+    (<code>1.00</code> hoặc <code>0.50</code>) thì tiền chia đều — nên các dòng trùng số là <b>bình thường</b>.
+    Thẻ <code>Staff Count (Distinct)</code> ở trên cho biết đang chia cho bao nhiêu người.
+  </div>
+
+  <div class="note-amber"><div class="ico">⚠️</div><div>
+    <b>Cột <code>Recon Δ (VND)</code> hiện <code>0.00</code> ở hầu hết dòng là đúng thiết kế.</b>
+    Giá trị chỉ được ghi ở <b>dòng cuối cùng của mỗi kỳ</b>, các dòng còn lại để trống.
+    Muốn tìm chỗ lệch, dùng toggle <b>Mismatches only</b> hoặc đọc thẳng hai thẻ
+    <code>Recon Mismatch (Absolute VND)</code> / <code>Recon Mismatch %</code>.
+  </div></div>
+</div></section>
+
+<!-- ================= FILTERS ================= -->
+<section id="filters"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">06</div><h2>Bộ lọc — hai tầng</h2></div>
+
+  <h4>Tầng 1 — slicer ngay trên trang</h4>
+  <div class="screen">
+    <div class="row"><div class="k">Date Range</div><div class="v"><b>Bộ điều khiển thời gian duy nhất.</b> Có sẵn preset <i>This month</i> / <i>Last N months</i>. Mọi con số trên trang đều theo khoảng ngày này — trừ <code>Cumulative Bonus</code>.</div></div>
+    <div class="row"><div class="k">Program</div><div class="v">Lọc theo chương trình. Rất nên chọn <b>một</b> chương trình khi xem trang <code>Distribution</code>.</div></div>
+  </div>
+
+  <h4>Tầng 2 — panel <code>Filters Settings</code> (nút <code>Filters</code> ở cột trái)</h4>
+  <div class="shots">
+    <figure class="shot">
+      <img src="case-study-assets/si-05-filter-store.png" alt="Store Filters">
+      <figcaption><span class="badge">Tab 1</span><b>Store Filters</b> — lọc theo Chain, Panel, Region, RSM, Concept, Project, và từng cửa hàng.
+      Ô <b>Store Id mass filter</b> cho phép dán thẳng danh sách mã cửa hàng từ Excel, ngăn cách bằng dấu phẩy.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="case-study-assets/si-06-filter-product.png" alt="Category Filters">
+      <figcaption><span class="badge">Tab 2</span><b>Category Filters</b> — lọc theo ngành hàng / sản phẩm.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="case-study-assets/si-07-filter-datastatus.png" alt="Data Status Filter">
+      <figcaption><span class="badge">Tab 3</span><b>Data Status</b> — ba cờ chất lượng của chương trình: <code>Approval Status</code>, <code>Is Stopped</code>, <code>Score Status</code>.</figcaption>
+    </figure>
+  </div>
+
+  <div class="trap"><div class="ico">⛔</div><div>
+    <b>Phải bấm <code>Apply</code> trước khi đóng panel</b>, nếu không lựa chọn sẽ không được áp.
+    Nút <code>Clear</code> nằm ngay cạnh và xoá sạch lựa chọn — đọc kỹ trước khi bấm.
+  </div></div>
+</div></section>
+
+<!-- ================= GLOSSARY ================= -->
+<section id="glossary"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">07</div><h2>Bảng thuật ngữ</h2></div>
+  <p class="muted">Tên cột trên báo cáo giữ nguyên tiếng Anh. Cột <b>Bẫy</b> là chỗ dễ hiểu sai nhất — đọc cột đó trước.</p>
+
+  <div class="tbl-wrap"><table class="glossary">
+    <thead><tr><th>Tên trên báo cáo</th><th>Nghĩa</th><th>Bẫy khi đọc</th></tr></thead>
+    <tbody>
+      <tr><td>Bonus Pool (VND)</td><td>Quỹ thưởng tích luỹ ở cấp cửa hàng × ngày.</td><td>Là số <b>theo dõi</b>, không phải chứng từ chi trả.</td></tr>
+      <tr><td>Bonus Paid to Staff (VND)</td><td>Tổng thưởng cộng từ từng dòng nhân viên.</td><td>Đọc từ bảng khác với <code>Bonus Pool</code>; bằng nhau trong sai số làm tròn.</td></tr>
+      <tr><td>Payout Rate %</td><td>Phần quỹ đã tới tay nhân viên.</td><td>Chênh <b>không</b> chỉ do chấm công: còn do kỳ chưa chốt còn thiếu dòng nhân viên, và do làm tròn về VND chẵn.</td></tr>
+      <tr><td>Pool vs Staff Δ (VND)</td><td>Phần quỹ chưa phân bổ được cho nhân viên.</td><td>Một phần là <b>dữ liệu tạm tính chưa đầy</b>, không phải thất thoát.</td></tr>
+      <tr><td>Program Revenue (VND)</td><td>Doanh thu của <b>đúng những SKU được thưởng</b>, tại cửa hàng/ngày có tham gia. Gồm POS + SLL.</td><td>⛔ <b>KHÔNG</b> phải tổng doanh thu cửa hàng. Đừng so với doanh thu trên báo cáo bán hàng.</td></tr>
+      <tr><td>Bonus as % of Program Revenue</td><td>Tiền thưởng trên mỗi đồng doanh số mà nó thưởng.</td><td>Mẫu số là doanh thu SKU được thưởng, không phải doanh thu cửa hàng.</td></tr>
+      <tr><td>Operating Store-Days</td><td>Số <b>ngày-cửa hàng</b> thực sự có bán, trong cửa sổ của chương trình.</td><td>Một ngày mà cửa hàng chạy nhiều chương trình chỉ đếm <b>một lần</b> ⇒ tổng theo chương trình <b>nhỏ hơn</b> tổng các dòng cộng lại.</td></tr>
+      <tr><td>Avg Bonus Pool per Operating Store-Day</td><td>Quỹ ÷ số ngày-cửa hàng.</td><td>Mẫu số đã loại ngày đóng cửa, nhưng <b>giữ</b> ngày mở cửa mà không phát sinh thưởng.</td></tr>
+      <tr><td>Index vs Baseline %</td><td>Giá trị của dòng so với <b>trung bình của các cửa hàng bạn đang xem</b>. 100% = bằng trung bình.</td><td>Baseline đổi theo vùng chọn. Lọc khác đi thì cùng một cửa hàng ra số khác — đó là đúng, không phải lỗi.</td></tr>
+      <tr><td>Cumulative Bonus (Period-to-Date)</td><td>Luỹ kế thưởng của <b>trọn kỳ</b> tới thời điểm mới nhất.</td><td>⛔ Cố ý <b>bỏ qua Date Range</b>. Chọn khoảng ngày vắt hai kỳ thì để trống.</td></tr>
+      <tr><td>Reward Units Achieved</td><td>Số đơn vị sản phẩm đã đạt điều kiện thưởng.</td><td>Khác với sản lượng bán — chỉ tính phần đạt ngưỡng.</td></tr>
+      <tr><td>Net Base Qty (L1)</td><td>Sản lượng quy về <b>đơn vị cơ sở</b> của SKU tham gia.</td><td>Không phải số lượng bill hay số thùng.</td></tr>
+      <tr><td>Eligible Staff Days</td><td>Số ngày-nhân viên đủ điều kiện nhận thưởng.</td><td>Là ngày-người, không phải số người.</td></tr>
+      <tr><td>Stores Earning Bonus</td><td>Số cửa hàng nhận được ít nhất <b>1 VND</b> thưởng trong khoảng ngày đang chọn.</td><td>Đếm <b>distinct</b>: tổng không bằng tổng các dòng khi một cửa hàng ở nhiều chương trình.</td></tr>
+      <tr><td>Stores Enrolled</td><td>Số cửa hàng được <b>set</b> cho chương trình (danh sách đăng ký).</td><td>⛔ Không đổi theo Date Range. Và <b>đừng lấy nó làm mẫu số</b> cho <code>Stores with Program Sales</code> — hai con số đến từ hai nguồn chưa đối chiếu.</td></tr>
+      <tr><td>Stores with Program Sales</td><td>Số cửa hàng thực sự có bán SKU được thưởng (≥ 1 VND).</td><td>Nhỏ hơn <code>Stores Enrolled</code> là bình thường.</td></tr>
+      <tr><td>Pool per Active Day (VND)</td><td>Tốc độ đốt quỹ theo ngày, tính trong <b>cửa sổ riêng của chương trình</b>.</td><td>Không theo Date Range của báo cáo.</td></tr>
+      <tr><td>Fastest-Ramping Program</td><td>Chương trình có tốc độ đốt quỹ cao nhất.</td><td>Chỉ xét <b>chương trình đang chạy</b>; bảng bên dưới có thể hiện cái nhanh hơn nếu bật tab stopped/ended.</td></tr>
+      <tr><td>Threshold (units)</td><td>Định mức đơn vị phải bán để đạt thưởng.</td><td><b>Trống = không có ngưỡng</b>, không phải thiếu dữ liệu.</td></tr>
+      <tr><td>Reward Conversion Rate %</td><td>Tỉ lệ đơn vị bán được quy thành đơn vị thưởng.</td><td>Bị chặn bởi chính ngưỡng của chương trình — luôn đọc kèm <code>Threshold</code>.</td></tr>
+      <tr><td>Bonus Rate per Unit (VND)</td><td>Số tiền thưởng cho mỗi đơn vị đạt.</td><td>Tham số thiết kế, không phải số thực chi.</td></tr>
+      <tr><td>Bonus Period</td><td>Kỳ thưởng (theo tháng).</td><td>Vòng đời kỳ quyết định số đã chốt hay chưa — xem dòng dưới.</td></tr>
+      <tr><td>Bonus Period Status</td><td><code>Settled</code> = đã chốt và công bố · <code>Provisional</code> = còn tạm tính · <code>Mixed</code> = vùng chọn trải nhiều giai đoạn.</td><td><code>Mixed</code> <b>không phải lỗi</b>. Một kỳ có thể vừa có chương trình đã chốt cấp cửa hàng vừa có chương trình đang chạy.</td></tr>
+      <tr><td>Recon Δ (VND)</td><td>Lệch giữa luỹ kế nguồn ghi và tổng các ngày cộng lại, cho từng khoá.</td><td>Chỉ có giá trị ở <b>dòng cuối kỳ</b>; các dòng khác để trống là đúng.</td></tr>
+      <tr><td>Recon Mismatch % </td><td>Tỉ lệ lệch trên tổng luỹ kế.</td><td>Kỳ đang chạy lệch nhỏ (~0,2%) là bình thường — số nguồn còn được ghi lại trong vài tuần.</td></tr>
+      <tr><td>Bonus coefficient</td><td>Hệ số chia quỹ cho từng nhân viên.</td><td>Cùng hệ số ⇒ chia đều ⇒ nhiều dòng trùng số tiền.</td></tr>
+      <tr><td>Data Through</td><td>Ngày cuối cùng có trong dữ liệu (luôn là D-1).</td><td>⛔ Khác <code>Refreshed at</code>. Refresh sáng nay không có nghĩa là có số hôm nay.</td></tr>
+      <tr><td>Index bins (0-25% … &gt; 200%)</td><td>Dải phân bố dùng cho trang <code>Distribution</code>.</td><td>Cột đầu <b>gộp cả cửa hàng thưởng bằng 0</b>.</td></tr>
+      <tr><td>Approval Status · Is Stopped · Score Status</td><td>Ba cờ chất lượng của chương trình, lọc ở tab <code>Data Status</code>.</td><td>Mặc định đang để <code>All</code>. Đổi ở đây sẽ đổi số trên mọi trang.</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<!-- ================= TRAPS ================= -->
+<section id="traps"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">08</div><h2>Tám bẫy đọc số — đọc trước khi kết luận</h2></div>
+  <div class="traps">
+    <div class="trap"><div class="ico">1</div><div><b>Program Revenue không phải doanh thu cửa hàng.</b> Nó chỉ gồm doanh thu của những SKU được thưởng, tại cửa hàng/ngày tham gia. So nó với doanh thu trên báo cáo bán hàng là so hai quần thể khác nhau.</div></div>
+    <div class="trap"><div class="ico">2</div><div><b>Operating Store-Days không cộng được theo chương trình.</b> Một ngày mở cửa chỉ đếm một lần dù cửa hàng chạy 8 chương trình. Nên dòng tổng <b>nhỏ hơn</b> tổng các dòng chương trình — đúng thiết kế.</div></div>
+    <div class="trap"><div class="ico">3</div><div><b>Cột <code>0-25%</code> không phải "nhóm làm kém".</b> Phần lớn là cửa hàng có tham gia nhưng <b>không phát sinh thưởng</b> — chỉ số bằng 0.</div></div>
+    <div class="trap"><div class="ico">4</div><div><b><code>Cumulative Bonus</code> bỏ qua Date Range.</b> Đừng cộng nó với các cột khác trên cùng một dòng và mong khớp.</div></div>
+    <div class="trap"><div class="ico">5</div><div><b><code>Mixed</code> ở băng trạng thái là bình thường.</b> Nó chỉ nói vùng chọn của bạn trải nhiều giai đoạn vòng đời, không nói dữ liệu sai.</div></div>
+    <div class="trap"><div class="ico">6</div><div><b>Đừng chia <code>Stores with Program Sales ÷ Stores Enrolled</code>.</b> Hai con số đến từ hai nguồn dữ liệu chưa được đối chiếu ở cấp cửa hàng.</div></div>
+    <div class="trap"><div class="ico">7</div><div><b><code>Data Through</code> ≠ <code>Refreshed at</code>.</b> Dữ liệu luôn dừng ở <b>D-1</b> vì pipeline cố ý không lấy ngày đang chạy dở (ngày dở cho số thấp giả).</div></div>
+    <div class="trap"><div class="ico">8</div><div><b>Index vs Baseline đổi theo vùng chọn.</b> Cùng một cửa hàng, lọc khác đi sẽ ra chỉ số khác — vì "trung bình" được tính lại trên đúng tập bạn đang xem.</div></div>
+  </div>
+</div></section>
+
+<!-- ================= UAT ================= -->
+<section id="uat"><div class="sec-inner">
+  <div class="sec-head"><div class="sec-num">09</div><h2>Vòng UAT này cần bạn phản hồi gì</h2></div>
+  <div class="calllist">
+    <h3>Bốn câu hỏi, trả lời được cái nào hay cái đó</h3>
+    <ol>
+      <li><b>Số nào bạn không tin?</b> Ghi lại trang, bộ lọc đang đặt, và con số. Có ảnh chụp thì tốt nhất.</li>
+      <li><b>Nhãn nào đọc không hiểu?</b> Nếu phải mở bảng thuật ngữ mới hiểu một cột, nhãn đó cần viết lại.</li>
+      <li><b>Thiếu chiều hay cột nào</b> để bạn ra được quyết định?</li>
+      <li><b>Có ô nào khiến bạn kết luận sai</b> rồi mới phát hiện? Đó là thứ giá trị nhất của vòng UAT.</li>
+    </ol>
+    <div class="extra">Hai việc đã biết và đang treo: (a) hai ngày <b>01–02/09</b> có quỹ cao gấp ~2,5 lần mặt bằng, chưa điều tra xong;
+    (b) phân quyền theo cửa hàng chưa test với tài khoản bị giới hạn.</div>
+  </div>
+</div></section>
+
+<footer><div class="foot-meta">
+  Staff Product Incentive · User Guide cho UAT round 1
+  <span class="sw" style="background:#2563EB"></span>
+  <span class="sw" style="background:#0D9373"></span>
+  <span class="sw" style="background:#D97706"></span>
+</div></footer>
+
+</div>
+</body>
+</html>
