@@ -108,6 +108,10 @@
   p{margin:0 0 14px;font-size:16px;}
   .muted{color:var(--muted);}
   .lead{font-size:17px;}
+  .pagepoints{margin:14px 0 0;padding-left:0;list-style:none;}
+  .pagepoints li{position:relative;padding-left:18px;margin-bottom:9px;font-size:15px;line-height:1.62;}
+  .pagepoints li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  .pagepoints li.watch::before{background:var(--amber);}
 
   /* ============ JOURNEY DIAGRAM ============ */
   .journey{display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin:26px 0 8px;}
@@ -324,7 +328,7 @@
   <div class="eyebrow"><span class="dot"></span>User Guide · UAT v.1</div>
   <h1>Staff Product Incentive</h1>
   <p class="lead muted">Hướng dẫn đọc báo cáo thưởng thi đua bán hàng theo sản phẩm — dành cho Finance.
-  <b>Đọc mục 01 và 02 trước</b> (thuật ngữ + bẫy đọc số), rồi mới đi theo luồng 4 trang.</p>
+  <b>Đọc mục 01 và 02 trước</b> (thuật ngữ + lưu ý khi đọc), rồi mới đi theo luồng 4 trang.</p>
   <div class="hero-meta">
     <span class="chip-meta"><span class="sw" style="background:#2563EB"></span>4 trang chính + 1 panel bộ lọc</span>
     <span class="chip-meta"><span class="sw" style="background:#0D9373"></span>Dữ liệu chốt tới D-1</span>
@@ -335,24 +339,21 @@
 <nav class="toc"><div class="toc-inner">
   <a href="#flow">00 · Luồng</a>
   <a href="#glossary">01 · Thuật ngữ</a>
-  <a href="#traps">02 · 8 bẫy</a>
+  <a href="#traps">02 · Lưu ý</a>
   <a href="#p1">03 · Overview</a>
   <a href="#p2">04 · Store Matrix</a>
   <a href="#p3">05 · Programs &amp; Budget</a>
   <a href="#p4">06 · Distribution</a>
   <a href="#p5">07 · Staff Detail</a>
   <a href="#filters">08 · Bộ lọc</a>
-  <a href="#uat">09 · Phản hồi</a>
 </div></nav>
 
 <!-- ================= 00 FLOW ================= -->
 <section id="flow"><div class="sec-inner">
-  <div class="sec-head"><div class="sec-num">00</div><h2>Báo cáo này trả lời câu gì</h2></div>
+  <div class="sec-head"><div class="sec-num">00</div><h2>Luồng đọc báo cáo</h2></div>
   <blockquote class="lede-q">
     <b>Chương trình thưởng thi đua đang tiêu bao nhiêu tiền, tiền đó có tới tay nhân viên không, và nó dồn vào đâu?</b>
   </blockquote>
-  <p>Bốn trang, mỗi trang một câu hỏi, và <b>chuyển tiếp sang trang sau</b>. Xem sơ đồ này 30 giây để biết mình đang ở đâu,
-  rồi đọc <a href="#glossary">bảng thuật ngữ</a> — phần lớn hiểu nhầm đến từ tên cột, không đến từ cách bấm.</p>
 
   <div class="journey">
     <div class="jnode">
@@ -381,319 +382,154 @@
       <div class="drill">Bấm 1 cửa hàng → drill sang Staff Detail</div>
     </div>
   </div>
-
-  <div class="note-amber"><div class="ico">⚠️</div><div>
-    <b>Budget và target là quỹ chung theo category, không phải ngân sách riêng của từng vùng/cửa hàng/chương trình.</b>
-    Chọn một vùng, một cửa hàng hay một chương trình thì cột <code>Budget</code> vẫn giữ nguyên mức của cả category —
-    bạn đang xem <b>phần quỹ chung đó đã dùng</b>, không phải một ngân sách được cấp riêng. Xem thêm bẫy số 6.
-  </div></div>
 </div></section>
 
 <!-- ================= 01 GLOSSARY ================= -->
 <section id="glossary"><div class="sec-inner">
-  <div class="sec-head"><div class="sec-num">01</div><h2>Bảng thuật ngữ — đọc trước</h2></div>
-  <p class="muted">Tên cột trên báo cáo giữ nguyên tiếng Anh. Cột <b>Bẫy khi đọc</b> là chỗ dễ hiểu sai nhất.
-  Không cần thuộc — nhưng hãy lướt qua một lượt trước khi mở báo cáo, và quay lại đây mỗi khi một con số làm bạn ngạc nhiên.</p>
+  <div class="sec-head"><div class="sec-num">01</div><h2>Bảng thuật ngữ</h2></div>
+  <p class="muted">Tên cột trên báo cáo giữ tiếng Anh; lướt qua bảng này một lượt trước khi mở báo cáo.</p>
 
   <div class="tbl-wrap"><table class="glossary">
-    <thead><tr><th>Tên trên báo cáo</th><th>Nghĩa</th><th>Bẫy khi đọc</th></tr></thead>
+    <thead><tr><th>Tên trên báo cáo</th><th>Nghĩa</th><th>Lưu ý</th></tr></thead>
     <tbody>
-      <tr><td>Bonus Period</td><td>Kỳ thưởng, đúng một tháng dương lịch. <b>Slicer thời gian duy nhất</b> của cả 4 trang.</td><td>Chọn nhiều tháng ⇒ mọi KPI-tháng và cột target để trống — đúng thiết kế, xem bẫy số 2.</td></tr>
-      <tr><td>Bonus Pool (VND)</td><td>Quỹ thưởng tích luỹ ở cấp cửa hàng × ngày.</td><td>Là số <b>theo dõi</b>, không phải chứng từ chi trả.</td></tr>
-      <tr><td>Bonus Paid to Staff (VND)</td><td>Tổng thưởng cộng từ từng dòng nhân viên.</td><td>Đọc từ bảng khác với <code>Bonus Pool</code>; hai số bằng nhau trong sai số làm tròn.</td></tr>
-      <tr><td>Payout Rate %</td><td>Phần quỹ đã tới tay nhân viên.</td><td>Chênh <b>không</b> chỉ do chấm công: còn do kỳ chưa chốt còn thiếu dòng nhân viên, và do làm tròn về VND chẵn. Trần thực tế là 100%.</td></tr>
-      <tr><td>Pool vs Staff Δ (VND)</td><td>Phần quỹ chưa phân bổ được cho nhân viên.</td><td>Một phần là <b>dữ liệu tạm tính chưa đầy</b>, không phải thất thoát.</td></tr>
-      <tr><td>Target per Store (VND) / Target per Staff (VND)</td><td>Hai ô nhập trên Overview để đổi mức target — mặc định <b>1.100.000</b> / <b>275.000</b>, chỉ nhập theo bội số <b>1.000</b>.</td><td>Đổi số ở đây là hỏi "nếu target là X thì đạt bao nhiêu" — không phải target chính thức đang áp dụng.</td></tr>
-      <tr><td>Bonus per Store per Month (VND)</td><td>Bonus Pool phân bổ về cửa hàng ÷ <code>Stores Earning Bonus</code>.</td><td>Mẫu số là <b>quỹ</b>, không phải tiền thực trả — đừng so trực tiếp với <code>Bonus per Staff per Month</code>, xem bẫy số 3.</td></tr>
-      <tr><td>Bonus per Staff per Month (VND)</td><td>Bonus Paid to Staff ÷ số nhân viên đã nhận thưởng.</td><td>Mẫu số là <b>tiền thực trả</b>. Muốn nối hai số này, đọc qua <code>Payout Rate %</code>.</td></tr>
-      <tr><td>Program Revenue (VND)</td><td>Doanh thu của <b>đúng những SKU được thưởng</b>, tại cửa hàng/ngày có tham gia. Gồm POS + SLL.</td><td>⛔ <b>KHÔNG</b> phải tổng doanh thu cửa hàng. Đừng so với doanh thu trên báo cáo bán hàng.</td></tr>
-      <tr><td>Bonus as % of Program Revenue</td><td>Tiền thưởng trên mỗi đồng doanh số mà nó thưởng.</td><td>Mẫu số là doanh thu SKU được thưởng. Mỗi chương trình có mặt bằng riêng, nên chỉ so trong cùng một chương trình.</td></tr>
-      <tr><td>Index vs Baseline %</td><td>Giá trị của dòng so với <b>trung bình của các cửa hàng bạn đang xem</b>. 100% = bằng trung bình.</td><td>Baseline đổi theo vùng chọn. Lọc khác đi thì cùng một cửa hàng ra số khác — đó là đúng, không phải lỗi.</td></tr>
-      <tr><td>Cumulative Bonus (Period-to-Date)</td><td>Luỹ kế thưởng của <b>trọn kỳ</b> tới thời điểm mới nhất.</td><td>⛔ Cố ý phớt lờ ngày trong tháng. Cần chọn đúng <b>một</b> tháng; chọn nhiều tháng thì để trống.</td></tr>
-      <tr><td>Stores Earning Bonus</td><td>Số cửa hàng nhận được ít nhất <b>1 VND</b> thưởng trong tháng đang chọn.</td><td>Đếm <b>distinct</b>: tổng không bằng tổng các dòng khi một cửa hàng ở nhiều chương trình.</td></tr>
-      <tr><td>Stores Earning Bonus %</td><td>Tỉ lệ <code>Stores Earning Bonus</code> trên <code>Participating Stores</code> (thẻ ở Overview).</td><td>Không phải % trên tổng số cửa hàng của chuỗi — mẫu số đã lọc theo phạm vi báo cáo.</td></tr>
-      <tr><td>Programs Active / Ended / Running / Upcoming</td><td><code>Active</code> (Overview) = có phát sinh quỹ trong vùng chọn. <code>Ended</code>/<code>Running</code> (Programs &amp; Budget) tính theo tháng đang chọn. <code>Upcoming</code> = Start sau <code>Data Through</code>.</td><td><code>Upcoming</code> <b>không phụ thuộc</b> tháng đang chọn ở slicer <code>Bonus Period</code>.</td></tr>
-      <tr><td>Budget (VND)</td><td>Ngân sách thưởng <b>tháng</b>, dùng <b>chung cho cả category</b> — không chia sẵn theo vùng/cửa hàng/chương trình.</td><td>⭐ Chọn một chương trình/vùng/cửa hàng thì cột này <b>vẫn giữ nguyên mức category</b> — không phải ngân sách riêng của lát đó. Xem bẫy số 6.</td></tr>
-      <tr><td>Budget Utilisation %</td><td>Bonus Pool ÷ Budget của category tương ứng.</td><td>Đọc là <b>"phần quỹ chung lát đó đã dùng"</b>, không phải "cửa hàng/chương trình này đã tiêu hết bao nhiêu ngân sách riêng".</td></tr>
-      <tr><td>Target Units</td><td>Sản lượng kế hoạch của category, theo tháng.</td><td>Category không có target (nhóm Mix, vd Đồ dùng Dân dụng/Trang trí) sẽ để trống — không phải thiếu dữ liệu.</td></tr>
-      <tr><td>Units Sold</td><td>Sản lượng thực bán của các category có ngân sách.</td><td>Chỉ tính category nằm trong bảng target — không phải tổng sản lượng toàn ngành.</td></tr>
-      <tr><td>Volume Attainment %</td><td>Units Sold ÷ Target Units.</td><td>Có thể vượt rất xa 100% khi bán vượt kế hoạch nhưng đơn giá thưởng thấp — không suy ra Utilisation cũng cao.</td></tr>
-      <tr><td>Planned Bonus per Unit (VND) / Actual Bonus per Unit Sold (VND)</td><td><code>Planned</code> = đơn giá thưởng theo kế hoạch. <code>Actual</code> = Bonus Pool ÷ Units Sold thực tế.</td><td>Hai số này thường lệch nhau nhiều — đó là lý do cần cột kế bên <code>Bonus per Unit vs Plan %</code>.</td></tr>
-      <tr><td>Bonus per Unit vs Plan %</td><td>Actual Bonus per Unit Sold ÷ Planned Bonus per Unit.</td><td>Thấp không có nghĩa "tiết kiệm tốt" — thường vì bán vượt xa kế hoạch nên đơn giá thực bị pha loãng.</td></tr>
-      <tr><td>Bonus Period Status</td><td><code>Settled</code> = đã chốt và công bố · <code>Provisional</code> = còn tạm tính · <code>Mixed</code> = vùng chọn trải nhiều giai đoạn.</td><td><code>Mixed</code> <b>không phải lỗi</b>. Một kỳ có thể vừa có chương trình đã chốt cấp cửa hàng vừa có chương trình đang chạy.</td></tr>
-      <tr><td>Recon Δ (VND)</td><td>Lệch giữa luỹ kế nguồn ghi và tổng các ngày cộng lại, cho từng khoá.</td><td>Chỉ có giá trị ở <b>dòng cuối kỳ</b>; các dòng khác để trống là đúng.</td></tr>
-      <tr><td>Bonus coefficient</td><td>Hệ số chia quỹ cho từng nhân viên.</td><td>Cùng hệ số ⇒ chia đều ⇒ nhiều dòng trùng số tiền. Đó là bình thường.</td></tr>
-      <tr><td>Data Through</td><td>Ngày cuối cùng có trong dữ liệu (luôn là D-1).</td><td>⛔ Khác <code>Refreshed at</code>. Refresh sáng nay không có nghĩa là có số hôm nay.</td></tr>
-      <tr><td>Index bins (0-25% … &gt; 200%)</td><td>Dải phân bố dùng cho trang <code>Distribution</code>.</td><td>Cột đầu <b>gộp cả cửa hàng thưởng bằng 0</b>.</td></tr>
-      <tr><td>Approval Status · Is Stopped · Score Status</td><td>Ba cờ chất lượng của chương trình, lọc ở tab <code>Data Status</code>.</td><td>Mặc định để <code>All</code>. Đổi ở đây sẽ đổi số trên <b>mọi</b> trang.</td></tr>
+      <tr><td>Bonus Period</td><td>Kỳ xét thưởng, theo tháng dương lịch.</td><td>Là bộ lọc thời gian duy nhất của cả 4 trang. Chọn nhiều tháng thì các chỉ số tính theo tháng sẽ để trống.</td></tr>
+      <tr><td>Bonus Pool (VND)</td><td>Quỹ thưởng chương trình tích luỹ được cho cửa hàng trong kỳ.</td><td>Là số theo dõi quỹ, không phải chứng từ đã chi trả.</td></tr>
+      <tr><td>Bonus Paid to Staff (VND)</td><td>Tổng thưởng đã chi cho nhân viên.</td><td>Tháng chưa chốt thì số này còn tăng tiếp.</td></tr>
+      <tr><td>Payout Rate %</td><td>Phần quỹ đã tới tay nhân viên.</td><td>Trần thực tế là 100%; chỉ cần soi phía thấp bất thường.</td></tr>
+      <tr><td>Pool vs Staff Δ (VND)</td><td>Phần quỹ chưa phân bổ được cho nhân viên.</td><td>Với tháng chưa chốt, đây là phần đang chờ xử lý, không phải thất thoát.</td></tr>
+      <tr><td>Target per Store (VND) / Target per Staff (VND)</td><td>Hai ô nhập trên Overview để đổi mức target — mặc định <b>1.100.000</b> / <b>275.000</b>, chỉ nhập theo bội số <b>1.000</b>.</td><td>Đổi số ở đây là hỏi thử "nếu target là X thì đạt bao nhiêu", không phải target chính thức đang áp dụng.</td></tr>
+      <tr><td>Bonus per Store per Month (VND)</td><td>Thưởng bình quân một cửa hàng một tháng.</td><td>Là quỹ thưởng chia cho số cửa hàng đã nhận thưởng — chưa phải tiền đã chi. Muốn xem phần đã tới tay nhân viên thì đọc <code>Payout Rate %</code>.</td></tr>
+      <tr><td>Bonus per Staff per Month (VND)</td><td>Thưởng bình quân một nhân viên một tháng.</td><td>Là tiền đã chi chia cho số nhân viên đã nhận thưởng, nên không so thẳng với dòng trên.</td></tr>
+      <tr><td>Program Revenue (VND)</td><td>Doanh thu của đúng những SKU được thưởng, tại cửa hàng/ngày có tham gia.</td><td>Không phải tổng doanh thu cửa hàng — đừng so với doanh thu trên báo cáo bán hàng.</td></tr>
+      <tr><td>Bonus as % of Program Revenue</td><td>Tiền thưởng trên mỗi đồng doanh số mà nó thưởng.</td><td>Mỗi chương trình có mặt bằng riêng, nên chỉ so trong cùng một chương trình.</td></tr>
+      <tr><td>Index vs Baseline %</td><td>Mức thưởng của một cửa hàng so với mặt bằng của nhóm đang xem. 100% = đúng bằng mặt bằng.</td><td>Chỉ dùng ở trang <code>Distribution</code>. Cửa hàng so trên <b>thưởng bình quân một ngày cửa hàng mở cửa</b>; nhân viên so trên <b>thưởng bình quân một nhân viên</b>. Mặt bằng tính lại theo vùng đang lọc, nên lọc khác đi thì cùng một cửa hàng ra số khác.</td></tr>
+      <tr><td>Cumulative Bonus (Period-to-Date)</td><td>Luỹ kế thưởng của một nhân viên từ đầu kỳ tới ngày mới nhất. Chỉ tính trong một kỳ.</td><td>Đọc theo <b>từng nhân viên</b> (trang <code>Staff Detail</code>). Nếu một nhân viên có phát sinh ở hai cửa hàng trong cùng tháng, số này là luỹ kế cả tháng của nhân viên đó, không phải phần tại riêng một cửa hàng — nên đừng cộng cột này qua nhiều dòng. Muốn biết tiền theo cửa hàng, dùng <code>Bonus Paid to Staff (VND)</code>.</td></tr>
+      <tr><td>Stores Earning Bonus</td><td>Số cửa hàng nhận được ít nhất 1 VND thưởng trong tháng đang chọn.</td><td>Đếm distinct cửa hàng — không cộng theo số dòng khi một cửa hàng ở nhiều chương trình.</td></tr>
+      <tr><td>Stores Earning Bonus %</td><td>Trong số cửa hàng được giao chương trình, bao nhiêu phần trăm thực sự có thưởng.</td><td>Mẫu số là <code>Participating Stores</code>, không phải tổng số cửa hàng của chuỗi.</td></tr>
+      <tr><td>Budget (VND)</td><td>Ngân sách thưởng tháng, dùng chung cho cả category.</td><td>Chọn một chương trình/vùng/cửa hàng thì cột này vẫn giữ nguyên mức cả category — xem thêm lưu ý số 1.</td></tr>
+      <tr><td>Budget Utilisation %</td><td>Phần ngân sách tháng của category đã dùng tới.</td><td>= <code>Bonus Pool</code> ÷ <code>Budget</code>. Đọc là phần quỹ chung đã dùng, không phải ngân sách riêng của cửa hàng/chương trình đang xem.</td></tr>
+      <tr><td>Target Units</td><td>Sản lượng kế hoạch của category, theo tháng.</td><td>Category không có target riêng (nhóm Mix) sẽ để trống — không phải thiếu dữ liệu.</td></tr>
+      <tr><td>Units Sold</td><td>Sản lượng thực bán của các category có ngân sách.</td><td>Chỉ tính category nằm trong bảng target, không phải tổng sản lượng toàn ngành.</td></tr>
+      <tr><td>Volume Attainment %</td><td>Mức đạt sản lượng so với kế hoạch tháng.</td><td>= <code>Units Sold</code> ÷ <code>Target Units</code>. Có thể vượt xa 100% khi đơn giá thưởng thấp — không suy ra <code>Budget Utilisation %</code> cũng cao.</td></tr>
+      <tr><td>Planned Bonus per Unit (VND) / Actual Bonus per Unit Sold (VND)</td><td>Tiền thưởng cho mỗi unit bán ra: theo kế hoạch (<code>Planned</code>) và theo thực tế (<code>Actual</code>).</td><td><code>Actual</code> = <code>Bonus Pool</code> ÷ <code>Units Sold</code>. Hai số thường lệch nhau — đọc kèm <code>Bonus per Unit vs Plan %</code>.</td></tr>
+      <tr><td>Bonus per Unit vs Plan %</td><td>Đơn giá thưởng thực tế đang bằng bao nhiêu phần so với kế hoạch.</td><td>= <code>Actual</code> ÷ <code>Planned</code>. Thấp không có nghĩa tiết kiệm tốt — thường vì bán vượt xa kế hoạch nên đơn giá bị pha loãng.</td></tr>
+      <tr><td>Bonus Period Status</td><td><code>Settled</code> = đã chốt và công bố · <code>Provisional</code> = còn tạm tính · <code>Mixed</code> = vùng chọn trải nhiều giai đoạn.</td><td><code>Mixed</code> không phải lỗi — một kỳ có thể vừa có chương trình đã chốt vừa có chương trình đang chạy.</td></tr>
+      <tr><td>Recon Δ (VND)</td><td>Chỉ số kiểm tra dữ liệu: chênh giữa số luỹ kế và tổng các ngày cộng lại.</td><td>Chỉ hiện ở dòng cuối kỳ, các dòng khác để trống là đúng. Lệch đáng kể thì báo lại cho nhóm dữ liệu.</td></tr>
+      <tr><td>Bonus coefficient</td><td>Hệ số chia quỹ cho từng nhân viên.</td><td>Cùng hệ số thì chia đều — nhiều dòng trùng số tiền là bình thường.</td></tr>
+      <tr><td>Data Through</td><td>Ngày cuối cùng có trong dữ liệu (luôn là D-1).</td><td>Khác <code>Refreshed at</code>. Refresh sáng nay không có nghĩa là đã có số của hôm nay.</td></tr>
+      <tr><td>Index bins (0-25% … &gt; 200%)</td><td>Các dải mức thưởng so với mặt bằng, dùng cho biểu đồ trang <code>Distribution</code>.</td><td>Cột đầu gộp cả cửa hàng có tham gia nhưng thưởng bằng 0.</td></tr>
+      <tr><td>Approval Status · Is Stopped · Score Status</td><td>Ba cờ chất lượng của chương trình, lọc ở tab <code>Data Status</code>.</td><td>Mặc định để <code>All</code>. Đổi ở đây sẽ đổi số trên mọi trang.</td></tr>
     </tbody>
   </table></div>
 </div></section>
 
 <!-- ================= 02 TRAPS ================= -->
 <section id="traps"><div class="sec-inner">
-  <div class="sec-head"><div class="sec-num">02</div><h2>Tám bẫy đọc số</h2></div>
-  <p class="muted">Tám điều dưới đây là nguyên nhân của gần như mọi câu hỏi "sao số này lạ vậy". Đọc một lần, dùng cả vòng UAT.</p>
+  <div class="sec-head"><div class="sec-num">02</div><h2>Lưu ý khi đọc báo cáo</h2></div>
+  <p class="muted">Ba điều dưới đây không thuộc về một cột nào, mà là cách đọc cả báo cáo.</p>
   <div class="traps">
-    <div class="trap"><div class="ico">1</div><div><b>Program Revenue không phải doanh thu cửa hàng.</b> Nó chỉ gồm doanh thu của những SKU được thưởng, tại cửa hàng/ngày tham gia. So nó với doanh thu trên báo cáo bán hàng là so hai quần thể khác nhau.</div></div>
-    <div class="trap"><div class="ico">2</div><div><b>Chọn nhiều tháng ở slicer <code>Bonus Period</code> ⇒ KPI tháng và cột target trống.</b> Đây là guard cố ý — mọi công thức "trên một tháng" chỉ tính được khi đúng một tháng đang được chọn.</div></div>
-    <div class="trap"><div class="ico">3</div><div><b>Per-store tính trên quỹ, per-staff tính trên tiền trả — không so trực tiếp.</b> <code>Bonus per Store per Month</code> chia trên <b>pool</b>, <code>Bonus per Staff per Month</code> chia trên <b>tiền thực trả</b>. Muốn nối hai số này thì đọc qua <code>Payout Rate %</code>.</div></div>
-    <div class="trap"><div class="ico">4</div><div><b>Tháng chưa chốt (Provisional) tô màu amber là số tạm tính, không phải "chưa đạt".</b> Chỉ tháng đã <code>PUBLISHED</code> mới tô xanh/đỏ theo đạt/không đạt target.</div></div>
-    <div class="trap"><div class="ico">5</div><div><b>Budget tổng <code>5.550.000.000</code> = cộng đúng 7 dòng category.</b> Slide nội bộ ghi tròn "5,5 tỷ" — con số trên report là tổng thật, chính xác hơn.</div></div>
-    <div class="trap"><div class="ico">6</div><div><b>Utilisation của một vùng/chương trình là phần quỹ chung đã dùng, không phải ngân sách riêng của vùng đó.</b> ⭐ Budget là quỹ <b>chung theo category</b>. Xem mục 05.</div></div>
-    <div class="trap"><div class="ico">7</div><div><b>Filter sản phẩm làm trống cột target.</b> Ở panel <code>Filters Settings</code> → tab <code>Category Filters</code>, lọc theo sản phẩm khiến mọi cột Budget/Target ở trang <code>Programs &amp; Budget</code> để trống — quỹ không chia được theo một tập con sản phẩm.</div></div>
-    <div class="trap"><div class="ico">8</div><div><b><code>Data Through</code> ≠ <code>Refreshed at</code>.</b> Dữ liệu luôn dừng ở <b>D-1</b> vì pipeline cố ý không lấy ngày đang chạy dở (ngày dở cho số thấp giả).</div></div>
+    <div class="trap"><div class="ico">1</div><div><b>Budget và target là quỹ chung theo category.</b> Chọn một vùng, một cửa hàng hay một chương trình thì <code>Budget</code> vẫn giữ nguyên mức cả category — bạn đang xem phần quỹ chung đó đã dùng, không phải ngân sách riêng.</div></div>
+    <div class="trap"><div class="ico">2</div><div><b>Tháng chưa chốt hiện màu amber là số còn tạm tính</b>, không phải "chưa đạt". Chỉ tháng đã chốt mới tô xanh/đỏ theo đạt hay không đạt.</div></div>
+    <div class="trap"><div class="ico">3</div><div><b>Dữ liệu dừng ở ngày hôm trước.</b> <code>Data Through</code> là ngày cuối cùng có số; báo cáo refresh sáng nay không có nghĩa đã có số của hôm nay.</div></div>
   </div>
 </div></section>
 
 <!-- ================= 03 PAGE 1 ================= -->
 <section id="p1"><div class="sec-inner">
-  <div class="sec-head"><div class="sec-num">03</div><h2>Overview — mạch đập của cả danh mục</h2></div>
-  <p>Trang có <b>một slicer thời gian duy nhất</b> — <code>Bonus Period</code>, một tháng = một kỳ thưởng. Hai ô nhập
-  <code>Target per Store (VND)</code> / <code>Target per Staff (VND)</code> cho phép đổi mức target để hỏi "nếu target
-  là X thì đạt bao nhiêu". KPI theo tháng (cột <code>vs Target</code>) chỉ ra số khi bạn chọn <b>đúng một tháng</b>.</p>
+  <div class="sec-head"><div class="sec-num">03</div><h2>Overview</h2></div>
+  <p class="lead">Tổng quỹ bao nhiêu, bao nhiêu tới tay nhân viên, tốn bao nhiêu trên mỗi đồng doanh số?</p>
 
   <div class="shots"><figure class="shot">
     <img src="case-study-assets/si-01-overview.png" alt="Trang Overview">
     <figcaption><span class="badge">Trang 1</span>Hàng 1: Bonus Pool · Target per Store/Bonus per Store per Month · Target per Staff/Bonus per Staff per Month. Hàng 2: Bonus Paid to Staff · Payout Rate %. Hàng 3: Program Revenue · Bonus as % of Program Revenue. Hàng 4: bốn thẻ quy mô.</figcaption>
   </figure></div>
 
-  <div class="dqlist">
-    <div class="dqitem"><h4>Hàng 1 — quỹ và hai mục tiêu tháng</h4>
-      <ul>
-        <li><code>Bonus Pool (VND)</code> tổng quỹ tích luỹ trong tháng đang chọn, kèm biểu đồ xu hướng nhỏ.</li>
-        <li><code>Target per Store (VND)</code> / <code>Target per Staff (VND)</code> — ô nhập, mặc định <b>1.100.000</b> / <b>275.000</b>, chỉ nhận bội số <b>1.000</b>.</li>
-        <li><code>Bonus per Store per Month</code> = quỹ phân bổ về cửa hàng ÷ số cửa hàng nhận thưởng. <code>Bonus per Staff per Month</code> = tiền thực trả ÷ số nhân viên đã nhận thưởng. Hai số <b>khác gốc có chủ đích</b> — xem bẫy số 3.</li>
-        <li>Mỗi thẻ có nhãn <code>vs Target</code> và <code>Target</code> riêng bên cạnh.</li>
-      </ul>
-    </div>
-    <div class="dqitem"><h4>Hàng 2 — tiền có tới tay nhân viên không</h4>
-      <ul>
-        <li><code>Bonus Paid to Staff (VND)</code> tổng cộng từ từng dòng nhân viên.</li>
-        <li><code>Payout Rate %</code> tỉ lệ tương ứng — cầu nối giữa <code>Bonus per Store per Month</code> (tính từ quỹ) và <code>Bonus per Staff per Month</code> (tính từ tiền trả). Trần là 100%; đọc chủ yếu để tìm chỗ <b>thấp bất thường</b>.</li>
-      </ul>
-    </div>
-    <div class="dqitem"><h4>Hàng 3 — đắt hay rẻ</h4>
-      <ul>
-        <li><code>Program Revenue (VND)</code> doanh thu của <b>đúng SKU được thưởng</b>.</li>
-        <li><code>Bonus as % of Program Revenue</code> mỗi đồng doanh số được thưởng thì tốn bao nhiêu tiền thưởng.</li>
-      </ul>
-    </div>
-    <div class="dqitem"><h4>Hàng 4 — bốn thẻ quy mô</h4>
-      <ul>
-        <li><code>Programs Active</code> chương trình có phát sinh quỹ trong vùng chọn.</li>
-        <li><code>Participating Stores</code> cửa hàng có ít nhất một dòng quỹ trong vùng chọn.</li>
-        <li><code>Stores Earning Bonus</code> cửa hàng nhận được ít nhất 1 VND thưởng, kèm nhãn <b>% trên số cửa hàng tham gia</b>.</li>
-        <li><code>Paid Staff</code> số nhân viên distinct đã nhận thưởng.</li>
-      </ul>
-    </div>
-    <div class="dqitem"><h4>Góc phải trên — hai mốc thời gian, không phải một</h4>
-      <ul>
-        <li><code>Data Through</code> = ngày cuối cùng <b>có trong dữ liệu</b>, luôn là <b>D-1</b>.</li>
-        <li><code>Refreshed at</code> = giờ báo cáo được làm mới lần cuối.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="tip"><div class="ico">💡</div><div>
-    <b>Màu của <code>vs Target</code> theo trạng thái kỳ, không theo tiến độ giữa tháng.</b> Tháng chưa chốt (<code>Provisional</code>)
-    luôn tô <span style="color:var(--amber);font-weight:700">amber</span> — số tạm tính, chưa phải kết luận đạt/không đạt.
-    Tháng đã <code>PUBLISHED</code> mới tô <span style="color:var(--good);font-weight:700">xanh (≥ 100%)</span> /
-    <span style="color:var(--bad);font-weight:700">đỏ (&lt; 100%)</span>. Nhãn <code>Full month · 31 of 31 days</code>
-    chỉ là <b>độ phủ ngày của tháng</b> trong dữ liệu, không phải tiến độ đạt target.
-  </div></div>
-
-  <div class="tip"><div class="ico">💡</div><div>
-    Băng dưới bộ đôi thẻ Program Revenue (<code>Settled</code> / <code>Provisional</code> / <code>Mixed</code>) cho biết số trên màn hình
-    đã chốt hay còn tạm tính. <b><code>Mixed</code> là bình thường</b> — xem mục 00.
-  </div></div>
+  <ul class="pagepoints">
+    <li><b>Hàng 1 — quỹ và mục tiêu tháng.</b> <code>Bonus Pool</code> là tổng quỹ; hai ô <code>Target per Store</code>/<code>Target per Staff</code> để thử mức mục tiêu, không phải mức chính thức đang áp dụng.</li>
+    <li><b>Hàng 2 — tiền đã tới tay nhân viên.</b> <code>Bonus Paid to Staff</code> và <code>Payout Rate %</code>.</li>
+    <li><b>Hàng 3 — chi phí trên doanh số.</b> <code>Program Revenue</code> và <code>Bonus as % of Program Revenue</code>.</li>
+    <li><b>Hàng 4 — bốn thẻ quy mô.</b> Số chương trình, cửa hàng tham gia, cửa hàng nhận thưởng, nhân viên đã nhận thưởng.</li>
+    <li class="watch"><b>Dễ đọc sai nhất:</b> <code>Data Through</code> (ngày cuối có dữ liệu) khác <code>Refreshed at</code> (giờ làm mới).</li>
+  </ul>
 </div></section>
 
 <!-- ================= 04 PAGE 2 ================= -->
 <section id="p2"><div class="sec-inner">
-  <div class="sec-head"><div class="sec-num">04</div><h2>Store Matrix — tiền nằm ở đâu</h2></div>
-  <p>Bốn tab ở đầu trang đổi <b>cách nhóm cửa hàng</b>: <code>by Concept</code> · <code>by Region</code> ·
-  <code>by RSM/Sub-RSM</code> · <code>by RSM Only</code>. Bấm dấu <b>+</b> để bung xuống cấp sâu hơn, tới tận từng cửa hàng.
-  Hai ô <code>Target per Store (VND)</code> / <code>Target per Staff (VND)</code> ở cột trái là cùng slicer đặt ở Overview —
-  đổi ở trang nào cũng áp cho cả hai.</p>
+  <div class="sec-head"><div class="sec-num">04</div><h2>Store Matrix</h2></div>
+  <p class="lead">Tiền nằm ở vùng/miền/concept nào? Chỗ nào lệch khỏi mặt bằng?</p>
 
   <div class="shots"><figure class="shot">
     <img src="case-study-assets/si-02-store-matrix.png" alt="Trang Store Matrix">
     <figcaption><span class="badge">Trang 2</span>Bốn cột được tô màu: <code>Bonus per Store per Month</code>, <code>Store Bonus vs Target %</code>, <code>Payout Rate %</code>, <code>Staff Bonus vs Target %</code>. Các cột tiền còn lại để trắng có chủ đích.</figcaption>
   </figure></div>
 
-  <h4>Bốn cột có màu — mỗi cột một quy ước riêng</h4>
-  <div class="tbl-wrap"><table class="calc">
-    <thead><tr><th>Cột</th><th>Quy ước màu</th><th>Đọc thế nào</th></tr></thead>
-    <tbody>
-      <tr>
-        <td>Bonus per Store per Month<br>Bonus per Staff per Month</td>
-        <td>amber = tháng chưa chốt · xanh/đỏ = đã <code>PUBLISHED</code>, đạt/không đạt target</td>
-        <td class="read">Cùng quy ước với thẻ <code>vs Target</code> ở Overview — xem mục 03. Amber <b>không</b> phải "chưa đạt", chỉ là số tạm tính.</td>
-      </tr>
-      <tr>
-        <td>Store Bonus vs Target %<br>Staff Bonus vs Target %</td>
-        <td>đỏ (thấp nhất) → amber (median) → xanh (cao nhất), <b>tương đối theo dòng đang hiện</b></td>
-        <td class="read">Thang <b>không neo ở 100%</b> — vì giữa tháng, phần lớn dòng sẽ đỏ nếu neo cứng. Đọc để so sánh <b>các dòng với nhau</b>, không đọc tuyệt đối như một ngưỡng đạt/chưa đạt.</td>
-      </tr>
-      <tr>
-        <td>Payout Rate %</td>
-        <td>đỏ ở 85% → xanh ở 100%</td>
-        <td class="read">Trần thật là 100%, nên ở đây <b>chỉ cần soi phía thấp</b>. Ô càng đỏ = quỹ càng chưa tới tay nhân viên.</td>
-      </tr>
-      <tr>
-        <td>Bonus as % of Program Revenue</td>
-        <td>nhạt ở 0% → đậm dần tới đỏ khi chạm hoặc vượt 4%</td>
-        <td class="read">Mỗi chương trình có mặt bằng chi phí riêng. Ô càng đậm nghĩa là chi phí trên mỗi đồng doanh số càng cao so với mặt bằng chung — đáng hỏi, chưa chắc là lỗi.</td>
-      </tr>
-    </tbody>
-  </table></div>
-
-  <div class="trap"><div class="ico">⛔</div><div>
-    <b>Cột <code>Cumulative Bonus (Period-to-Date)</code> cố ý phớt lờ ngày trong tháng.</b>
-    Nó luôn là luỹ kế của <b>trọn kỳ thưởng</b>, nên chỉ có nghĩa khi bạn chọn đúng <b>một tháng</b>.
-    Chọn nhiều tháng thì cột để trống — <b>cố ý</b>, không phải mất dữ liệu.
-  </div></div>
-
-  <div class="trap"><div class="ico">⛔</div><div>
-    <b>Cửa hàng không phát sinh thưởng đã bị ẩn.</b> Tổng số cửa hàng trên trang này
-    <b>không</b> phải tổng số cửa hàng của chuỗi. Cột <code>Stores Earning Bonus</code> cho biết còn lại bao nhiêu.
-  </div></div>
+  <ul class="pagepoints">
+    <li><b>Bốn tab đầu trang</b> đổi cách nhóm cửa hàng — <code>by Concept</code>, <code>by Region</code>, <code>by RSM/Sub-RSM</code>, <code>by RSM Only</code>. Bấm dấu <b>+</b> để bung xuống từng cửa hàng.</li>
+    <li><b><code>Bonus per Store</code>/<code>Staff per Month</code></b> — tô theo trạng thái kỳ; amber nghĩa là tháng còn tạm tính.</li>
+    <li><b><code>Store</code>/<code>Staff Bonus vs Target %</code></b> — so tương đối giữa các dòng đang hiện, không neo ở 100%.</li>
+    <li><b><code>Payout Rate %</code></b> — chỉ cần soi những dòng thấp bất thường.</li>
+    <li><b><code>Bonus as % of Program Revenue</code></b> — càng đậm màu càng tốn chi phí trên doanh số.</li>
+    <li class="watch"><b>Dễ đọc sai nhất:</b> cửa hàng không phát sinh thưởng đã bị ẩn khỏi bảng, nên số dòng ở đây không phải tổng số cửa hàng của chuỗi.</li>
+  </ul>
 </div></section>
 
 <!-- ================= 05 PAGE 3 ================= -->
 <section id="p3"><div class="sec-inner">
-  <div class="sec-head"><div class="sec-num">05</div><h2>Programs &amp; Budget — quỹ tháng dùng bao nhiêu</h2></div>
-  <blockquote class="lede-q">
-    <b>Quỹ thưởng tháng dùng bao nhiêu, sản lượng đạt bao nhiêu so với kế hoạch — theo ngành → category → chương trình?</b>
-  </blockquote>
+  <div class="sec-head"><div class="sec-num">05</div><h2>Programs &amp; Budget</h2></div>
+  <p class="lead">Quỹ thưởng tháng dùng bao nhiêu, sản lượng đạt bao nhiêu so với kế hoạch?</p>
 
   <div class="shots"><figure class="shot">
     <img src="case-study-assets/si-03-programs.png" alt="Trang Programs & Budget">
     <figcaption><span class="badge">Trang 3</span>Ba thẻ vòng đời chương trình ở trên. Bảng dưới là ma trận <code>Budget vs Actual by Category</code>, mở sẵn tới cấp category; bấm <b>+</b> để bung xuống từng chương trình.</figcaption>
   </figure></div>
 
-  <h4>Ba thẻ quy mô chương trình</h4>
-  <div class="cards">
-    <div class="fcard v">
-      <div class="fhead"><div class="ico">🏁</div><h3>Programs Ended</h3><div class="sub">Đã chạy xong</div></div>
-      <div class="fbody">
-        <div><div class="mean">Chương trình chạy trong tháng đang chọn và <b>đã kết thúc</b>.</div></div>
-        <div class="decision">Trống khi chọn nhiều tháng.</div>
-      </div>
-    </div>
-    <div class="fcard m">
-      <div class="fhead"><div class="ico">▶️</div><h3>Programs Running</h3><div class="sub">Đang chạy</div></div>
-      <div class="fbody">
-        <div><div class="mean">Đang chạy tính tới <code>Data Through</code>.</div></div>
-        <div class="decision">Trống khi chọn nhiều tháng.</div>
-      </div>
-    </div>
-    <div class="fcard r">
-      <div class="fhead"><div class="ico">⏳</div><h3>Programs Upcoming</h3><div class="sub">Sắp chạy</div></div>
-      <div class="fbody">
-        <div><div class="mean">Start sau <code>Data Through</code>.</div></div>
-        <div class="decision"><b>Không phụ thuộc</b> tháng đang chọn ở <code>Bonus Period</code>.</div>
-      </div>
-    </div>
-  </div>
-
-  <h4>Ba nhóm cột trong ma trận</h4>
-  <div class="tbl-wrap"><table class="calc">
-    <thead><tr><th>Nhóm cột</th><th>Đọc thế nào</th></tr></thead>
-    <tbody>
-      <tr>
-        <td>Budget · Bonus Pool · Budget Utilisation %</td>
-        <td class="read">Ngân sách tháng, quỹ đã dùng, và tỉ lệ tương ứng. <code>Budget Utilisation %</code> <b>không tô màu</b> — chưa có ngưỡng business để so.</td>
-      </tr>
-      <tr>
-        <td>Target Units · Units Sold · Volume Attainment %</td>
-        <td class="read">Sản lượng kế hoạch, sản lượng thực bán, và tỉ lệ đạt. <code>Volume Attainment %</code> tô màu theo cùng quy ước <code>vs Target</code> ở Overview — xem mục 03.</td>
-      </tr>
-      <tr>
-        <td>Planned vs Actual Bonus per Unit · Bonus per Unit vs Plan %</td>
-        <td class="read">Đơn giá thưởng theo kế hoạch so với đơn giá thực. Tỉ lệ thấp thường vì <b>bán vượt xa kế hoạch</b>, không phải "tiết kiệm tốt".</td>
-      </tr>
-    </tbody>
-  </table></div>
-
-  <div class="dd-sub scope"><b class="h">⭐ Quỹ là quỹ chung theo category</b>
-    <code>Budget</code>, <code>Target Units</code> và các cột phái sinh từ chúng được cấp <b>ở cấp category</b>, không chia sẵn theo vùng, cửa hàng hay chương trình.
-    Chọn một vùng, một cửa hàng hoặc một chương trình (slicer <code>Program</code>/<code>Store</code>, hoặc filter ở <code>Filters Settings</code>) thì
-    <code>Budget</code> vẫn giữ nguyên mức category, và <code>Budget Utilisation %</code> đọc là <b>phần quỹ chung lát đó đã dùng</b> — không phải ngân sách
-    riêng của lát đó. Dòng chương trình lặp lại đúng budget của category nó thuộc; cộng các dòng chương trình lại đúng bằng dòng category.
-  </div>
-
-  <div class="trap"><div class="ico">⛔</div><div>
-    <b>Filter sản phẩm (tab <code>Category Filters</code> ở panel <code>Filters</code>) làm trống toàn bộ cột target</b>
-    (Budget, Budget Utilisation %, Target Units, Units Sold, Volume Attainment %, Bonus per Unit vs Plan %) — quỹ không chia được
-    theo một tập con sản phẩm. Lọc theo Program/Store/vùng thì không gây trống — xem khối ⭐ ở trên.
-  </div></div>
-
-  <div class="dd-sub warn"><b class="h">Category không có target (danh mục Mix)</b>
-    Một số category không có ngân sách/sản lượng kế hoạch riêng (gộp chung vào nhóm Mix, ví dụ Gia dụng + Văn phòng phẩm) —
-    dòng của category đó chỉ hiện <code>Bonus Pool</code>, các cột target để trống. Đây là do thiết kế nguồn target theo 7 category
-    chính, không phải thiếu dữ liệu.
-  </div>
+  <ul class="pagepoints">
+    <li><b>Ba thẻ trên đầu — vòng đời chương trình.</b> <code>Programs Ended</code> đã chạy xong, <code>Programs Running</code> đang chạy, <code>Programs Upcoming</code> bắt đầu sau <code>Data Through</code> (không phụ thuộc slicer <code>Bonus Period</code>).</li>
+    <li><b>Nhóm ngân sách:</b> <code>Budget</code> · <code>Bonus Pool</code> · <code>Budget Utilisation %</code> — đã dùng bao nhiêu phần quỹ tháng.</li>
+    <li><b>Nhóm sản lượng:</b> <code>Target Units</code> · <code>Units Sold</code> · <code>Volume Attainment %</code> — bán được bao nhiêu so với kế hoạch.</li>
+    <li><b>Nhóm đơn giá:</b> <code>Planned</code> vs <code>Actual Bonus per Unit</code> — thưởng mỗi unit so với kế hoạch.</li>
+    <li class="watch"><b>Quỹ là của cả category.</b> Chọn một vùng, cửa hàng hay chương trình thì <code>Budget</code> và <code>Target Units</code> vẫn giữ nguyên mức cả category — xem lưu ý số 1.</li>
+    <li class="watch"><b>Dễ đọc sai nhất:</b> lọc theo sản phẩm ở tab <code>Category Filters</code> làm trống toàn bộ cột target, vì quỹ không chia được theo một tập con sản phẩm.</li>
+  </ul>
 </div></section>
 
 <!-- ================= 06 PAGE 4 ================= -->
 <section id="p4"><div class="sec-inner">
-  <div class="sec-head"><div class="sec-num">06</div><h2>Distribution — tiền rải đều hay dồn cục</h2></div>
-  <p>Hai biểu đồ cột: một cho <b>cửa hàng</b>, một cho <b>nhân viên</b>. Trục ngang là <b>dải phần trăm so với trung bình</b>
-  của chính vùng chọn hiện tại — không phải số tiền.</p>
+  <div class="sec-head"><div class="sec-num">06</div><h2>Distribution</h2></div>
+  <p class="lead">Tiền rải đều hay dồn cục? Cửa hàng nào nằm ở đuôi?</p>
 
   <div class="shots"><figure class="shot">
     <img src="case-study-assets/si-04-distribution.png" alt="Trang Distribution">
     <figcaption><span class="badge">Trang 4</span>Bấm vào một cột → danh sách bên phải thu hẹp về đúng dải đó. Bấm lại cột đó để bỏ chọn.</figcaption>
   </figure></div>
 
-  <h4>Đọc hình dạng</h4>
-  <div class="tbl-wrap"><table class="calc">
-    <thead><tr><th>Hình dạng</th><th>Nghĩa</th></tr></thead>
-    <tbody>
-      <tr><td>Đuôi <code>&gt; 200%</code> dày</td><td class="read">Một nhóm nhỏ đang gánh phần lớn tiền thưởng. Bấm vào cột đó để xem đích danh cửa hàng nào.</td></tr>
-      <tr><td>Dồn về <code>0-25%</code></td><td class="read">Chương trình <b>không với tới</b> phần lớn cửa hàng đang tham gia.</td></tr>
-      <tr><td>Hai bướu (hai đỉnh)</td><td class="read">Dấu hiệu bạn đang <b>trộn nhiều chương trình có thang thưởng rất khác nhau</b>.
-      Trang này đọc chuẩn nhất khi <b>chọn đúng một chương trình</b> ở slicer <code>Program</code>.</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="trap"><div class="ico">⛔</div><div>
-    <b>Cột đầu tiên <code>0-25%</code> có gộp cả cửa hàng thưởng bằng 0</b> — cửa hàng <b>có mở cửa, có tham gia, nhưng không kiếm được đồng nào</b>.
-    Chỉ số bằng <b>0</b>, không phải "nhỏ". Đừng đọc cả cột đó thành "nhóm làm kém".
-  </div></div>
-
-  <div class="tip"><div class="ico">💡</div><div>
-    <b>Đường ra chi tiết duy nhất là drill sang Staff Detail</b> (trang này không còn nối sang <code>Store &amp; Product</code>).
-    Bấm một dòng trong danh sách cửa hàng → nút ở góc trên phải đổi từ <i>"Select any row to continue"</i> sang
-    <i>"View staff detail"</i> → bấm để xem từng nhân viên của cửa hàng đó.
-  </div></div>
+  <ul class="pagepoints">
+    <li><b>Hai biểu đồ cột:</b> một cho cửa hàng, một cho nhân viên.</li>
+    <li><b>Trục ngang là mức so với mặt bằng (%), không phải số tiền.</b></li>
+    <li><b>Đuôi &gt; 200% dày</b> — một nhóm nhỏ đang gánh phần lớn tiền thưởng.</li>
+    <li><b>Dồn về 0-25%</b> — chương trình chưa với tới phần lớn cửa hàng tham gia.</li>
+    <li><b>Chọn đúng một chương trình</b> ở slicer <code>Program</code> thì trang đọc chuẩn nhất.</li>
+    <li><b>Bấm một dòng cửa hàng</b> rồi bấm <code>View staff detail</code> để sang trang <code>Staff Detail</code> — đây là đường ra chi tiết duy nhất.</li>
+    <li class="watch"><b>Dễ đọc sai nhất:</b> cột đầu <code>0-25%</code> gộp cả cửa hàng có tham gia nhưng thưởng bằng 0 — đừng đọc cả cột đó thành nhóm làm kém.</li>
+  </ul>
 </div></section>
 
 <!-- ================= 07 PAGE 5 ================= -->
 <section id="p5"><div class="sec-inner">
-  <div class="sec-head"><div class="sec-num">07</div><h2>Staff Detail — bảng phẳng để đối chiếu</h2></div>
-  <p>Trang này <b>không nằm trên thanh điều hướng</b>. Bạn tới được bằng cách drill-through từ trang <code>Distribution</code>,
-  hoặc chuột phải một dòng cửa hàng ở <code>Store Matrix</code>. Nút <code>Back to Previous page</code> ở cột trái đưa bạn quay lại.
-  Trang có <b>slicer <code>Bonus Period</code> và <code>Program</code> riêng</b> — không dùng chung với 4 trang chính.</p>
+  <div class="sec-head"><div class="sec-num">07</div><h2>Staff Detail</h2></div>
+  <p class="lead">Bảng phẳng để đối chiếu từng nhân viên — một dòng là một nhân viên × chương trình × cửa hàng × kỳ.</p>
 
   <div class="shots"><figure class="shot">
     <img src="case-study-assets/si-08-staff-detail.png" alt="Trang Staff Detail">
     <figcaption><span class="badge">Drill-through</span>Bốn thẻ Bonus Pool · Bonus Paid to Staff · Payout Rate % · Paid Staff, kèm dải trạng thái kỳ. Bảng dưới: một dòng = một <b>nhân viên × chương trình × cửa hàng × kỳ</b>. Xuất Excel từ bảng này để đối chiếu.</figcaption>
   </figure></div>
 
-  <div class="dd-sub scope"><b class="h">Vì sao nhiều nhân viên cùng cửa hàng nhận số tiền y hệt nhau</b>
-    Quỹ của cửa hàng được chia cho nhân viên theo <code>Bonus coefficient</code>. Khi mọi người cùng hệ số
-    (<code>1.00</code> hoặc <code>0.50</code>) thì tiền chia đều — nên các dòng trùng số là <b>bình thường</b>.
-    Thẻ <code>Paid Staff</code> ở trên cho biết đang chia cho bao nhiêu người.
-  </div>
-
-  <div class="note-amber"><div class="ico">⚠️</div><div>
-    <b>Cột <code>Recon Δ (VND)</code> để trống ở hầu hết dòng là đúng thiết kế.</b>
-    Giá trị = <b>luỹ kế nguồn ghi − tổng các ngày cộng lại</b>, và chỉ được ghi ở <b>dòng cuối cùng của mỗi kỳ</b> cho từng khoá
-    nhân viên × chương trình × cửa hàng — các dòng khác để trống là đúng, không phải thiếu dữ liệu.
-  </div></div>
+  <ul class="pagepoints">
+    <li><b>Vào trang bằng drill-through</b> từ <code>Distribution</code>, hoặc chuột phải một dòng cửa hàng ở <code>Store Matrix</code>. Nút <code>Back to Previous page</code> đưa bạn quay lại.</li>
+    <li><b>Trang có slicer riêng</b> — <code>Bonus Period</code> và <code>Program</code> ở đây không dùng chung với 4 trang chính.</li>
+    <li><b><code>Cumulative Bonus (Period-to-Date)</code> đọc theo từng nhân viên</b> — xem mục 01.</li>
+    <li class="watch"><b>Nhiều nhân viên cùng cửa hàng nhận số tiền y hệt nhau là bình thường:</b> quỹ chia theo <code>Bonus coefficient</code>, cùng hệ số thì chia đều.</li>
+  </ul>
 </div></section>
 
 <!-- ================= 08 FILTERS ================= -->
@@ -733,22 +569,6 @@
     <b>Phải bấm <code>Apply</code> trước khi đóng panel</b>, nếu không lựa chọn sẽ không được áp.
     Nút <code>Clear</code> nằm ngay cạnh và xoá sạch lựa chọn — đọc kỹ trước khi bấm.
   </div></div>
-</div></section>
-
-<!-- ================= 09 UAT ================= -->
-<section id="uat"><div class="sec-inner">
-  <div class="sec-head"><div class="sec-num">09</div><h2>Vòng UAT này cần bạn phản hồi gì</h2></div>
-  <div class="calllist">
-    <h3>Bốn câu hỏi cho vòng phản hồi sau UAT đợt 1</h3>
-    <ol>
-      <li><b>Ngưỡng màu cho <code>Budget Utilisation %</code>?</b> Cột này hiện chưa tô màu (chưa có ngưỡng business) — bao nhiêu % thì nên tô đỏ/xanh?</li>
-      <li><b>Có cần ngân sách/target theo vùng</b> (không chỉ theo category) không? Hiện quỹ là quỹ chung, không chia sẵn theo vùng/cửa hàng.</li>
-      <li><b>Cột nào ở <code>Store Matrix</code> còn thừa?</b> Trang hiện có 11 cột — cột nào bạn không dùng tới khi ra quyết định?</li>
-      <li><b>Có nhãn hay con số nào khiến bạn kết luận sai</b> rồi mới phát hiện? Đó là thứ giá trị nhất của vòng UAT.</li>
-    </ol>
-    <div class="extra">Hai việc đã biết và đang treo: (a) hai ngày <b>01–02/09</b> có quỹ cao gấp ~2,5 lần mặt bằng, chưa điều tra xong;
-    (b) phân quyền theo cửa hàng chưa test với tài khoản bị giới hạn.</div>
-  </div>
 </div></section>
 
 <footer><div class="foot-meta">
