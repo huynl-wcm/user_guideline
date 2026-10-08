@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CVS Report Review</title>
+<style>
+  :root{
+    /* synced với full-palette-v2 */
+    --accent:#2563EB;
+    --accent-dark:#1D4ED8;
+    --accent-soft:#EEF2FF;
+    --good:#0D9373;
+    --good-soft:#ECFDF5;
+    --amber:#D97706;
+    --amber-soft2:#FEF3C7;
+    --ink:#0F172A;
+    --muted:#64748B;
+    --faint:#94A3B8;
+    --line:#E2E8F0;
+    --line-strong:#CBD5E1;
+    --bg:#F8FAFC;
+    --card:#FFFFFF;
+    --shadow-sm:0 8px 24px -18px rgba(15,23,42,.34);
+    --ease:cubic-bezier(.32,.72,0,1);
+    --display:"Bahnschrift","Segoe UI Semibold","Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:Calibri,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);
+    line-height:1.58;-webkit-font-smoothing:antialiased;padding-bottom:48px;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 16px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--accent);background:var(--accent-soft);
+    padding:6px 14px;border-radius:999px;margin:0 0 16px;}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  header.hero{padding:48px 0 8px;}
+  .hero h1{font-family:var(--display);text-transform:uppercase;font-size:clamp(30px,5.2vw,48px);line-height:1.04;
+    margin:0 0 14px;font-weight:700;letter-spacing:.01em;}
+  .hero p{margin:0;font-size:17px;color:var(--muted);max-width:60ch;}
+  .demo{display:inline-block;margin-top:14px;background:var(--amber-soft2);color:#92400E;border:1.5px solid var(--amber);
+    border-radius:6px;padding:4px 10px;font-size:13px;font-weight:700;}
+  h2{font-family:var(--display);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    margin:36px 0 12px;font-weight:700;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  a.card{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink);background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow-sm);
+    transition:border-color .4s var(--ease),transform .4s var(--ease);}
+  a.card:hover{border-color:var(--accent);transform:translateY(-2px);}
+  .card .top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .card .t{font-family:var(--display);font-size:18px;font-weight:700;}
+  .card .d{font-size:15px;color:var(--muted);}
+  .tag{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap;
+    color:var(--accent);background:var(--accent-soft);}
+  .tag.dl{color:var(--good);background:var(--good-soft);}
+  .n{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;
+    background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700;margin-right:8px;flex:none;}
+  footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--faint);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow"><span class="dot"></span>CVS · Daily reports</div>
+  <h1>CVS Report Review</h1>
+  <p>Bản mẫu các báo cáo hằng ngày cho chuỗi CVS, số liệu chỉ để minh họa.</p>
+  <p>Mở từng báo cáo theo thứ tự dưới đây, rồi ghi góp ý vào file Excel feedback.</p>
+  <span class="demo">Demo data</span>
+</header>
+
+<h2>Báo cáo hằng ngày</h2>
+<div class="grid">
+  <a class="card" href="cvs-snapshot-bod-mock-r7_2026-10-07.html">
+    <div class="top"><span class="t"><span class="n">1</span>BOD Snapshot</span><span class="tag">Mở</span></div>
+    <span class="d">Toàn chuỗi: Core 7 so với kế hoạch, theo Model, Region và ngành hàng.</span>
+  </a>
+  <a class="card" href="cvs-snapshot-ops-mock-r7_2026-10-07.html">
+    <div class="top"><span class="t"><span class="n">2</span>OPS Snapshot</span><span class="tag">Mở</span></div>
+    <span class="d">Theo đơn vị quản lý, store rồi ngành hàng: chỗ nào đang hụt kế hoạch.</span>
+  </a>
+  <a class="card" href="cvs-snapshot-cat-mock-r7_2026-10-07.html">
+    <div class="top"><span class="t"><span class="n">3</span>CAT Snapshot</span><span class="tag">Mở</span></div>
+    <span class="d">Theo ngành hàng MCH2 ▸ MCH3, cùng Basket và Promo.</span>
+  </a>
+  <a class="card" href="album.html">
+    <div class="top"><span class="t"><span class="n">4</span>Telegram Album</span><span class="tag">Mở</span></div>
+    <span class="d">Ảnh gửi qua Telegram mỗi sáng, xem như trên điện thoại.</span>
+  </a>
+  <a class="card" href="cvs-detail-mock-r7_2026-10-07.html">
+    <div class="top"><span class="t"><span class="n">5</span>DETAIL</span><span class="tag">Mở</span></div>
+    <span class="d">Chọn bộ lọc để xem đủ mọi chỉ số, thử xuất ra Excel.</span>
+  </a>
+  <a class="card" href="cvs-metrics-v0_2026-10-07.html">
+    <div class="top"><span class="t"><span class="n">6</span>Metrics Catalog</span><span class="tag">Mở</span></div>
+    <span class="d">Danh mục chỉ số: nghĩa, cách đọc, chỉ số nằm ở báo cáo nào.</span>
+  </a>
+</div>
+
+<h2>Tải về</h2>
+<div class="grid">
+  <a class="card" href="cvs-metrics-v0_2026-10-07.xlsx" download="cvs-metrics-v0_2026-10-07.xlsx">
+    <div class="top"><span class="t">Feedback Excel</span><span class="tag dl">Tải về</span></div>
+    <span class="d">Mỗi dòng một chỉ số, có cột để ghi góp ý.</span>
+  </a>
+  <a class="card" href="cvs-target-template_2026-10-07.xlsx" download="cvs-target-template_2026-10-07.xlsx">
+    <div class="top"><span class="t">Target Template</span><span class="tag dl">Tải về</span></div>
+    <span class="d">File mẫu để nhập kế hoạch (target) theo store và tháng.</span>
+  </a>
+</div>
+
+<footer>Số liệu trên các trang là dữ liệu minh họa, không phải số thật của CVS · Cập nhật 08/10/2026</footer>
+
+</div>
+</body>
+</html>
