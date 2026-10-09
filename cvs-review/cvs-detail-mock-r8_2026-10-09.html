@@ -21,9 +21,9 @@ header .sub{color:var(--t2);font-size:13px;margin-top:2px}
 .seg button,.seg a{border:0;background:none;padding:6px 10px;font:inherit;font-size:13px;color:var(--t2);cursor:pointer;text-decoration:none}
 .seg .on{background:var(--accent);color:#fff}
 select{font:inherit;font-size:13px;padding:5px 6px;border:1.5px solid var(--b2);border-radius:6px;background:var(--card)}
-h2{font-size:15px;margin:44px 0 10px;font-weight:700;line-height:1.35}
-h2 small{font-weight:500;color:var(--t2);font-size:13px} #main>h2:first-child{margin-top:20px}
-.note{font-size:13px;color:var(--t2);margin:-4px 0 10px}
+h2{font-size:15px;margin:20px 0 6px;font-weight:700}
+h2 small{font-weight:500;color:var(--t2);font-size:13px}
+.note{font-size:13px;color:var(--t2);margin:-2px 0 6px}
 .strip{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
 .kpi{background:var(--card);border:1.5px solid var(--b1);border-radius:8px;padding:9px 10px}
 .kpi .n{color:var(--t2);font-size:13px;font-weight:600}
@@ -40,21 +40,18 @@ table.fx td,table.fx th{overflow:hidden;text-overflow:ellipsis}
 table.fx th{white-space:normal}
 th,td{padding:9px 10px;border-bottom:1.5px solid var(--line);text-align:right;white-space:nowrap;vertical-align:middle}
 td{height:46px;font-weight:500}
-th{color:var(--t1);font-weight:700;font-size:13px;background:#F1F5F9;border-bottom:2px solid var(--t1)}
+th{color:var(--t2);font-weight:600;font-size:13px;background:var(--bg);border-bottom:1.5px solid var(--b2)}
 th:first-child,td:first-child{text-align:left;position:sticky;left:0;z-index:1}
 tr td{background:var(--card)} tr.alt td{background:#F8FAFC}
 tr td.bad,tr.alt td.bad{background:var(--negbg)}
 td.bad .c{color:var(--neg)}
 .neg{color:var(--neg)}
-th:first-child{background:#F1F5F9}
+th:first-child{background:var(--bg)}
 td .c{display:inline-flex;align-items:center;gap:5px;font-size:14px;color:var(--t1)}
 td .l{display:block;font-size:13px;color:var(--t2)}
 .lv0 td:first-child{font-weight:600}
 .lv1 td:first-child{padding-left:28px}.lv2 td:first-child{padding-left:44px}.lv3 td:first-child{padding-left:60px}
 tr.top td{background:var(--bg)} tr.top td:first-child{font-weight:600}
-/* T34 — dòng Total: ghim ngay dưới header, chữ đậm, kẻ dưới Slate 400, KHÔNG tô nền (nền nhạt chỉ cho ô ≤ E). Thứ bậc: header → Total → hàng */
-tr.tot td,tr.tot.alt td{background:var(--card);font-weight:700;border-bottom:2px solid #94A3B8} tr.tot td .c{font-weight:700} tr.tot td.bad{background:var(--negbg)}
-table.ph td.tot,table.ph th.tot{font-weight:700;border-right:2px solid #94A3B8} table.ph td.tot .c{font-weight:700}
 tr.hot td:first-child{box-shadow:inset 5px 0 0 var(--hc);font-weight:700}
 tr.sel td{background:#F1F5F9} tr.sel td:first-child::after{content:' ● selected';color:var(--t2);font-size:13px;font-weight:600}
 .tg{cursor:pointer;color:var(--accent);display:inline-block;width:16px}
@@ -206,14 +203,14 @@ table.dt td:first-child{white-space:normal;min-width:var(--wl);max-width:calc(va
 table.dt th.grp{text-align:center;background:var(--card);color:var(--t1);border-bottom:1.5px solid var(--b1);border-left:1.5px solid var(--b1)}
 table.dt td.g0,table.dt th.g0{border-left:1.5px solid var(--b1)}
 table.dt td.so .c{color:var(--t3)}
-/* T34: kiểu dòng tổng (tr.tot) dùng chung — khối <style> của snapshot_template */
+tr.tot td{background:var(--bg);font-weight:700} tr.tot td:first-child{box-shadow:inset 5px 0 0 var(--accent)}
 .pager{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--t2);margin:6px 0}
 #ex{display:none;position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:30;align-items:center;justify-content:center;padding:16px}
 #ex.on{display:flex}
 #ex .box{background:var(--card);border-radius:10px;border:1.5px solid var(--b2);max-width:560px;width:100%;padding:16px 18px;line-height:1.55;max-height:90vh;overflow-y:auto}
 #ex h3{margin:0 0 8px;font-size:16px}
 #ex .opt{display:block;border:1.5px solid var(--b1);border-radius:8px;padding:8px 10px;margin:6px 0;cursor:pointer;font-size:13px}
-#ex .opt.on{border-color:var(--accent);background:#F1F5F9}
+#ex .opt.on{border-color:var(--accent);background:var(--h1)}
 #ex .opt b{font-size:14px}
 #ex .est{font-size:14px;margin:8px 0}
 .prog{height:8px;background:var(--b1);border-radius:4px;overflow:hidden;margin:6px 0}
