@@ -210,7 +210,7 @@ tr.tot td{background:var(--bg);font-weight:700} tr.tot td:first-child{box-shadow
 #ex .box{background:var(--card);border-radius:10px;border:1.5px solid var(--b2);max-width:560px;width:100%;padding:16px 18px;line-height:1.55;max-height:90vh;overflow-y:auto}
 #ex h3{margin:0 0 8px;font-size:16px}
 #ex .opt{display:block;border:1.5px solid var(--b1);border-radius:8px;padding:8px 10px;margin:6px 0;cursor:pointer;font-size:13px}
-#ex .opt.on{border-color:var(--accent);background:var(--h1)}
+#ex .opt.on{border-color:var(--accent);background:#F1F5F9}
 #ex .opt b{font-size:14px}
 #ex .est{font-size:14px;margin:8px 0}
 .prog{height:8px;background:var(--b1);border-radius:4px;overflow:hidden;margin:6px 0}
@@ -233,12 +233,14 @@ tr.tot td{background:var(--bg);font-weight:700} tr.tot td:first-child{box-shadow
 .tools{flex-direction:column;align-items:stretch}
 .tools .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 @media (max-width:480px){.step,.tools{font-size:13px}.lvls select{max-width:100%}}
+/* T36: về trang overview của link review (như "‹ Back to home" của snapshot / album) */
+.dhome{display:inline-block;margin-bottom:6px;color:var(--t2);text-decoration:none;font-size:13px;font-weight:600}.dhome:hover{color:var(--t1)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="demo">Demo data — not real CVS figures. Stores, sales and targets are invented to show how the report reads.</div>
-  <header><h1>CVS Detail Report</h1><div class="sub" id="sub"></div></header>
+  <header><a class="dhome" href="index.html">‹ Back to home</a><h1>CVS Detail Report</h1><div class="sub" id="sub"></div></header>
   <div class="step" id="step1"></div>
   <div class="step" id="step2"></div>
   <div class="fbar hidden" id="fbar"></div>
@@ -718,7 +720,8 @@ function cellHTML(m, f, sub) {
   const s = status(m), col = COLORS[s.st];
   npCount(m);
   if (isNoPlan(m)) return `<span class="c">${fmt(m.v, f)}</span>${sub ? `<span class="l">${sub}</span>` : ''}`;
-  return `<span class="c"><span class="dot" style="background:${col}"></span>${m.v == null ? '–' : fmt(m.v, f)}</span><span class="l">${msLabel(m, s, f)}</span>${sub ? `<span class="l">${sub}</span>` : ''}`;
+  // T36: ô matrix chỉ số + màu — mốc kế tiếp / giá trị / trần / cấp plan xem trong khung giải thích (cellBlock); ô xám giữ lý do
+  return `<span class="c"><span class="dot" style="background:${col}"></span>${m.v == null ? '–' : fmt(m.v, f)}</span>${s.st === 'grey' ? `<span class="l">${s.label}</span>` : ''}${sub ? `<span class="l">${sub}</span>` : ''}`;
 }
 const tdCell = (m, f, sub, note) => `<td data-c="${reg(m, f, note)}" title="${HOVER}"${status(m).st === 'red' ? ' class="bad"' : ''}>${cellHTML(m, f, sub)}</td>`;
 const splitTxt = (x) => x ? `${sg(x.tot)} vs plan = ${KB.m.bpd.name} ${sg(x.bpd)} · ${KB.m.bs.name} ${sg(x.bs)}` : null;
@@ -739,7 +742,7 @@ function cellBlock(c) {
   const m = c.m, s = status(m), f = c.f;
   let h = `<h4>This number</h4><p>${esc(c.row)} · ${esc(c.per)}</p><div class="cellv">${m.t ? `<span class="dot" style="background:${COLORS[s.st]}"></span>` : ''}${m.v == null ? '–' : fmt(m.v, f)}</div>`;
   if (m.t && !m.blank && m.v != null)
-    h += `<p>Plan used: ${m.lvl ? LVL_TXT(m.lvl) : m.src || 'plan'} · ${BAND[s.cap ? 'cap' : s.st]}${s.ms && s.st !== 'violet' ? ` · next to beat: ${MS_NAME[s.ms]}` : ''}</p>`
+    h += `<p>Plan used: ${m.lvl ? LVL_TXT(m.lvl) : m.src || 'plan'} · ${BAND[s.cap ? 'cap' : s.st]}${s.cap ? ` · ${m.cap}% (max)` : s.st === 'violet' ? ` · above O+ ${fmt(m.t.Op, f)}` : s.ms ? ` · next to beat: ${MS_NAME[s.ms]} ${fmt(m.t[s.ms], f)}` : ''}</p>`
       + `<table class="xms"><tr>${MS.map(k => `<th>${MS_NAME[k]}</th>`).join('')}</tr><tr>${MS.map(k => `<td${s.st !== 'violet' && s.ms === k ? ' class="cur"' : ''}>${fmt(m.t[k], f)}</td>`).join('')}</tr></table>`;
   else h += `<p>${m.blank ? `No colour: ${m.blank}.` : m.v == null ? 'No value for this cell.' : 'No plan for this cell — the number is shown without colour.'}</p>`;
   if (c.note) h += `<p style="margin-top:6px">${esc(c.note)}</p>`;
