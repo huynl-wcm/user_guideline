@@ -341,11 +341,13 @@ function scopeTarget(k, S, D) {
 
 function agg(S, C, D) {
   const sS = new Set(S), sC = new Set(C), sD = new Set(D);
-  const a = {rev: 0, mar: 0, units: 0, bw: 0, adj: 0, drc: 0, stock: 0, cogs: 0,
+  const a = {rev: 0, mar: 0, units: 0, bw: 0, adj: 0, drc: 0, stock: 0, cogs: 0, stockN: 0,
              bills: 0, unitsSD: 0, open: 0, dp: [0, 0, 0, 0, 0, 0], pp: 0, pok: 0, bw2: MCH2.map(() => 0)};
   for (const r of DB.facts.leaf) if (sS.has(r[L.store]) && sC.has(r[L.mch3]) && sD.has(r[L.day])) {
     a.rev += r[L.revenue]; a.mar += r[L.margin_sl]; a.units += r[L.units]; a.bw += r[L.bills_with_cat];
-    a.adj += r[L.dr_adj]; a.drc += r[L.dr_count]; a.stock += r[L.stock_core]; a.cogs += r[L.cogs30_core];
+    a.adj += r[L.dr_adj]; a.drc += r[L.dr_count];
+    // T39: stock_core null = nguồn tồn không có dòng ⇒ leaf loại khỏi CẢ tử lẫn mẫu DIO (không để DIO thấp giả); stockN = số leaf có tồn
+    if (r[L.stock_core] != null) { a.stock += r[L.stock_core]; a.cogs += r[L.cogs30_core]; a.stockN++; }
   }
   for (const r of DB.facts.store_day) if (sS.has(r[SD.store]) && sD.has(r[SD.day])) {
     a.bills += r[SD.bills]; a.unitsSD += r[SD.units]; a.open += r[SD.open];
@@ -408,6 +410,7 @@ function setPre(S, C, D) {
     a.has = sel.t === 'm2' ? a.bw2[sel.i] : a.bw; return a; };      // bill CÓ CHỨA nút
   const set = C.sel, as = set.map(sel => one(S, sel)), a = {...as[0]};
   for (const f of ADD_F) a[f] = as.reduce((t, x) => t + x[f], 0);
+  a.stockN = as.reduce((t, x) => t + x.stockN, 0);                  // đếm leaf, không nhân tỷ trọng
   if (set.length === 1) a.bw = as[0].has;
   else { a.bw = 0; for (const s of S) { const B = agg([s], ALL_C, D).bills; if (!B) continue;     // độc lập: B × (1 − Π(1 − p)) theo store (như DETAIL)
     a.bw += B * (1 - set.reduce((p, sel) => p * (1 - Math.min(1, one([s], sel).has / B)), 1)); } }
@@ -445,7 +448,9 @@ function metrics(S, C, D, pre) {      // pre (T19 DETAIL, tùy chọn): {a, cs} 
   out.dio = {v: den > 0 ? a.stock / den : null, rev: true, t: dio && dio.t,
              lvl: dio && (cs.t === 'm2' ? (S.length === NS ? null : 'chain') : inherited(dio.lvl, S, cs))};
   if (S.every(s => STORES[s].unclassified)) out.dio.blank = 'unclassified range';
-  else if (!(den > 0) || out.dio.v < 0) out.dio.blank = 'negative stock';
+  else if (!a.stockN) out.dio.blank = 'no stock data';              // T39: tách nhãn (trước: mọi ca ⇒ negative stock)
+  else if (a.stock < 0) out.dio.blank = 'negative stock';
+  else if (!(den > 0)) out.dio.blank = 'no sales cost';
   // Chỉ số ngoài Core 7 — cột target TÙY CHỌN (T20): trống ⇒ no plan
   const odrT = st && st.odrOk ? vmap((k, i) => st.odr[i] / st.planDays) : null;
   out.odr = {v: st ? a.open / st.planDays * 100 : null, t: odrT,
@@ -822,7 +827,9 @@ function whereTxt(x) {          // "nơi dồn": kết quả luật owner — c�
 function storyHTML(c) {
   const x = storyOf(c); if (!x) return '';
   const name = KB.m[x.k].name, scope = BASE && BASE.name || 'this scope', w = whereTxt(x);
-  const share = x.own ? `This cell is the whole of ${esc(scope)}.` : x.share != null ? `<b>${pct(x.share)} of the gap</b> on ${esc(name)} in ${esc(scope)}${x.share > 1 ? ' — the rest is above plan and makes up for part of it' : ''}.`
+  // T39: mẫu = hụt RÒNG của phạm vi gốc (giữ) ⇒ > 100% hợp lệ; thêm đúng 1 câu (chỉ khung, không Red cells / album)
+  const over = BASE && BASE.name === 'the filtered scope' ? `the whole filtered scope (${esc(BASE.label)})` : 'the whole chain';
+  const share = x.own ? `This cell is the whole of ${esc(scope)}.` : x.share != null ? `<b>${pct(x.share)} of the gap</b> on ${esc(name)} in ${esc(scope)}.${x.share > 1 ? `<span data-over="1"> Above 100%: this unit alone is short by more than ${over} — other units above plan offset part of it.</span>` : ''}`
     : x.refPlan ? `${esc(scope)} as a whole is not below plan on ${esc(name)}.` : `${esc(scope)} as a whole has no plan on ${esc(name)}, so there is no share of the gap to show.`;
   const rule = x.kind === 'cat' ? `${RULE_CAT_TXT}${x.axes ? ` This cell — share of plan, category vs whole unit: ${x.axes.map(a => `${a.axis}: ` + a.units.map(u => `${u.name} ${pct(u.a)} vs unit ${pct(u.au)}${u.rel <= -REL.pts ? ' (weaker)' : ''}`).join(', ')).join('. ')}.` : ''}` : RULE_TXT;
   const nav = storyNav(x);
@@ -1154,7 +1161,7 @@ function unionBills(S, set, D) {
     t += B * (1 - set.reduce((p, sel) => p * (1 - Math.min(1, ctx1([s], sel, D).bills / B)), 1)); }
   return t;
 }
-const ADD_A = ['rev', 'mar', 'units', 'adj', 'drc', 'stock', 'cogs'], ADD_X = ['fm', 'shr', 'loss', 'po', 'gr', 'dead', 'night', 'fmn', 'pcost', 'ps', 'dfm', 'skd', 'ovl'];
+const ADD_A = ['rev', 'mar', 'units', 'adj', 'drc', 'stock', 'cogs', 'stockN'], ADD_X = ['fm', 'shr', 'loss', 'po', 'gr', 'dead', 'night', 'fmn', 'pcost', 'ps', 'dfm', 'skd', 'ovl'];
 function ctx(S, set, D) {              // tập ngành (OR) — cộng các nút (cùng cấp, không chồng nhau); tỷ lệ tính lại từ tổng
   if (set.length === 1) return ctx1(S, set[0], D);
   const key = `${S.join(',')}|${set.map(selKey).join('+')}|${D.join(',')}`;
